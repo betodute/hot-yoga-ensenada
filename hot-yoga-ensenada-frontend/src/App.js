@@ -10,17 +10,11 @@ const NotFound = () => {
 function App() {
   return (
     <Router>
-    <Link to="/">
-      <nav>
-        <h3 className="main-headline">Hot Yoga Ensenada</h3>
-      </nav>
-    </Link>
-    <Routes>
-      <Route path="/" element={<Home/>} />
-      
-      <Route element={NotFound} />
-    </Routes>  
-  </Router> 
+      <Routes>
+        <Route path="/" element={<Home/>} />
+        <Route element={NotFound} />
+      </Routes>  
+    </Router> 
   );
 }
 

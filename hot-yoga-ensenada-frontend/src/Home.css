@@ -1,12 +1,18 @@
-.home-wrapper {
-  display: flex;
-  justify-content: center;
-}
-
-.schedule-wrapper {
-  margin: 1em;
+.headline-wrapper {
+  margin-top: 1em;
+  text-align: center;
 }
 
 .quote-wrapper {
-  margin: 1em;
+  margin-top: 1em;
+  text-align: center;
+}
+
+.reservation-wrapper {
+  margin-top: 1em;
+  text-align: center;
+}
+
+.reservation-wrapper label {
+  font-weight: bold;
 }
