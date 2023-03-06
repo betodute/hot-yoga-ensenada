@@ -1,5 +1,12 @@
+import { Schedule } from './Schedule';
+import { Quote } from './Quote'
+import './Home.css'
+
 export const Home = () => {
   return(
-    <h3> Hot Yoga Home Component Testing</h3>
+    <div className='home-wrapper'>
+      <Schedule/>
+      <Quote />
+    </div>
   )
 };

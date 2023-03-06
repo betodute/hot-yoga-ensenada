@@ -1,0 +1,12 @@
+.home-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.schedule-wrapper {
+  margin: 1em;
+}
+
+.quote-wrapper {
+  margin: 1em;
+}
