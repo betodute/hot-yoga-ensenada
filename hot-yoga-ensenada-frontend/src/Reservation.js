@@ -4,29 +4,51 @@ export const Reservation = () => {
   return(
     <div className="reservation-wrapper">
       <form>
-          <label className='tue-morning'> Martes 7am </label>
-          <button type='button' className='btn btn-warning m-2'> Reservar </button>
-          <label> Martes 6pm </label>
-          <button type='button' className='btn btn-warning m-2'> Reservar </button>
-
-          <div></div>
-        
-          <label> Jueves 7am </label>
-          <button type='button' className='btn btn-warning m-2'> Reservar </button>
-          <label> Jueves 6pm </label>
-          <button type='button' className='btn btn-warning m-2'> Reservar </button>
-
-          <div></div>
-        
-          <label> Sábado 4pm </label>
-          <button type='button' className='btn btn-warning m-2'> Reservar </button>
+        {/* Tuesday Classes */}
+        <div className='form-row'>
+          <div id='tue-morn' className='col-6'>
+            <label> Martes 7am </label>
+            <button type='button' className='btn btn-warning m-2'> Reservar </button>
+          </div>
+          <div id='tue-eve' className='col-6'>
+            <label> Martes 6pm </label>
+            <button type='button' className='btn btn-warning m-2'> Reservar </button>
+          </div>
+        </div>
+        {/* Thursday Classes */}
+        <div className='form-row'>
+          <div id='thur-morn' className='col-6'>
+            <label> Jueves 7am </label>
+            <button type='button' className='btn btn-warning m-2'> Reservar </button>
+          </div>
+          <div id='thur-eve' className='col-6'>
+            <label> Jueves 6pm </label>
+            <button type='button' className='btn btn-warning m-2'> Reservar </button>
+          </div>
+        </div>
+        {/* Saturday Class */}
+        <div className='form-row'>
+          <div id='sat-after' className='col-6'>
+            <label> Sábado 4pm </label>
+            <button type='button' className='btn btn-warning m-2'> Reservar </button>
+          </div>
+        </div> 
       </form>
     </div>
   );
+};
+
+componentDidMount(){
+  
 }
 
-/* let today = new Date();
-if (today.getDate() == 0) {
-  let tuesday = document.getElementsByClassName("tue-morning")
-  tuesday.style.display.none;
-}; */
+
+/* function updateTest () {
+  let today = new Date();
+  if (today.getDay() === 1) {
+    document.getElementById('tue-morn').addClass('disabled');
+    return;
+  };
+};
+
+updateTest(); */
