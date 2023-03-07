@@ -1,6 +1,26 @@
 import './Home.css'
+import {useEffect} from 'react';
 
-export const Reservation = () => {
+export const Reservation = (props) => {
+
+  useEffect(()=> {
+    if (props.today === 2 && props.time >= 7) {
+      document.getElementById('tue-morn').classList.add("disabled");
+    };
+    if (props.today === 2 && props.time >= 18) {
+      document.getElementById('tue-eve').classList.add("disabled");
+    };
+    if (props.today === 4 && props.time >= 7) {
+      document.getElementById('thur-morn').classList.add("disabled");
+    };
+    if (props.today === 4 && props.time >= 18) {
+      document.getElementById('thur-eve').classList.add("disabled");
+    };
+    if (props.today === 6 && props.time >= 16) {
+      document.getElementById('sat-after').classList.add("disabled");
+    };
+  })
+
   return(
     <div className="reservation-wrapper">
       <form>
@@ -37,18 +57,3 @@ export const Reservation = () => {
     </div>
   );
 };
-
-componentDidMount(){
-  
-}
-
-
-/* function updateTest () {
-  let today = new Date();
-  if (today.getDay() === 1) {
-    document.getElementById('tue-morn').addClass('disabled');
-    return;
-  };
-};
-
-updateTest(); */

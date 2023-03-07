@@ -3,9 +3,30 @@
   text-align: center;
 }
 
+.headline {
+  font-family: 'Texturina', serif;
+  font-size: 4em;
+}
+
+.home-image {
+  width: 35em;
+  height: 35em;
+  margin: 1em;
+}
+
 .quote-wrapper {
   margin-top: 1em;
   text-align: center;
+}
+
+.quote {
+  font-family: 'Texturina', serif;
+  font-size: 1.5em;
+}
+
+.quote-author {
+  font-family: 'Archivo', sans-serif;
+  font-size: 1em;
 }
 
 .reservation-wrapper {
@@ -29,5 +50,6 @@
 
 .disabled {
   pointer-events: none;
+  cursor: not-allowed;
   opacity: .50;
 }
