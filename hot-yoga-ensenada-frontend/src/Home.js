@@ -1,6 +1,7 @@
 import { Headline } from './Headline';
 import { Quote } from './Quote'
 import { Reservation } from './Reservation'
+import { Bookclub } from './Bookclub.js'
 import React, {useState, useEffect} from 'react';
 import homeImageOne from './images/original.png'
 import './Home.css'
@@ -26,6 +27,7 @@ export const Home = () => {
         </div>
         <Quote className='col-12'/>
         <Reservation today={today} time={time} className='col-12'/>
+        <Bookclub/>
       </div>
     </div>
   )

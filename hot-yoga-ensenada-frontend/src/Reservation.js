@@ -1,24 +1,45 @@
 import './Home.css'
-import {useEffect} from 'react';
+import {useEffect, useRef} from 'react';
 
 export const Reservation = (props) => {
 
-  useEffect(()=> {
-    if (props.today === 2 && props.time >= 7) {
-      document.getElementById('tue-morn').classList.add("disabled");
-    };
-    if (props.today === 2 && props.time >= 18) {
-      document.getElementById('tue-eve').classList.add("disabled");
-    };
-    if (props.today === 4 && props.time >= 7) {
-      document.getElementById('thur-morn').classList.add("disabled");
-    };
-    if (props.today === 4 && props.time >= 18) {
-      document.getElementById('thur-eve').classList.add("disabled");
-    };
+  const tueMorn = useRef(null);
+  const tueEve = useRef(null);
+  const thurMorn = useRef(null);
+  const thurEve = useRef(null);
+  const satAfter = useRef(null);
+  
+   
+  useEffect(() => {
+
+    // If Saturday and after 4:00pm
+
     if (props.today === 6 && props.time >= 16) {
-      document.getElementById('sat-after').classList.add("disabled");
+      satAfter.current.classList.add('disabled');
     };
+
+    // If Thursday or Greater Than Thursday
+
+    if (props.today >= 4) {
+      if (props.today > 4 || props.time >= 18) {
+        thurEve.current.classList.add('disabled');
+      };
+      if (props.today > 4 || props.time >= 7) {
+        thurMorn.current.classList.add('disabled');
+      };
+    }
+
+    // If Tuesday or Greater Than Tuesday
+
+    if (props.today >= 2) {
+      if (props.today > 2 || props.time >= 18) {
+        tueEve.current.classList.add('disabled');
+      };
+      if (props.today > 2 || props.time >= 7 ) {
+        tueMorn.current.classList.add('disabled');
+      };
+    };
+
   })
 
   return(
@@ -26,29 +47,29 @@ export const Reservation = (props) => {
       <form>
         {/* Tuesday Classes */}
         <div className='form-row'>
-          <div id='tue-morn' className='col-6'>
+          <div ref={tueMorn} className='col-6'>
             <label> Martes 7am </label>
             <button type='button' className='btn btn-warning m-2'> Reservar </button>
           </div>
-          <div id='tue-eve' className='col-6'>
+          <div ref={tueEve} className='col-6'>
             <label> Martes 6pm </label>
             <button type='button' className='btn btn-warning m-2'> Reservar </button>
           </div>
         </div>
         {/* Thursday Classes */}
         <div className='form-row'>
-          <div id='thur-morn' className='col-6'>
+          <div ref={thurMorn} className='col-6'>
             <label> Jueves 7am </label>
             <button type='button' className='btn btn-warning m-2'> Reservar </button>
           </div>
-          <div id='thur-eve' className='col-6'>
+          <div ref={thurEve} className='col-6'>
             <label> Jueves 6pm </label>
             <button type='button' className='btn btn-warning m-2'> Reservar </button>
           </div>
         </div>
         {/* Saturday Class */}
         <div className='form-row'>
-          <div id='sat-after' className='col-6'>
+          <div ref={satAfter} className='col-6'>
             <label> Sábado 4pm </label>
             <button type='button' className='btn btn-warning m-2'> Reservar </button>
           </div>
