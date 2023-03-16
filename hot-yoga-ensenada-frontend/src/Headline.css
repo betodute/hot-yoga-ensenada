@@ -1,0 +1,9 @@
+.headline-wrapper {
+  margin-top: 1em;
+  text-align: center;
+}
+
+.headline {
+  font-family: 'Texturina', serif;
+  font-size: 4em;
+}

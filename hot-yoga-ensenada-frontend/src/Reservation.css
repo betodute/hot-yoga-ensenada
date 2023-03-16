@@ -1,0 +1,24 @@
+.reservation-wrapper {
+  margin-top: 1em;
+  text-align: center;
+}
+
+.reservation-wrapper label {
+  font-weight: bold;
+  align-self: center;
+}
+
+.reservation-wrapper div {
+  display: inline-flex;
+  width: fit-content;
+  margin: .5em;
+  padding: .5em;
+  border-radius: 50px;
+  background-color: antiquewhite;
+}
+
+.disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: .50;
+}

@@ -1,0 +1,10 @@
+.profile-wrapper {
+  color: antiquewhite;
+  margin: 2em;
+  text-align: center;
+  border: solid black;
+}
+
+input {
+  margin: .5em;
+}

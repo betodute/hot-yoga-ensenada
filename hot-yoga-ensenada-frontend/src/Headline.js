@@ -1,4 +1,4 @@
-import './Home.css';
+import './Headline.css';
 
 export const Headline = () => {
   return (

@@ -1,4 +1,4 @@
-import './Home.css'
+import './Reservation.css'
 import {useEffect, useRef} from 'react';
 
 export const Reservation = (props) => {

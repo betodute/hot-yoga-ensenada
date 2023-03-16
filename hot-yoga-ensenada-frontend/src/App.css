@@ -5,3 +5,9 @@ font-family: 'Barriecito', cursive;
 font-family: 'Chivo Mono', monospace;
 font-family: 'Labrada', serif;
 font-family: 'Texturina', serif; */
+
+.navbar-item {
+  margin-left: 1em;
+  font-size: 1.5em;
+  color: orange;
+}
