@@ -8,6 +8,11 @@ export const Reservation = (props) => {
   const thurMorn = useRef(null);
   const thurEve = useRef(null);
   const satAfter = useRef(null);
+
+  const reserveClass = (classId) => {
+    console.log(classId.innerText)
+    console.log("Hit")
+  }
   
    
   useEffect(() => {
@@ -49,29 +54,29 @@ export const Reservation = (props) => {
         <div className='form-row'>
           <div ref={tueMorn} className='col-6'>
             <label> Martes 7am </label>
-            <button type='button' className='btn btn-warning m-2'> Reservar </button>
+            <button type='button' className='btn btn-warning m-2' onClick={reserveClass(tueMorn)}> Reservar </button>
           </div>
           <div ref={tueEve} className='col-6'>
             <label> Martes 6pm </label>
-            <button type='button' className='btn btn-warning m-2'> Reservar </button>
+            <button type='button' className='btn btn-warning m-2' onClick={reserveClass}> Reservar </button>
           </div>
         </div>
         {/* Thursday Classes */}
         <div className='form-row'>
           <div ref={thurMorn} className='col-6'>
             <label> Jueves 7am </label>
-            <button type='button' className='btn btn-warning m-2'> Reservar </button>
+            <button type='button' className='btn btn-warning m-2' onClick={reserveClass}> Reservar </button>
           </div>
           <div ref={thurEve} className='col-6'>
             <label> Jueves 6pm </label>
-            <button type='button' className='btn btn-warning m-2'> Reservar </button>
+            <button type='button' className='btn btn-warning m-2' onClick={reserveClass}> Reservar </button>
           </div>
         </div>
         {/* Saturday Class */}
         <div className='form-row'>
           <div ref={satAfter} className='col-6'>
             <label> Sábado 4pm </label>
-            <button type='button' className='btn btn-warning m-2'> Reservar </button>
+            <button type='button' className='btn btn-warning m-2' onClick={reserveClass(satAfter)}> Reservar </button>
           </div>
         </div> 
       </form>

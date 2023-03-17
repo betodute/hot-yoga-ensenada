@@ -1,4 +1,4 @@
-import './Home.css'
+import './Quote.css'
 
 export const Quote = () => {
   return (
