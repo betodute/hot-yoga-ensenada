@@ -1,8 +1,8 @@
-.profile-wrapper {
+.login-wrapper {
   color: antiquewhite;
-  margin: 2em;
   text-align: center;
-  border: solid black;
+  margin: 2em 0em;
+  padding: 1em;
 }
 
 input {

@@ -1,10 +1,51 @@
 import './Quote.css'
 
+let quotes = {
+  quote1: {
+    content: "Quiero aprender de mí mismo, deseo ser mi discípulo, conocerme.",
+    citation: "del libro Siddhartha de Hermann Hesse" 
+  },
+  quote2: {
+    content: "omg",
+    citation: "by omg"
+  },
+  quote3: {
+    content: "omaiga",
+    citation: "by omaiga"
+  }
+}
+
+let randomNum = Math.ceil(Math.random() * 3);
+
+
 export const Quote = () => {
-  return (
-    <div className="quote-wrapper">
-      <h3 className="quote"> "Quiero aprender de mí mismo, deseo ser mi discípulo, conocerme." </h3>
-      <h5 className="quote-author"> del libro Siddhartha de Hermann Hesse </h5>
-    </div>
-  )
+
+  if (randomNum === 1) {
+    return (
+      <div className="quote-wrapper">
+        <h3 className="quote"> {quotes.quote1.content} </h3>
+        <h5 className="quote-author"> {quotes.quote1.citation} </h5>
+      </div>
+    )
+  };
+
+  if (randomNum === 2) {
+    return (
+      <div className="quote-wrapper">
+        <h3 className="quote"> {quotes.quote2.content} </h3>
+        <h5 className="quote-author"> {quotes.quote2.citation} </h5>
+      </div>
+    )
+  };
+
+  if (randomNum === 3) {
+    return (
+      <div className="quote-wrapper">
+        <h3 className="quote"> {quotes.quote3.content} </h3>
+        <h5 className="quote-author"> {quotes.quote3.citation} </h5>
+      </div>
+    )
+  }
+
+
 }

@@ -1,5 +1,5 @@
 import './Reservation.css'
-import {useEffect, useRef} from 'react';
+import {useEffect, useRef, useState} from 'react';
 
 export const Reservation = (props) => {
 
@@ -9,10 +9,11 @@ export const Reservation = (props) => {
   const thurEve = useRef(null);
   const satAfter = useRef(null);
 
-  const reserveClass = (classId) => {
-    console.log(classId.innerText)
-    console.log("Hit")
+  const reserveClass = (whichClass) => {
+    console.log(whichClass)
   }
+
+  const [classReserved, setClassReserved] = useState('');
   
    
   useEffect(() => {
@@ -52,31 +53,31 @@ export const Reservation = (props) => {
       <form>
         {/* Tuesday Classes */}
         <div className='form-row'>
-          <div ref={tueMorn} className='col-6'>
+          <div ref={tueMorn} className='col-5'>
             <label> Martes 7am </label>
-            <button type='button' className='btn btn-warning m-2' onClick={reserveClass(tueMorn)}> Reservar </button>
+            <button type='button' className='btn btn-warning m-2' onClick={()=>{reserveClass('tueMorn')}}> Reservar </button>
           </div>
           <div ref={tueEve} className='col-6'>
             <label> Martes 6pm </label>
-            <button type='button' className='btn btn-warning m-2' onClick={reserveClass}> Reservar </button>
+            <button type='button' className='btn btn-warning m-2' onClick={()=>{reserveClass('tueEve')}}> Reservar </button>
           </div>
         </div>
         {/* Thursday Classes */}
         <div className='form-row'>
           <div ref={thurMorn} className='col-6'>
             <label> Jueves 7am </label>
-            <button type='button' className='btn btn-warning m-2' onClick={reserveClass}> Reservar </button>
+            <button type='button' className='btn btn-warning m-2' onClick={()=>{reserveClass('thurMorn')}}> Reservar </button>
           </div>
           <div ref={thurEve} className='col-6'>
             <label> Jueves 6pm </label>
-            <button type='button' className='btn btn-warning m-2' onClick={reserveClass}> Reservar </button>
+            <button type='button' className='btn btn-warning m-2' onClick={()=>{reserveClass('thurEve')}}> Reservar </button>
           </div>
         </div>
         {/* Saturday Class */}
         <div className='form-row'>
           <div ref={satAfter} className='col-6'>
             <label> Sábado 4pm </label>
-            <button type='button' className='btn btn-warning m-2' onClick={reserveClass(satAfter)}> Reservar </button>
+            <button type='button' className='btn btn-warning m-2' onClick={()=>{reserveClass('satAfter')}}> Reservar </button>
           </div>
         </div> 
       </form>
