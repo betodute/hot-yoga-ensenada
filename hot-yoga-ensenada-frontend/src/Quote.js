@@ -3,11 +3,11 @@ import './Quote.css'
 let quotes = {
   quote1: {
     content: "Quiero aprender de mí mismo, deseo ser mi discípulo, conocerme.",
-    citation: "del libro Siddhartha de Hermann Hesse" 
+    citation: "de la obra Siddhartha de Hermann Hesse" 
   },
   quote2: {
-    content: "omg",
-    citation: "by omg"
+    content: "Lo mismo que al árbol. Cuanto más quiere elevarse hacia la altura y hacia la luz, tanto más fuertemente tienden sus raíces hacia la tierra, hacia abajo, hacia lo oscuro, lo profundo, - hacia el mal",
+    citation: "de la obra Así Hablo Zaratustra de Nietzsche"
   },
   quote3: {
     content: "omaiga",
