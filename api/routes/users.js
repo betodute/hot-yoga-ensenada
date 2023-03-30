@@ -1,14 +1,19 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+
+router.use(express.json());
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
+router.get('/', (req, res) => {
   res.send('Users Get Request: Working Properly');
 });
 
 /* POST users listing */
-router.post('/', function(req, res, next) {
-  res.send('Users Post Request: Working Properly')
+router.post('/', (req, res) => {
+  let regUserData = req.body
+
+  // then send regUserData to Mongo
+  res.json(regUserData);
 })
 
 module.exports = router;

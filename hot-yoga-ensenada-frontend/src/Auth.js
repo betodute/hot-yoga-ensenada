@@ -17,13 +17,20 @@ export const Auth = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("hit", userEmail, userPassword)
+    
   };
 
   const handleRegisterSubmit = (event) => {
     event.preventDefault();
-    console.log("hit handle register", regUserName)
-  }
+
+    fetch('http://localhost:9000/users', {
+      method: 'POST',
+      body: JSON.stringify({regUserName, regPhoneNumber, regUserEmail, regUserPassword}),
+      headers: { 'Content-Type': 'application/json' }
+    })
+    .then((response) => response.json())
+    .then((data) => console.log(data))
+  };
 
   if (authMode === "signin") {
     return (
