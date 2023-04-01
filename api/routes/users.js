@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const userController = require('../controllers/user');
 
 router.use(express.json());
+
 
 /* GET users listing. */
 router.get('/', (req, res) => {
