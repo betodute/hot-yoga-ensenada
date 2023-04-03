@@ -7,8 +7,8 @@ router.use(express.json());
 require('dotenv').config();
 const mongoString = process.env.DATABASE_URL
 
-// Importing User Model (Schema)
-const User = require('../models/user');
+//Import Reservation Model (Schema)
+const Reservation = require('../models/reservation');
 
 mongoose.connect(mongoString);
 const database = mongoose.connection;
@@ -21,23 +21,15 @@ database.once('connected', () => {
   console.log('Database Connected');
 })
 
-/* GET users listing. */
-router.get('/', (req, res) => {
-  res.send('Users Get Request is Working Properly');
-});
-
-/* POST users listing */
 router.post('/', async (req, res) => {
-  const user = new User ({
-    name: req.body.regUserName,
-    phonenumber: req.body.regPhoneNumber,
-    email: req.body.regUserEmail,
-    password: req.body.regUserPassword
+  const reservation = new Reservation ({
+    userID: req.body.userID,
+    classID: req.body.classID
   })
 
   try{
-    const dataToSave = user.save();
-    res.status(200).json(userToSave)
+    const reservationToSave = reservation.save();
+    res.status(200).json(reservationToSave)
   }
   catch(error){
     res.status(400).json({message: error.message})

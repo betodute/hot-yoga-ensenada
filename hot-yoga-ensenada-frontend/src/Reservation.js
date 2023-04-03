@@ -9,8 +9,16 @@ export const Reservation = (props) => {
   const thurEve = useRef(null);
   const satAfter = useRef(null);
 
-  const reserveClass = (whichClass) => {
-    console.log(whichClass)
+  const reserveClass = (classID) => {
+    let userID = "sample-001"
+
+    fetch('http://localhost:9000/reservations', {
+      method: 'POST',
+      body: JSON.stringify({userID, classID}),
+      headers: { 'Content-Type': 'application/json' }
+    })
+    .then((response) => response.json())
+    .then((data) => console.log(data))
   }
 
   const [classReserved, setClassReserved] = useState('');
