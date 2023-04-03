@@ -4,8 +4,7 @@ var router = express.Router();
 router.use(express.json());
 
 router.get('/', function(req, res) {
-    console.log("HIT TEST API")
-    res.send('Test API Route is Working Properly')
+    console.log("Hit Get Route")
 });
 
 module.exports = router;
