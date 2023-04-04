@@ -3,10 +3,10 @@ const mongoose = require('mongoose')
 const router = express.Router();
 router.use(express.json());
 
-// Importing User Schema from Models Directory
-const User = require('../models/user');
+// Importing YogaClass Schema from Models Directory
+const YogaClass = require('../models/yogaclass');
 
-// Importing the .env file using the NPM Package "DotEnv"
+// Importing the .env File Using the NPM Package "DotEnv"
 require('dotenv').config();
 const mongoString = process.env.DATABASE_URL
 
@@ -20,23 +20,17 @@ database.once('connected', () => {
   console.log('Database Connected');
 });
 
-/* GET Users */
-router.get('/', (req, res) => {
-  res.send('Users Get Request is Working Properly');
-});
-
-/* POST Users */
+/* POST YogaClasses */ 
 router.post('/', async (req, res) => {
-  const user = new User ({
-    name: req.body.regUserName,
-    phonenumber: req.body.regPhoneNumber,
-    email: req.body.regUserEmail,
-    password: req.body.regUserPassword
+  const yogaclass = new YogaClass ({
+    date: req.body.date,
+    day: req.body.day,
+    time: req.body.time
   })
 
   try{
-    const dataToSave = user.save();
-    res.status(200).json(userToSave)
+    const yogaClassToSave = yogaclass.save();
+    res.status(200).json(yogaClassToSave)
   }
   catch(error){
     res.status(400).json({message: error.message})

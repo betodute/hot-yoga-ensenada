@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const ReservationSchema = new Schema({
   userID: String,
-  classID: String
+  yogaClassID: String
 })
 
 const Reservation = mongoose.model('Reservation', ReservationSchema);

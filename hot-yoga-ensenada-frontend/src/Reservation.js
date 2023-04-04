@@ -9,12 +9,21 @@ export const Reservation = (props) => {
   const thurEve = useRef(null);
   const satAfter = useRef(null);
 
-  const reserveClass = (classID) => {
+  // So this structure works but put each <YogaClass /> in its own component
+  // I don't need to populate the reservation structure I have now with the actual API class instances
+  // I can simply match the active week with each day in the API  
+
+  const reserveClass = (yogaClassID) => {
+
+    // When reserveClass is clicked the USERID can be added to the appropriate class of the current week. 
+    // The list of class day and time with the corresponding YogaClassDB ID can be listed here to be
+    // Passed down for the Reservation Post
+    
     let userID = "sample-001"
 
     fetch('http://localhost:9000/reservations', {
       method: 'POST',
-      body: JSON.stringify({userID, classID}),
+      body: JSON.stringify({userID, yogaClassID}),
       headers: { 'Content-Type': 'application/json' }
     })
     .then((response) => response.json())
