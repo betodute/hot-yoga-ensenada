@@ -13,7 +13,7 @@ Here's an example of how you can modify the previous code to generate new yogaCl
 */
 
 
-function getWeeklyYogaClasses() {
+/* function getWeeklyYogaClasses() {
   const today = new Date();
   const daysUntilSunday = (7 - today.getDay()) % 7;
   const sunday = new Date(today.getTime() + daysUntilSunday * 24 * 60 * 60 * 1000);
@@ -80,3 +80,4 @@ function App() {
 }
 
 
+ */

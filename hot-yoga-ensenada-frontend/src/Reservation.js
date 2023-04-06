@@ -9,9 +9,14 @@ export const Reservation = (props) => {
   const thurEve = useRef(null);
   const satAfter = useRef(null);
 
-  // So this structure works but put each <YogaClass /> in its own component
-  // I don't need to populate the reservation structure I have now with the actual API class instances
-  // I can simply match the active week with each day in the API  
+  const weekOfClasses = [
+    {day: "Tuesday", time: "7:00 am", caldate: "01/01/2023"},
+    {day: "Tuesday", time: "6:00 pm", caldate:"01/01/2023"},
+    {day: "Thursday", time: "7:00 am", caldate:"01/01/2023"},
+    {day: "Thursday", time: "6:00 pm", caldate:"01/01/2023"},
+    {day: "Saturday", time: "2:00 pm", caldate: "01/01/2023"},
+  ];
+  
 
   const reserveClass = (yogaClassID) => {
 
@@ -65,8 +70,15 @@ export const Reservation = (props) => {
 
   })
 
+  // Obviously I need to create the YogaClass component still
+
   return(
     <div className="reservation-wrapper">
+      <div className="sandbox"> 
+      { weekOfClasses.forEach((element, index) => {
+        <YogaClass singleClass={ element } />
+      }) }
+      </div>
       <form>
         {/* Tuesday Classes */}
         <div className='form-row'>
