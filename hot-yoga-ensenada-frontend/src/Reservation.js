@@ -1,4 +1,5 @@
 import './Reservation.css'
+import { YogaClass } from './YogaClass'
 import {useEffect, useRef, useState} from 'react';
 
 export const Reservation = (props) => {
@@ -10,32 +11,27 @@ export const Reservation = (props) => {
   const satAfter = useRef(null);
 
   const weekOfClasses = [
-    {day: "Tuesday", time: "7:00 am", caldate: "01/01/2023"},
-    {day: "Tuesday", time: "6:00 pm", caldate:"01/01/2023"},
-    {day: "Thursday", time: "7:00 am", caldate:"01/01/2023"},
-    {day: "Thursday", time: "6:00 pm", caldate:"01/01/2023"},
-    {day: "Saturday", time: "2:00 pm", caldate: "01/01/2023"},
+    {day: "Martes ", time: "7am", caldate: "01/01/2023"},
+    {day: "Martes ", time: "6pm", caldate: "01/01/2023"},
+    {day: "Jueves ", time: "7am", caldate: "01/01/2023"},
+    {day: "Jueves ", time: "6pm", caldate: "01/01/2023"},
+    {day: "Sábado ", time: "4pm", caldate: "01/01/2023"},
   ];
   
 
-  const reserveClass = (yogaClassID) => {
-
-    // When reserveClass is clicked the USERID can be added to the appropriate class of the current week. 
-    // The list of class day and time with the corresponding YogaClassDB ID can be listed here to be
-    // Passed down for the Reservation Post
+  const reserveClass = () => {
     
     let userID = "sample-001"
 
     fetch('http://localhost:9000/reservations', {
       method: 'POST',
-      body: JSON.stringify({userID, yogaClassID}),
+      body: JSON.stringify({userID}),
       headers: { 'Content-Type': 'application/json' }
     })
     .then((response) => response.json())
     .then((data) => console.log(data))
   }
-
-  const [classReserved, setClassReserved] = useState('');
+  
   
    
   useEffect(() => {
@@ -74,42 +70,39 @@ export const Reservation = (props) => {
 
   return(
     <div className="reservation-wrapper">
-      <div className="sandbox"> 
-      { weekOfClasses.forEach((element, index) => {
-        <YogaClass singleClass={ element } />
-      }) }
-      </div>
       <form>
         {/* Tuesday Classes */}
+
         <div className='form-row'>
-          <div ref={tueMorn} className='col-5'>
-            <label> Martes 7am </label>
-            <button type='button' className='btn btn-warning m-2' onClick={()=>{reserveClass('tueMorn')}}> Reservar </button>
+          <div ref={tueMorn} className='yoga-class col-6'>
+            <YogaClass singleClass={weekOfClasses[0]} />
           </div>
-          <div ref={tueEve} className='col-6'>
-            <label> Martes 6pm </label>
-            <button type='button' className='btn btn-warning m-2' onClick={()=>{reserveClass('tueEve')}}> Reservar </button>
+          <div ref={tueEve} className='yoga-class col-6'>
+            <YogaClass singleClass={weekOfClasses[1]} />
           </div>
         </div>
+
         {/* Thursday Classes */}
+
         <div className='form-row'>
-          <div ref={thurMorn} className='col-6'>
-            <label> Jueves 7am </label>
-            <button type='button' className='btn btn-warning m-2' onClick={()=>{reserveClass('thurMorn')}}> Reservar </button>
+          <div ref={thurMorn} className='yoga-class col-6'>
+            <YogaClass singleClass={weekOfClasses[2]} />
           </div>
-          <div ref={thurEve} className='col-6'>
-            <label> Jueves 6pm </label>
-            <button type='button' className='btn btn-warning m-2' onClick={()=>{reserveClass('thurEve')}}> Reservar </button>
+          <div ref={thurEve} className='yoga-class col-6'>
+            <YogaClass singleClass={weekOfClasses[3]} />
           </div>
         </div>
+     
         {/* Saturday Class */}
+      
         <div className='form-row'>
-          <div ref={satAfter} className='col-6'>
-            <label> Sábado 4pm </label>
-            <button type='button' className='btn btn-warning m-2' onClick={()=>{reserveClass('satAfter')}}> Reservar </button>
+          <div ref={satAfter} className='yoga-class col-6'>
+            <YogaClass singleClass={weekOfClasses[4]} />
           </div>
-        </div> 
+        </div>
+     
       </form>
     </div>
   );
+
 };

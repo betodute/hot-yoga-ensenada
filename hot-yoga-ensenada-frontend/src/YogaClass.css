@@ -1,0 +1,17 @@
+.single-class {
+  margin: .5em;
+  padding: .7em .5em .7em 1em;
+  border-radius: 50px;
+  background-color: antiquewhite;
+}
+
+.single-class label {
+  font-size: large;
+  align-self: center;
+}
+
+.disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: .50;
+}
