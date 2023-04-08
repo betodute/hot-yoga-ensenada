@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
   })
 
   try{
-    const yogaClassToSave = yogaclass.save();
+    const yogaClassToSave = await yogaclass.save();
     res.status(200).json(yogaClassToSave)
   }
   catch(error){

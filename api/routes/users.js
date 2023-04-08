@@ -35,12 +35,13 @@ router.post('/', async (req, res) => {
   })
 
   try{
-    const dataToSave = user.save();
+    const userToSave = await user.save();
     res.status(200).json(userToSave)
   }
   catch(error){
     res.status(400).json({message: error.message})
   }
+
 })
 
 module.exports = router;

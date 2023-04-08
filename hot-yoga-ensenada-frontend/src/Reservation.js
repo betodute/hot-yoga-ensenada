@@ -11,11 +11,11 @@ export const Reservation = (props) => {
   const satAfter = useRef(null);
 
   const weekOfClasses = [
-    {day: "Martes ", time: "7am", caldate: "01/01/2023"},
-    {day: "Martes ", time: "6pm", caldate: "01/01/2023"},
-    {day: "Jueves ", time: "7am", caldate: "01/01/2023"},
-    {day: "Jueves ", time: "6pm", caldate: "01/01/2023"},
-    {day: "Sábado ", time: "4pm", caldate: "01/01/2023"},
+    {day: "Martes ", time: "7am", caldate: "01/01/2023", order: 0},
+    {day: "Martes ", time: "6pm", caldate: "01/01/2023", order: 1},
+    {day: "Jueves ", time: "7am", caldate: "01/01/2023", order: 2},
+    {day: "Jueves ", time: "6pm", caldate: "01/01/2023", order: 3},
+    {day: "Sábado ", time: "4pm", caldate: "01/01/2023", order: 4},
   ];
   
 
@@ -75,10 +75,10 @@ export const Reservation = (props) => {
 
         <div className='form-row'>
           <div ref={tueMorn} className='yoga-class col-6'>
-            <YogaClass singleClass={weekOfClasses[0]} />
+            <YogaClass singleClass={weekOfClasses[0]} id={weekOfClasses[0].order} />
           </div>
           <div ref={tueEve} className='yoga-class col-6'>
-            <YogaClass singleClass={weekOfClasses[1]} />
+            <YogaClass singleClass={weekOfClasses[1]} id={weekOfClasses[1].order} />
           </div>
         </div>
 
@@ -86,10 +86,10 @@ export const Reservation = (props) => {
 
         <div className='form-row'>
           <div ref={thurMorn} className='yoga-class col-6'>
-            <YogaClass singleClass={weekOfClasses[2]} />
+            <YogaClass singleClass={weekOfClasses[2]} id={weekOfClasses[2].order} />
           </div>
           <div ref={thurEve} className='yoga-class col-6'>
-            <YogaClass singleClass={weekOfClasses[3]} />
+            <YogaClass singleClass={weekOfClasses[3]} id={weekOfClasses[3].order} />
           </div>
         </div>
      
@@ -97,7 +97,7 @@ export const Reservation = (props) => {
       
         <div className='form-row'>
           <div ref={satAfter} className='yoga-class col-6'>
-            <YogaClass singleClass={weekOfClasses[4]} />
+            <YogaClass singleClass={weekOfClasses[4]} id={weekOfClasses[4].order} />
           </div>
         </div>
      

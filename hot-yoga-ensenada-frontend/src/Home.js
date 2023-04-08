@@ -7,13 +7,13 @@ import './Home.css'
 
 export const Home = () => {
 
-  const [today, setToday] = useState('');
+ /*  const [today, setToday] = useState('');
   const [time, setTime] = useState('');
 
   useEffect(() => {
     setToday(new Date().getDay());
     setTime(new Date().getHours());
-  });
+  }); */
  
   return(
     <div className='container'>
@@ -23,7 +23,7 @@ export const Home = () => {
           <img className="home-image mx-auto d-block" src={homeImageOne}></img>
         </div>
         <Quote className='col-12'/>
-        <Reservation today={today} time={time} className='col-12'/>
+        <Reservation today={new Date().getDay()} time={new Date().getHours()} className='col-12'/>
       </div>
     </div>
   );

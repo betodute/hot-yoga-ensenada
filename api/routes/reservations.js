@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
   })
 
   try{
-    const reservationToSave = reservation.save();
+    const reservationToSave = await reservation.save();
     res.status(200).json(reservationToSave)
   }
   catch(error){
