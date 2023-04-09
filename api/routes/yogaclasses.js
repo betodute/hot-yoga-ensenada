@@ -22,6 +22,7 @@ database.once('connected', () => {
 
 /* POST YogaClasses */ 
 router.post('/', async (req, res) => {
+
   const yogaclass = new YogaClass ({
     date: req.body.date,
     day: req.body.day,
@@ -29,7 +30,9 @@ router.post('/', async (req, res) => {
   })
 
   try{
+    console.log("save before")
     const yogaClassToSave = await yogaclass.save();
+    console.log("save after")
     res.status(200).json(yogaClassToSave)
   }
   catch(error){

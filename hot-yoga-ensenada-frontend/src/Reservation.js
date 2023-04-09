@@ -17,12 +17,19 @@ export const Reservation = (props) => {
     {day: "Jueves ", time: "6pm", caldate: "01/01/2023", order: 3},
     {day: "Sábado ", time: "4pm", caldate: "01/01/2023", order: 4},
   ];
-  
+
+  weekOfClasses.forEach((yogaclass)=> {
+    fetch('http://localhost:9000/yogaclasses', {
+      method: 'POST',
+      body: JSON.stringify({ date: yogaclass.caldate, day: yogaclass.day, time: yogaclass.time }),
+      headers: { 'Content-Type': 'application/json' }
+    })
+    .then((response) => response.json())
+    .then((data) => console.log(data))
+  })
 
   const reserveClass = () => {
-    
     let userID = "sample-001"
-
     fetch('http://localhost:9000/reservations', {
       method: 'POST',
       body: JSON.stringify({userID}),
@@ -31,8 +38,6 @@ export const Reservation = (props) => {
     .then((response) => response.json())
     .then((data) => console.log(data))
   }
-  
-  
    
   useEffect(() => {
 
@@ -66,8 +71,6 @@ export const Reservation = (props) => {
 
   })
 
-  // Obviously I need to create the YogaClass component still
-
   return(
     <div className="reservation-wrapper">
       <form>
@@ -75,10 +78,10 @@ export const Reservation = (props) => {
 
         <div className='form-row'>
           <div ref={tueMorn} className='yoga-class col-6'>
-            <YogaClass singleClass={weekOfClasses[0]} id={weekOfClasses[0].order} />
+            <YogaClass singleClass={weekOfClasses[0]}/>
           </div>
           <div ref={tueEve} className='yoga-class col-6'>
-            <YogaClass singleClass={weekOfClasses[1]} id={weekOfClasses[1].order} />
+            <YogaClass singleClass={weekOfClasses[1]} />
           </div>
         </div>
 
@@ -86,10 +89,10 @@ export const Reservation = (props) => {
 
         <div className='form-row'>
           <div ref={thurMorn} className='yoga-class col-6'>
-            <YogaClass singleClass={weekOfClasses[2]} id={weekOfClasses[2].order} />
+            <YogaClass singleClass={weekOfClasses[2]} />
           </div>
           <div ref={thurEve} className='yoga-class col-6'>
-            <YogaClass singleClass={weekOfClasses[3]} id={weekOfClasses[3].order} />
+            <YogaClass singleClass={weekOfClasses[3]} />
           </div>
         </div>
      
@@ -97,7 +100,7 @@ export const Reservation = (props) => {
       
         <div className='form-row'>
           <div ref={satAfter} className='yoga-class col-6'>
-            <YogaClass singleClass={weekOfClasses[4]} id={weekOfClasses[4].order} />
+            <YogaClass singleClass={weekOfClasses[4]} />
           </div>
         </div>
      
