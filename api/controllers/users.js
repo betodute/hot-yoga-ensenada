@@ -1,26 +1,24 @@
-/* const User = require('../models/user');
-const express = require('express');
-const router = express.Router();
-const mongoose = require('mongoose');
+const User = require('../models/user');
 
 
-router.post("/", (req, res) => {
-  
+exports.createUser = async (req, res) => {
+  console.log(req.body)
+
   const user = new User ({
-    name: "Marco Antonio Solis",
-    phonenumber: "555-555-5555",
-    email: "omg@omg",
-    password: "omg",
+    name: req.body.regUserName,
+    phonenumber: req.body.regPhoneNumber,
+    email: req.body.regUserEmail,
+    password: req.body.regUserPassword
   })
+  
+  try {
+    const userToSave = await user.save();
+    res.status(200).json(userToSave);
 
-  user.save((error) => {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log('Data saved successfully!');
-    }
-  });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 
-})
 
-mongoose.connect('mongodb://localhost:27017/hot_yoga'); */
+}
+

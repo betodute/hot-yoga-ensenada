@@ -1,4 +1,4 @@
-import React from 'react';
+import {React, useEffect} from 'react';
 import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 import { Home } from './Home'
 import { Auth } from './Auth'
@@ -12,7 +12,7 @@ let randomNum = Math.ceil(Math.random() * 2);
 
 function App() {
   
-  if (randomNum === 1) {
+  if (randomNum) {
     return(
     <Router>
       <Routes>
@@ -22,7 +22,7 @@ function App() {
     )
   };
 
-  if (randomNum === 2) {
+  /* if (randomNum === 2) {
     return (
       <Router>
         <Routes>
@@ -30,7 +30,7 @@ function App() {
         </Routes>
       </Router>
     )
-  }
+  } */
 }
 
 export default App;

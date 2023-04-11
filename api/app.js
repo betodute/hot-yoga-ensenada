@@ -10,10 +10,14 @@ var usersRouter = require('./routes/users');
 var reservationsRouter = require('./routes/reservations');
 var yogaClassesRouter = require('./routes/yogaclasses')
 
+// DB Connection
+require('dotenv').config();
+const mongoose = require('mongoose');
+
 var app = express();
 console.log("Printed from App.JS Express API")
 
-// view engine setup
+// View Engine Setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
@@ -28,6 +32,22 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/reservations', reservationsRouter);
 app.use('/yogaclasses', yogaClassesRouter)
+
+// DB Connection
+
+const mongoString = process.env.DATABASE_URL
+
+// Connecting to MongoDB and Printing Error or Confirmation
+mongoose.connect(mongoString);
+const database = mongoose.connection;
+database.on('error', (error) => {
+  console.log(error)
+});
+database.once('connected', () => {
+  console.log('Database Connected');
+});
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
