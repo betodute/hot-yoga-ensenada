@@ -9,6 +9,7 @@ export const YogaClass = (props) => {
     let sampleUserID = '010101'
     let parentDivID = event.currentTarget.parentNode.id;
     console.log('User ID =', sampleUserID, "Class ID =", parentDivID)
+    //fetch('http://localhost:9000/users/testregister')
   }
 
 

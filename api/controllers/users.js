@@ -1,5 +1,12 @@
+const mongoose = require('mongoose');
+const passportLocalMongoose = require('passport-local-mongoose');
 const User = require('../models/user');
 
+
+exports.testRegister = async (req, res) => {
+  console.log(req.body)
+  User.register({ username: 'boocoo', active: false }, 'caneyomgomg');
+}
 
 exports.createUser = async (req, res) => {
   console.log(req.body)
@@ -18,7 +25,6 @@ exports.createUser = async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-
 
 }
 

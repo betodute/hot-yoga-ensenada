@@ -1,7 +1,6 @@
 const YogaClass = require('../models/yogaclass');
 
 exports.getYogaClasses = async (req, res) => {
-  console.log("HIT GET CONTROLLER")
   try {
     const yogaClasses = await YogaClass.find({});
     res.status(200).json(yogaClasses);

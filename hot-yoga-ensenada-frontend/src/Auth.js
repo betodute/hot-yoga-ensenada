@@ -17,6 +17,8 @@ export const Auth = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    // This is where the dashboard Get Request goes 
+    
     
   };
 
