@@ -9,7 +9,7 @@ router.use(express.json());
 router.post('/', userController.createUser)
 
 /* TEST REGISTER */
-router.get('/testregister', userController.testRegister)
+router.post('/testregister', userController.testRegister)
 
 /* AUTH */
 

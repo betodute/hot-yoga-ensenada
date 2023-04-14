@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { redirect } from 'react-router-dom';
 import './Auth.css';
 
 export const Auth = () => {
@@ -10,6 +11,8 @@ export const Auth = () => {
   let [regPhoneNumber, setRegPhoneNumber] = useState("");
   let [regUserEmail, setRegUserEmail] = useState("");
   let [regUserPassword, setRegUserPassword] = useState("");
+  let [apiUserData, setApiUserData] = useState(null);
+  let [redirectUrl, setRedirectUrl] = useState('');
 
   const changeAuthMode = () => {
     setAuthMode(authMode === "signin" ? "signup" : "signin")
@@ -24,15 +27,19 @@ export const Auth = () => {
 
   const handleRegisterSubmit = (event) => {
     event.preventDefault();
-
-    fetch('http://localhost:9000/users', {
+    fetch('http://localhost:9000/user/testregister', {
       method: 'POST',
       body: JSON.stringify({regUserName, regPhoneNumber, regUserEmail, regUserPassword}),
       headers: { 'Content-Type': 'application/json' }
     })
-    .then((response) => response.json())
-    .then((data) => console.log(data))
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      //setRedirectUrl('/success')
   };
+
+  if (redirectUrl === '/success') {
+    return redirect('/home');
+  }
 
   if (authMode === "signin") {
     return (
@@ -44,7 +51,7 @@ export const Auth = () => {
             <div className="text-center">
               Not registered yet?{" "}
               <span className="link-primary" onClick={changeAuthMode}>
-              Regístrese
+              Regístrate
               </span>
             </div>
             <div className="form-group mt-3">
@@ -86,7 +93,7 @@ export const Auth = () => {
       <form className="auth-form" onSubmit={handleRegisterSubmit}>
         <div className="auth-form-content">
           <h5 className="auth-form-hye">Hot Yoga Ensenada</h5>
-          <h3 className="auth-form-title">Regístrese</h3>
+          <h3 className="auth-form-title">Regístrate</h3>
           <div className="text-center">
             Already registered?{" "}
             <span className="link-primary" onClick={changeAuthMode}>

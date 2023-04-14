@@ -8,29 +8,16 @@ const NotFound = () => {
   return <h2>404 Not Found</h2>;
 }
 
-let randomNum = Math.ceil(Math.random() * 2);
-
 function App() {
   
-  if (randomNum) {
-    return(
+  return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Auth />} />
+        <Route path="/home" element={<Home />} />
       </Routes>
     </Router>
-    )
-  };
-
-  /* if (randomNum === 2) {
-    return (
-      <Router>
-        <Routes>
-          <Route path="/" element={<Auth />} />
-        </Routes>
-      </Router>
-    )
-  } */
+  )
 }
 
-export default App;
+export default App

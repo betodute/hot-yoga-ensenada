@@ -9,7 +9,6 @@ export const YogaClass = (props) => {
     let sampleUserID = '010101'
     let parentDivID = event.currentTarget.parentNode.id;
     console.log('User ID =', sampleUserID, "Class ID =", parentDivID)
-    //fetch('http://localhost:9000/users/testregister')
   }
 
 
@@ -17,7 +16,7 @@ export const YogaClass = (props) => {
   // THIS WAY THERE ARE ONLY 5 ACTIVE CLASSES THAT GET CALLED HERE EACH TIME
  
   useEffect(() => {
-    fetch('http://localhost:9000/yogaclasses')
+    fetch('http://localhost:9000/yogaclass')
       .then(response => response.json())
       .then(data => setApiList(data))
       .catch(error => console.log(error));
