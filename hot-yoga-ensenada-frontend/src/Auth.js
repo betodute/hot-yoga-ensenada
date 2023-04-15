@@ -34,7 +34,6 @@ export const Auth = () => {
     })
       .then((response) => response.json())
       .then((data) => console.log(data))
-      //setRedirectUrl('/success')
   };
 
   if (redirectUrl === '/success') {

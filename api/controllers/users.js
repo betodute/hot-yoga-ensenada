@@ -27,7 +27,9 @@ exports.registerUser = async (req, res) => {
   );
 };
 
+
 exports.dashboardUser = async (req, res) => {
+
   res.send(`Hello ${req.user.username}. Your session ID is ${req.sessionID} 
   and your session expires in ${req.session.cookie.maxAge} 
   milliseconds.<br><br>
@@ -36,7 +38,7 @@ exports.dashboardUser = async (req, res) => {
 }
 
 exports.homeUser = async (req, res) => {
-  res.sendFile(__dirname + '../hot-yoga-ensenada-frontend/src/Home.js')
+  res.redirect('localhost:3000/home')
 }
 
 exports.logoutUser = async (req, res) => {
