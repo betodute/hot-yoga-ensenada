@@ -27,7 +27,7 @@ export const Auth = () => {
 
   const handleRegisterSubmit = (event) => {
     event.preventDefault();
-    fetch('http://localhost:9000/user/testregister', {
+    fetch('http://localhost:9000/user/registerUser', {
       method: 'POST',
       body: JSON.stringify({regUserName, regPhoneNumber, regUserEmail, regUserPassword}),
       headers: { 'Content-Type': 'application/json' }

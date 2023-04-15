@@ -5,34 +5,13 @@ const connectEnsureLogin = require('connect-ensure-login');// authorization
 const userController = require('../controllers/users');
 router.use(express.json());
 
-/* POST Users */
-router.post('/', userController.createUser)
-
-/* TEST REGISTER */
-router.post('/testregister', userController.testRegister)
+/* Post New User */
+router.post('/registerUser', userController.registerUser)
 
 /* AUTH */
-
-router.get('/dashboard', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
-  res.send(`Hello ${req.user.username}. Your session ID is ${req.sessionID} 
-   and your session expires in ${req.session.cookie.maxAge} 
-   milliseconds.<br><br>
-   <a href="/logout">Log Out</a><br><br>
-   <a href="/Home">Members Only</a>`);
-});
-
-router.get('/Home', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
-  res.sendFile(__dirname + '../hot-yoga-ensenada-frontend/src/Home.js');
-});
-
-router.get('/logout', function(req, res) {
-  req.logout();
-  res.redirect('/login');
-});
-
-router.post('/login', passport.authenticate('local', { failureRedirect: '/' }),  function(req, res) {
-	console.log(req.user)
-	res.redirect('/dashboard');
-});
+router.get('/dashboardUser', connectEnsureLogin.ensureLoggedIn(), userController.dashboardUser);
+router.get('/homeUser', connectEnsureLogin.ensureLoggedIn(), userController.homeUser); 
+router.get('/logout', userController.logoutUser);
+router.post('/login', passport.authenticate('local', { failureRedirect: '/' }),  userController.loginUser);
 
 module.exports = router;

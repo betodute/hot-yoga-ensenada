@@ -3,11 +3,10 @@ const passportLocalMongoose = require('passport-local-mongoose');
 var express = require('express');
 const router = express.Router();
 const passport = require('passport');  // authentication
-
 router.use(express.json());
 const User = require('../models/user');
 
-exports.testRegister = async (req, res) => {
+exports.registerUser = async (req, res) => {
   User.register(
     new User({ 
       name: req.body.regUserName,
@@ -22,31 +21,31 @@ exports.testRegister = async (req, res) => {
       }
       else {
         console.log('User registered successfully: ' + user.username);
-        console.log(user)
         res.status(200).json(user)
       }
     }
   );
 };
 
+exports.dashboardUser = async (req, res) => {
+  res.send(`Hello ${req.user.username}. Your session ID is ${req.sessionID} 
+  and your session expires in ${req.session.cookie.maxAge} 
+  milliseconds.<br><br>
+  <a href="/logout">Log Out</a><br><br>
+  <a href="/Home">Members Only</a>`)
+}
 
-exports.createUser = async (req, res) => {
-  console.log(req.body)
+exports.homeUser = async (req, res) => {
+  res.sendFile(__dirname + '../hot-yoga-ensenada-frontend/src/Home.js')
+}
 
-  const user = new User ({
-    name: req.body.regUserName,
-    phonenumber: req.body.regPhoneNumber,
-    email: req.body.regUserEmail,
-    password: req.body.regUserPassword
-  })
-  
-  try {
-    const userToSave = await user.save();
-    res.status(200).json(userToSave);
+exports.logoutUser = async (req, res) => {
+  req.logout();
+  res.redirect('/login');
+}
 
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-
+exports.loginUser = async (req, res) => {
+  console.log(req.user)
+	res.redirect('/dashboard');
 }
 
