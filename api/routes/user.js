@@ -5,13 +5,12 @@ const connectEnsureLogin = require('connect-ensure-login');// Authorization: Jur
 const userController = require('../controllers/users');
 router.use(express.json());
 
-/* Post New User */
-router.post('/registerUser', userController.registerUser)
 
-/* Auth */
+router.post('/registerUser', userController.registerUser)
+router.post('/login', passport.authenticate('local', { failureRedirect: '/login' }), userController.loginUser);
 router.get('/dashboardUser', connectEnsureLogin.ensureLoggedIn(), userController.dashboardUser);
 router.get('/homeUser', connectEnsureLogin.ensureLoggedIn(), userController.homeUser); 
 router.get('/logout', userController.logoutUser);
-router.post('/login', passport.authenticate('local', { failureRedirect: '/registerUser' }),  userController.loginUser);
+
 
 module.exports = router;

@@ -48,6 +48,6 @@ exports.logoutUser = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
   console.log(req.user)
-	res.redirect('/dashboard');
+	res.send('LOGGED IN');
 }
 

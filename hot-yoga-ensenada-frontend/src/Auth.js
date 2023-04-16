@@ -20,9 +20,14 @@ export const Auth = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // This is where the dashboard Get Request goes 
-    
-    
+    console.log("handle submit")
+    fetch('http://localhost:9000/user/login', {
+      method: 'POST',
+      body: JSON.stringify({userEmail, userPassword}),
+      headers: { 'Content-Type': 'application/json' }
+    })
+      .then((response) => response.json())
+      .then((data) => console.log("Login Response", data))
   };
 
   const handleRegisterSubmit = (event) => {
