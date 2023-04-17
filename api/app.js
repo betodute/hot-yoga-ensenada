@@ -21,18 +21,19 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 
 var app = express();
-console.log("Printed from App.JS Express API")
 
 // View Engine Setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
+// Middleware
+app.use(express.static(path.join(__dirname, "..", "hot-yoga-ensenada-frontend/public/src")));
 
 app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/user', usersRouter);
@@ -79,7 +80,7 @@ app.use(session({
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.authenticate('session'));
 
 passport.use(User.createStrategy());
 

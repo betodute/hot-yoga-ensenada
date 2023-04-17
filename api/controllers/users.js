@@ -29,7 +29,6 @@ exports.registerUser = async (req, res) => {
 
 
 exports.dashboardUser = async (req, res) => {
-
   res.send(`Hello ${req.user.username}. Your session ID is ${req.sessionID} 
   and your session expires in ${req.session.cookie.maxAge} 
   milliseconds.<br><br>
@@ -47,7 +46,11 @@ exports.logoutUser = async (req, res) => {
 }
 
 exports.loginUser = async (req, res) => {
-  console.log(req.user)
-	res.send('LOGGED IN');
+  console.log(req.body.userEmail)
+  passport.authenticate('local', {
+    successRedirect: console.log("hit success"),
+    failureRedirect: console.log("hit failure")
+  })
+  res.send(req.body);
 }
 

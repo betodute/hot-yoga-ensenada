@@ -6,5 +6,5 @@ const ReservationSchema = new Schema({
   yogaClassID: String
 })
 
-const Reservation = mongoose.model('Reservation', ReservationSchema);
+const Reservation = mongoose.model('Reservation', ReservationSchema, 'Reservation');
 module.exports = Reservation

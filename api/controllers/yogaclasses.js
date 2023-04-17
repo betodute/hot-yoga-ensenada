@@ -18,7 +18,7 @@ exports.createYogaClass = async (req, res) => {
   });
 
   try {
-    const yogaClassToSave = await YogaClass.save();
+    const yogaClassToSave = await yogaclass.save();
     res.status(200).json(yogaClassToSave);
 
   } catch (error) {

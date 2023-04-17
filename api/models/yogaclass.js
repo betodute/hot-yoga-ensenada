@@ -7,5 +7,5 @@ const YogaClassSchema = new Schema({
   time: String,
 })
 
-const YogaClass = mongoose.model('YogaClass', YogaClassSchema);
+const YogaClass = mongoose.model('YogaClass', YogaClassSchema, 'YogaClass');
 module.exports = YogaClass

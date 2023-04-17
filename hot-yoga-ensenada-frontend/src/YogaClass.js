@@ -10,16 +10,23 @@ export const YogaClass = (props) => {
     let parentDivID = event.currentTarget.parentNode.id;
     console.log('User ID =', sampleUserID, "Class ID =", parentDivID)
   }
-
-
-  // LATER - ONLY SEARCH "ACTIVE" CLASSES IN THE API! MAKE ACTIVE AN ATTRIBUTE WITH A BOOLEAN VALUE
-  // THIS WAY THERE ARE ONLY 5 ACTIVE CLASSES THAT GET CALLED HERE EACH TIME
  
   useEffect(() => {
-    fetch('http://localhost:9000/yogaclass')
-      .then(response => response.json())
-      .then(data => setApiList(data))
-      .catch(error => console.log(error));
+    const postClasses = async () => {
+      const postClasses = await fetch('http://localhost:9000/yogaclass', {
+        method: 'POST',
+        body: JSON.stringify({date: props.singleClass.calDate, day: props.singleClass.day, time: props.singleClass.time}),
+        headers: { 'Content-Type': 'application/json' }})
+      const json1 = await postClasses.json();
+      console.log(json1);
+    }
+    const getClasses = async () => {
+      const getClasses = await fetch('http://localhost:9000/yogaclass')
+      const json2 = await getClasses.json();
+      setApiList(json2);
+    }
+    //postClasses();
+    getClasses();
   }, [])
 
   const matchingAPI = apiList.find(singleAPI => singleAPI.day === props.singleClass.day && singleAPI.time === props.singleClass.time);

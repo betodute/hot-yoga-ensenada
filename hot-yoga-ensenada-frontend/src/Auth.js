@@ -1,8 +1,10 @@
 import React, { useState } from "react"
-import { redirect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'
 import './Auth.css';
 
 export const Auth = () => {
+
+  const navigate = useNavigate();
 
   let [authMode, setAuthMode] = useState("signin");
   let [userEmail, setUserEmail] = useState("");
@@ -11,8 +13,6 @@ export const Auth = () => {
   let [regPhoneNumber, setRegPhoneNumber] = useState("");
   let [regUserEmail, setRegUserEmail] = useState("");
   let [regUserPassword, setRegUserPassword] = useState("");
-  let [apiUserData, setApiUserData] = useState(null);
-  let [redirectUrl, setRedirectUrl] = useState('');
 
   const changeAuthMode = () => {
     setAuthMode(authMode === "signin" ? "signup" : "signin")
@@ -20,7 +20,6 @@ export const Auth = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("handle submit")
     fetch('http://localhost:9000/user/login', {
       method: 'POST',
       body: JSON.stringify({userEmail, userPassword}),
@@ -28,6 +27,7 @@ export const Auth = () => {
     })
       .then((response) => response.json())
       .then((data) => console.log("Login Response", data))
+      navigate('/home');
   };
 
   const handleRegisterSubmit = (event) => {
@@ -40,10 +40,6 @@ export const Auth = () => {
       .then((response) => response.json())
       .then((data) => console.log(data))
   };
-
-  if (redirectUrl === '/success') {
-    return redirect('/home');
-  }
 
   if (authMode === "signin") {
     return (

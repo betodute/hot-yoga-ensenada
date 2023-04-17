@@ -7,7 +7,7 @@ router.use(express.json());
 
 
 router.post('/registerUser', userController.registerUser)
-router.post('/login', passport.authenticate('local', { failureRedirect: '/login' }), userController.loginUser);
+router.post('/login', userController.loginUser);
 router.get('/dashboardUser', connectEnsureLogin.ensureLoggedIn(), userController.dashboardUser);
 router.get('/homeUser', connectEnsureLogin.ensureLoggedIn(), userController.homeUser); 
 router.get('/logout', userController.logoutUser);
