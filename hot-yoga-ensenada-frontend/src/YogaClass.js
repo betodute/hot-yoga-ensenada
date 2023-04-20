@@ -15,7 +15,7 @@ export const YogaClass = (props) => {
     const postClasses = async () => {
       const postClasses = await fetch('http://localhost:9000/yogaclass', {
         method: 'POST',
-        body: JSON.stringify({date: props.singleClass.calDate, day: props.singleClass.day, time: props.singleClass.time}),
+        body: JSON.stringify({date: props.singleClass.caldate, day: props.singleClass.day, time: props.singleClass.time}),
         headers: { 'Content-Type': 'application/json' }})
       const json1 = await postClasses.json();
       console.log(json1);

@@ -7,8 +7,8 @@ export const Auth = () => {
   const navigate = useNavigate();
 
   let [authMode, setAuthMode] = useState("signin");
-  let [userEmail, setUserEmail] = useState("");
-  let [userPassword, setUserPassword] = useState("");
+  let [username, setUserEmail] = useState("");
+  let [password, setUserPassword] = useState("");
   let [regUserName, setRegUserName] = useState("");
   let [regPhoneNumber, setRegPhoneNumber] = useState("");
   let [regUserEmail, setRegUserEmail] = useState("");
@@ -22,12 +22,12 @@ export const Auth = () => {
     event.preventDefault();
     fetch('http://localhost:9000/user/login', {
       method: 'POST',
-      body: JSON.stringify({userEmail, userPassword}),
+      body: JSON.stringify({username, password}),
       headers: { 'Content-Type': 'application/json' }
     })
       .then((response) => response.json())
       .then((data) => console.log("Login Response", data))
-      navigate('/home');
+      //navigate('/home');
   };
 
   const handleRegisterSubmit = (event) => {
@@ -60,7 +60,7 @@ export const Auth = () => {
                 type="email"
                 className="form-control mt-1"
                 placeholder="Enter email"
-                value={userEmail}
+                value={username}
                 onChange={(event) => {setUserEmail(event.target.value)}}
               />
             </div>
@@ -70,7 +70,7 @@ export const Auth = () => {
                 type="password"
                 className="form-control mt-1"
                 placeholder="Enter password"
-                value={userPassword}
+                value={password}
                 onChange={(event) => {setUserPassword(event.target.value)}}
               />
             </div>

@@ -79,5 +79,14 @@ function App() {
   );
 }
 
+  let user = {
+    username: req.body.userEmail,
+    password: req.body.password
+  }
+  req.login(user, function(err) {
+    if (err) { return next(err); }
+    res.send('user logged into passport');
+  });
+
 
  */
