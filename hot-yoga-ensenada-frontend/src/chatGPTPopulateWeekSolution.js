@@ -88,5 +88,18 @@ function App() {
     res.send('user logged into passport');
   });
 
+  
+
+    User.register(newUser, req.body.regUserPassword, function(err, user) {
+    if (err) {
+      console.log('Error: ' + err);
+      res.status(400).json({ message: 'Error registering user' });
+    } else {
+      console.log('User registered successfully: ' + user.username);
+      res.status(200).json(user);
+    }
+  });
+};
+
 
  */

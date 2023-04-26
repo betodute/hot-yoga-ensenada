@@ -10,7 +10,7 @@ const passport = require('passport');  // authentication
 var LocalStrategy = require('passport-local')
 const MongoStore = require('connect-mongo');
 
-
+// Routes Directory
 var usersRouter = require('./routes/user');
 var reservationsRouter = require('./routes/reservation');
 var yogaClassesRouter = require('./routes/yogaclass');
@@ -33,8 +33,9 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: false }));
 
-
+// Routes Declaration
 app.use('/user', usersRouter);
 app.use('/reservation', reservationsRouter);
 app.use('/yogaclass', yogaClassesRouter)
@@ -51,8 +52,6 @@ database.on('error', (error) => {
 database.once('connected', () => {
   console.log('Database Connected');
 });
-
-console.log(secret, mongoString)
 
 const store = new MongoStore({
   mongoUrl: mongoString,
@@ -71,18 +70,13 @@ const sessionConfig = {
   resave: false,
   saveUninitialized: true,
   cookie: {
-      // protect against cookies being extracted by a javascript attack
       httpOnly: true,
-      // you want this setting for shtml but doesn't work on local server
-      // secure: true,
       expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
       maxAge: 1000 * 60 * 60 * 24 * 7
   }
 }
 
-app.use(session(sessionConfig))
-
-
+app.use(session(sessionConfig));
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
@@ -105,6 +99,5 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.use(bodyParser.urlencoded({ extended: false }));
 
 module.exports = app;

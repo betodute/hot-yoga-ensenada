@@ -8,7 +8,7 @@ const User = require('../models/user');
 
 
 // Register a new user
-exports.registerUser = async (req, res) => {
+module.exports.registerUser = async (req, res) => {
   const newUser = new User({
     name: req.body.regUserName,
     phonenumber: req.body.regPhoneNumber,
@@ -29,11 +29,8 @@ exports.registerUser = async (req, res) => {
 };
 
 module.exports.loginUser = async (req, res, next) => {
-  
   passport.authenticate('local', function(err, user, info) {
-
-    console.log("Salted Password", user.salt)
-
+    console.log("Hit Login Function This is the User", user)
     if (err) {
       console.log('Error during authentication:', err);
       return res.status(400).json({ message: 'Error during authentication' });
@@ -42,8 +39,9 @@ module.exports.loginUser = async (req, res, next) => {
       console.log('Authentication failed:', info.message);
       return res.status(401).json({ message: info.message });
     }
+    console.log("hit before login", user);
     // If authentication is successful, you can access the authenticated user via req.user
-    req.logIn(user, function(err) {
+    req.login(user, function(err) {
       if (err) {
         console.log('Error logging in:', err);
         return res.status(400).json({ message: 'Error logging in' });
@@ -51,12 +49,11 @@ module.exports.loginUser = async (req, res, next) => {
       console.log('User logged in successfully:', user.username);
       return res.status(200).json(user);
     });
-
   })(req, res, next);
-
 };
 
-exports.logoutUser = async (req, res) => {
+
+module.exports.logoutUser = async (req, res) => {
   req.logout();
   res.redirect('/login');
 }
