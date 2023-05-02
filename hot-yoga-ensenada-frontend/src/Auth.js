@@ -27,7 +27,7 @@ export const Auth = () => {
     })
       .then((response) => response.json())
       .then((data) => console.log("Login Response", data))
-      //navigate('/home');
+      navigate('/home');
   };
 
   const handleRegisterSubmit = (event) => {

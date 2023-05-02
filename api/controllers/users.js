@@ -54,7 +54,10 @@ module.exports.loginUser = async (req, res, next) => {
 
 
 module.exports.logoutUser = async (req, res) => {
-  req.logout();
-  res.redirect('/login');
+  console.log("hit logout")
+  req.logout(function(err) {
+    if (err) { return next(err); }
+    res.redirect('/');
+  });
 }
 

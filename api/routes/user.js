@@ -8,7 +8,7 @@ router.use(express.json());
 
 router.post('/registerUser', userController.registerUser)
 router.post('/login', userController.loginUser);
-router.get('/logout', userController.logoutUser);
+router.post('/logout', userController.logoutUser);
 
 
 module.exports = router;

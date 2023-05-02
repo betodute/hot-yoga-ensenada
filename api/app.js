@@ -35,11 +35,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// Routes Declaration
-app.use('/user', usersRouter);
-app.use('/reservation', reservationsRouter);
-app.use('/yogaclass', yogaClassesRouter)
-
 const mongoString = process.env.DATABASE_URL
 const secret = process.env.SECRET
 
@@ -79,6 +74,12 @@ const sessionConfig = {
 app.use(session(sessionConfig));
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Routes Declaration
+app.use('/user', usersRouter);
+app.use('/reservation', reservationsRouter);
+app.use('/yogaclass', yogaClassesRouter)
+
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
