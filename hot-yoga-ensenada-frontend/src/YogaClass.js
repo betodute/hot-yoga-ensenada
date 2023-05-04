@@ -11,12 +11,12 @@ export const YogaClass = (props) => {
 
   const handleRegisterClick = (event) => {
     let userID = user._id
-    let yogaclassID = event.currentTarget.parentNode.id;
-    console.log('User ID =', userID, "Yoga Class ID =", yogaclassID)
+    let yogaClassID = event.currentTarget.parentNode.id;
+    console.log('User ID =', userID, "Yoga Class ID =", yogaClassID)
 
     fetch('http://localhost:9000/reservation', {
       method: 'POST',
-      body: JSON.stringify({"userID": userID, "yogaclassID": yogaclassID}),
+      body: JSON.stringify({"userID": userID, "yogaClassID": yogaClassID}),
       headers: { 'Content-Type': 'application/json' }
     })
     .then((response) => response.json())
