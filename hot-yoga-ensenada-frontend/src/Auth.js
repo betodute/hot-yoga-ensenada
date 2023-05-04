@@ -1,10 +1,14 @@
 import React, { useState } from "react"
+import { useContext } from "react";
+import { UserContext } from "./UserContext";
 import { useNavigate } from 'react-router-dom'
 import './Auth.css';
 
-export const Auth = () => {
 
+export const Auth = () => {
+  
   const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
 
   let [authMode, setAuthMode] = useState("signin");
   let [username, setUserEmail] = useState("");
@@ -25,10 +29,12 @@ export const Auth = () => {
       body: JSON.stringify({username, password}),
       headers: { 'Content-Type': 'application/json' }
     })
-      .then((response) => response.json())
-      .then((data) => console.log("Login Response", data))
+    .then((response) => response.json())
+    .then((user) => {
+      setUser(user); 
       navigate('/home');
-  };
+    }); 
+  }; 
 
   const handleRegisterSubmit = (event) => {
     event.preventDefault();

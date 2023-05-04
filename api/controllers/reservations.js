@@ -2,7 +2,7 @@ const Reservation = require('../models/reservation');
 
 
 exports.createReservation = async (req, res) => {
-  console.log(req.body)
+  console.log('this is what is coming in', req.body)
 
   const newReservation = new Reservation ({
     userID: req.body.userID,

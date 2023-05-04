@@ -1,5 +1,6 @@
-import {React, useEffect} from 'react';
+import { React } from 'react';
 import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
+import { UserProvider } from "./UserContext";
 import { Home } from './Home'
 import { Auth } from './Auth'
 import './App.css';
@@ -11,12 +12,14 @@ const NotFound = () => {
 function App() {
   
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Auth />} />
-        <Route path="/home" element={<Home />} />
-      </Routes>
-    </Router>
+    <UserProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Auth />} />
+          <Route path="/home" element={<Home />} />
+        </Routes>
+      </Router>
+    </UserProvider>
   )
 }
 

@@ -3,6 +3,7 @@ import { YogaClass } from './YogaClass'
 import { useState } from 'react';
 
 export const Reservation = (props) => {
+  
 
   const [yogaClasses, setYogaClasses] = useState([
     { day: "Martes ", time: "7am", caldate: "01/01/2023" },

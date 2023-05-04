@@ -1,14 +1,28 @@
 import './YogaClass.css'
 import { useEffect, useState } from 'react'
+import { useContext } from "react";
+import { UserContext } from "./UserContext";
 
 export const YogaClass = (props) => {
-  
+
+  const { user } = useContext(UserContext);
+  console.log(user._id)
   let [apiList, setApiList] = useState([]);
 
   const handleRegisterClick = (event) => {
-    let sampleUserID = '010101'
-    let parentDivID = event.currentTarget.parentNode.id;
-    console.log('User ID =', sampleUserID, "Class ID =", parentDivID)
+    let userID = user._id
+    let yogaclassID = event.currentTarget.parentNode.id;
+    console.log('User ID =', userID, "Yoga Class ID =", yogaclassID)
+
+    fetch('http://localhost:9000/reservation', {
+      method: 'POST',
+      body: JSON.stringify({"userID": userID, "yogaclassID": yogaclassID}),
+      headers: { 'Content-Type': 'application/json' }
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data)
+    }); 
   }
  
   useEffect(() => {
@@ -18,7 +32,6 @@ export const YogaClass = (props) => {
         body: JSON.stringify({date: props.singleClass.caldate, day: props.singleClass.day, time: props.singleClass.time}),
         headers: { 'Content-Type': 'application/json' }})
       const json1 = await postClasses.json();
-      console.log(json1);
     }
     const getClasses = async () => {
       const getClasses = await fetch('http://localhost:9000/yogaclass')
