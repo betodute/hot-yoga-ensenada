@@ -4,7 +4,7 @@
   text-align: center;
 }
 
-.disabled {
+.disable {
   pointer-events: none;
   cursor: not-allowed;
   opacity: .50;

@@ -6,7 +6,7 @@ import { UserContext } from "./UserContext";
 export const YogaClass = (props) => {
 
   const { user } = useContext(UserContext);
-  console.log(user._id)
+  
   let [apiList, setApiList] = useState([]);
 
   const handleRegisterClick = (event) => {
