@@ -4,3 +4,8 @@
   font-size: 1.5em;
   font-family: 'Archivo', sans-serif;
 }
+
+.logoutLink {
+  justify-self: center;
+  color: blue;
+}

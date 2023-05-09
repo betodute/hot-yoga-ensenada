@@ -53,11 +53,14 @@ module.exports.loginUser = async (req, res, next) => {
 };
 
 
-module.exports.logoutUser = async (req, res) => {
-  console.log("hit logout")
+
+module.exports.logout = async (req, res) => {
+  console.log("hit logout in the controller")
   req.logout(function(err) {
-    if (err) { return next(err); }
-    res.redirect('/');
+    if (err) { 
+      return res.status(500).json({ error: 'Internal Server Error' }); 
+    }
+    console.log("logout successful")
+    return res.status(200).json({ message: 'Logged out successfully' });
   });
 }
-

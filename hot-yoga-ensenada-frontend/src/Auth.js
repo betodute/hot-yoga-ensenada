@@ -43,8 +43,11 @@ export const Auth = () => {
       body: JSON.stringify({regUserName, regPhoneNumber, regUserEmail, regUserPassword}),
       headers: { 'Content-Type': 'application/json' }
     })
-      .then((response) => response.json())
-      .then((data) => console.log(data))
+    .then((response) => response.json())
+    .then((user) => {
+      setUser(user); 
+      navigate('/home');
+    }); 
   };
 
   if (authMode === "signin") {
@@ -55,7 +58,7 @@ export const Auth = () => {
             <h5 className="auth-form-hye">Hot Yoga Ensenada</h5>
             <h3 className="auth-form-title">Login</h3>
             <div className="text-center">
-              Not registered yet?{" "}
+            ¿ Aún Sin Cuenta ? {" "}
               <span className="link-primary" onClick={changeAuthMode}>
               Regístrate
               </span>
@@ -101,9 +104,9 @@ export const Auth = () => {
           <h5 className="auth-form-hye">Hot Yoga Ensenada</h5>
           <h3 className="auth-form-title">Regístrate</h3>
           <div className="text-center">
-            Already registered?{" "}
+          ¿ Ya Registradx ? {" "}
             <span className="link-primary" onClick={changeAuthMode}>
-              Sign In
+              Login
             </span>
           </div>
           <div className="form-group mt-3">
@@ -146,14 +149,11 @@ export const Auth = () => {
               onChange={(event) => {setRegUserPassword(event.target.value)}}
             />
           </div>
-          <div className="d-grid gap-2 mt-3">
+          <div className="d-grid gap-2 mt-3 mb-4">
             <button type="submit" className="btn btn-primary">
               Submit
             </button>
           </div>
-          <p className="text-center mt-2">
-            Forgot <a href="#">password?</a>
-          </p>
         </div>
       </form>
     </div>
