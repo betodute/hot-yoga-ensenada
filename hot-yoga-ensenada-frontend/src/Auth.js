@@ -1,14 +1,14 @@
 import React, { useState } from "react"
 import { useContext } from "react";
-import { UserContext } from "./UserContext";
-import { useNavigate } from 'react-router-dom'
+import { UserContext } from "./UserContext.js";
+import { useNavigate } from 'react-router-dom';
 import './Auth.css';
 
 
 export const Auth = () => {
   
   const navigate = useNavigate();
-  const { setUser } = useContext(UserContext);
+  let { setUser } = useContext(UserContext);
 
   let [authMode, setAuthMode] = useState("signin");
   let [username, setUserEmail] = useState("");
@@ -29,12 +29,20 @@ export const Auth = () => {
       body: JSON.stringify({username, password}),
       headers: { 'Content-Type': 'application/json' }
     })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Failed to login');
+      }
+      return response.json();
+    })
     .then((user) => {
       setUser(user); 
       navigate('/home');
-    }); 
-  }; 
+    })
+    .catch((error) => {
+      alert(error.message);
+    });
+  };
 
   const handleRegisterSubmit = (event) => {
     event.preventDefault();
@@ -43,11 +51,20 @@ export const Auth = () => {
       body: JSON.stringify({regUserName, regPhoneNumber, regUserEmail, regUserPassword}),
       headers: { 'Content-Type': 'application/json' }
     })
-    .then((response) => response.json())
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Registration failed.');
+      }
+    })
     .then((user) => {
       setUser(user); 
       navigate('/home');
-    }); 
+    })
+    .catch((error) => {
+      alert(error.message);
+    });
   };
 
   if (authMode === "signin") {
@@ -58,7 +75,7 @@ export const Auth = () => {
             <h5 className="auth-form-hye">Hot Yoga Ensenada</h5>
             <h3 className="auth-form-title">Login</h3>
             <div className="text-center">
-            ¿ Aún Sin Cuenta ? {" "}
+            ¿ No Tienes Cuenta ? {" "}
               <span className="link-primary" onClick={changeAuthMode}>
               Regístrate
               </span>

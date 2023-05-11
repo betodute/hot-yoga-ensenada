@@ -52,15 +52,28 @@ module.exports.loginUser = async (req, res, next) => {
   })(req, res, next);
 };
 
+module.exports.findYogi = async (req, res) => {
+  console.log("hit find User method this is id", req.params)
+  const userID = req.params.id;
+  try {
+    const user = await User.findById(userID);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    console.log("this is the user after databsase return:", user)
+    res.json(user);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
 
 
 module.exports.logout = async (req, res) => {
-  console.log("hit logout in the controller")
   req.logout(function(err) {
     if (err) { 
       return res.status(500).json({ error: 'Internal Server Error' }); 
     }
-    console.log("logout successful")
     return res.status(200).json({ message: 'Logged out successfully' });
   });
 }

@@ -1,5 +1,21 @@
+import './Logout.css'
+import React, { useState, useEffect } from "react"
+import { useNavigate } from 'react-router-dom'
+
 export const Logout = () => {
+
+  const navigate = useNavigate();
+
+  const logoutUser = () => {
+    fetch('http://localhost:9000/user/logout')
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data); 
+      navigate('/');
+    });
+  }
+
   return(
-    <a className="logoutLink" href="#" onClick={(logoutUser)}> logout </a>
+    <p className="logout-link"> <a href="#" onClick={(logoutUser)}> logout </a> </p>
   )
 }

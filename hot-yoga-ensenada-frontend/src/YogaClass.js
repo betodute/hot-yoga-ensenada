@@ -38,7 +38,7 @@ export const YogaClass = (props) => {
       const json2 = await getClasses.json();
       setApiList(json2);
     }
-    //postClasses();
+    postClasses();
     getClasses();
   }, [])
 

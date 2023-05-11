@@ -1,9 +1,7 @@
 import './Profile.css'
 import React, { useState, useEffect } from "react"
 import { useContext } from "react";
-import { UserContext } from "./UserContext";
-import { useNavigate } from 'react-router-dom'
-
+import { UserContext } from "./UserContext.js";
 
 function Greeting() {
   const [greeting, setGreeting] = useState('Good morning');
@@ -27,16 +25,6 @@ export const Profile = () => {
 
   const { user } = useContext(UserContext);
   const [greeting, setGreeting] = useState('Buen día');
-  const navigate = useNavigate();
-  
-  const logoutUser = () => {
-    fetch('http://localhost:9000/user/logout')
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data); 
-      navigate('/');
-    });
-  }
 
   useEffect(() => {
     const now = new Date();
@@ -52,7 +40,6 @@ export const Profile = () => {
   return (
     <div>
       <p className="welcome"> {greeting}, {user ? user.name : ''} </p>
-      <a className="logoutLink" href="#" onClick={(logoutUser)}> logout </a>
     </div>
   )
   

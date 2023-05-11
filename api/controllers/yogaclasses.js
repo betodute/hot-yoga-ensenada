@@ -24,5 +24,19 @@ exports.createYogaClass = async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-
 };
+
+exports.findYogaClass = async (req, res) => {
+  const yogaClassID = req.params.id;
+  try {
+    const yogaClass = await YogaClass.findById(yogaClassID);
+    if (!yogaClass) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    console.log("this is the yogaclass after databsase return:", yogaClass)
+    res.json(yogaClass);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+}

@@ -1,0 +1,11 @@
+.admin-wrapper {
+  background-color: antiquewhite;
+  padding: 1em;
+  margin: 2em;
+  border-radius: 30px;
+  height: 30em;
+}
+
+ul {
+  font-size: 1.3em;
+}
