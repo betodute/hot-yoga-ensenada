@@ -6,7 +6,6 @@ const passport = require('passport');
 router.use(express.json());
 const User = require('../models/user');
 
-
 // Register a new user
 module.exports.registerUser = async (req, res) => {
   const newUser = new User({
@@ -30,7 +29,6 @@ module.exports.registerUser = async (req, res) => {
 
 module.exports.loginUser = async (req, res, next) => {
   passport.authenticate('local', function(err, user, info) {
-    console.log("Hit Login Function This is the User", user)
     if (err) {
       console.log('Error during authentication:', err);
       return res.status(400).json({ message: 'Error during authentication' });
@@ -39,7 +37,6 @@ module.exports.loginUser = async (req, res, next) => {
       console.log('Authentication failed:', info.message);
       return res.status(401).json({ message: info.message });
     }
-    console.log("hit before login", user);
     // If authentication is successful, you can access the authenticated user via req.user
     req.login(user, function(err) {
       if (err) {
@@ -53,14 +50,13 @@ module.exports.loginUser = async (req, res, next) => {
 };
 
 module.exports.findYogi = async (req, res) => {
-  console.log("hit find User method this is id", req.params)
   const userID = req.params.id;
   try {
     const user = await User.findById(userID);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    console.log("this is the user after databsase return:", user)
+    console.log("this is the user after database return:", user)
     res.json(user);
   } catch (err) {
     console.error(err);
@@ -68,12 +64,16 @@ module.exports.findYogi = async (req, res) => {
   }
 }
 
-
 module.exports.logout = async (req, res) => {
   req.logout(function(err) {
     if (err) { 
       return res.status(500).json({ error: 'Internal Server Error' }); 
     }
-    return res.status(200).json({ message: 'Logged out successfully' });
+    req.session.destroy(function(err) {
+      if (err) {
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
+      return res.status(200).json({ message: 'Logged out successfully' });
+    });
   });
 }

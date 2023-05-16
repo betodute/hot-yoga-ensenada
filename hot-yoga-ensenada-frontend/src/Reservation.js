@@ -6,11 +6,11 @@ export const Reservation = (props) => {
   
 
   const [yogaClasses, setYogaClasses] = useState([
-    { day: "Martes ", time: "7am", caldate: "01/01/2023" },
-    { day: "Martes ", time: "6pm", caldate: "01/01/2023" },
-    { day: "Jueves ", time: "7am", caldate: "01/01/2023" },
-    { day: "Jueves ", time: "6pm", caldate: "01/01/2023" },
-    { day: "Sábado ", time: "4pm", caldate: "01/01/2023" },
+    { day: "Martes", time: "7am", caldate: "01/01/2023" },
+    { day: "Martes", time: "6pm", caldate: "01/01/2023" },
+    { day: "Jueves", time: "7am", caldate: "01/01/2023" },
+    { day: "Jueves", time: "6pm", caldate: "01/01/2023" },
+    { day: "Sábado", time: "4pm", caldate: "01/01/2023" },
   ]);
   
   const groupedClasses = yogaClasses.reduce((acc, yogaClass) => {

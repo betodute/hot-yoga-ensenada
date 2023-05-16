@@ -12,7 +12,6 @@ export const YogaClass = (props) => {
   const handleRegisterClick = (event) => {
     let userID = user._id
     let yogaClassID = event.currentTarget.parentNode.id;
-    console.log('User ID =', userID, "Yoga Class ID =", yogaClassID)
 
     fetch('http://localhost:9000/reservation', {
       method: 'POST',
