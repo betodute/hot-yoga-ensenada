@@ -5,6 +5,7 @@ const YogaClassSchema = new Schema({
   date: String,
   day: String,
   time: String,
+  active: Boolean,
 })
 
 const YogaClass = mongoose.model('YogaClass', YogaClassSchema, 'YogaClass');

@@ -1,90 +1,213 @@
 import React, { useState, useEffect } from "react";
 import './Admin.css';
 
-
 export const Admin = () => {
-  const [reservations, setReservations] = useState([]);
   const [yogaClasses, setYogaClasses] = useState([]);
-  const [yogis, setYogis] = useState([]);
-  
+  const [reservations, setReservations]= useState([]);
+  const [classCount, setClassCount] = useState(0);
+
+  const [yogaClassDetails, setYogaClassDetails] = useState([]);
+  const [userDetails, setUserDetails] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('http://localhost:9000/reservation');
-        const reservations = await response.json();
-        setReservations(reservations);
-        await fetchDetails();
-      } catch (error) {
-        // Handle error
-      }
-    };
+    if (classCount === 5) {
+      // No need to make the fetch requests if classCount is 5
+      return;
+    }
   
-    fetchData();
-  }, []);
+    fetch('http://localhost:9000/reservation')
+      .then((response) => response.json())
+      .then((reservationsData) => {
+        setReservations(reservationsData);
   
-  const fetchDetails = async () => {
-    try {
-      const fetchPromises = reservations.map(async (reservation) => {
+        // Create an array of promises for the fetch requests
+        const yogaClassPromises = reservationsData.map((reservation) => {
+          const yogaClassId = reservation.yogaClassID;
+          return fetch(`http://localhost:9000/yogaclass/${yogaClassId}`)
+            .then((response) => response.json());
+        });
   
-        const userResponse = await fetch(`http://localhost:9000/user/${reservation.userID}`);
-        const userData = await userResponse.json();
-        setYogis((prevYogis) => [...prevYogis, userData]);
-
+        const userPromises = reservationsData.map((reservation) => {
+          const userId = reservation.userID;
+          return fetch(`http://localhost:9000/user/${userId}`)
+            .then((response) => response.json());
+        });
   
-        const classResponse = await fetch(`http://localhost:9000/yogaclass/${reservation.yogaClassID}`);
-        const classData = await classResponse.json();
-        setYogaClasses((prevClasses) => [...prevClasses, classData]);
+        // Execute all the promises concurrently using Promise.all
+        Promise.all(yogaClassPromises)
+          .then((yogaClassDetails) => {
+            // Process the results of the yogaClass fetch requests
+            setYogaClassDetails(yogaClassDetails);
+            console.log(yogaClassDetails)
+          })
+          .catch((error) => {
+            // Handle any errors from the yogaClass fetch requests
+            console.error('Error:', error);
+          });
+  
+        Promise.all(userPromises)
+          .then((userDetails) => {
+            // Process the results of the user fetch requests
+            setUserDetails(userDetails);
+            console.log(userDetails)
+          })
+          .catch((error) => {
+            // Handle any errors from the user fetch requests
+            console.error('Error:', error);
+          });
+      })
+      .catch((error) => {
+        // Handle any errors from the first fetch request
+        console.error('Error:', error);
       });
+  }, [classCount]);
   
-      await Promise.all(fetchPromises);
+  
+
+  const generateClasses = () => {
+    let nextDates = getNextDates();
+    let yogaClassesTemplate = [
+      {date: nextDates[0], day:'Martes', time: '7am', active: true},
+      {date: nextDates[0], day:'Martes', time: '6pm', active: true},
+      {date: nextDates[1], day:'Jueves', time: '7am', active: true},
+      {date: nextDates[1], day:'Jueves', time: '6pm', active: true},
+      {date: nextDates[2], day:'Sábado', time: '4pm', active: true}
+    ];
+    genClassesBackend(yogaClassesTemplate);
+  };
+
+  const getNextDates = () => {
+    const today = new Date();
+    const daysToAdd = [2, 4, 6]; // Tuesday, Thursday, and Saturday
+    const nextDates = [];
+
+    for (const dayToAdd of daysToAdd) {
+      const dayOfWeek = (dayToAdd - today.getDay() + 7) % 7;
+      const daysUntilNextDate = dayOfWeek === 0 ? 7 : dayOfWeek;
+      const nextDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + daysUntilNextDate);
+      nextDates.push(nextDate.toLocaleDateString());
+    }
+    return nextDates;
+  };
+
+  const genClassesBackend = async (preYogaClasses) => {
+    try {
+      const promises = preYogaClasses.map(async (element) => {
+        const response = await fetch('http://localhost:9000/yogaclass', {
+          method: 'POST',
+          body: JSON.stringify({ date: element.date, day: element.day, time: element.time, active: element.active }),
+          headers: { 'Content-Type': 'application/json' }
+        });
+        return response.json();
+      });
+      const results = await Promise.all(promises);
+      setYogaClasses(results);
+      setClassCount(classCount + preYogaClasses.length); // Increment the class count
     } catch (error) {
-      // Handle error
+      console.error('Error:', error);
     }
   };
 
+  const confirmUser = () => {
+    console.log("omg user confirmed")
+  };
 
+  const cancelUser = () => {
+    console.log('omg user canceled')
+  }
 
   return (
     <div className='admin-wrapper'>
-      <h3> ADMIN </h3>
-      <div className='class-wrapper mt-4'>
-        <ul id='mar7'> Martes 7am  </ul>
-        {yogaClasses.map((classData, index) => {
-          if (classData.day === 'Martes ' && classData.time === '7am') {
-            return <li> {yogis[index].name} </li>
-          }
-          return null;
-        })}
-        <ul id='mar6'> Martes 6pm </ul>
-        {yogaClasses.map((classData, index) => {
-          if (classData.day === 'Martes ' && classData.time === '6pm') {
-            return <li> {yogis[index].name} </li>
-          }
-          return null;
-        })}
-        <ul id='jue7'> Jueves 7am </ul>
-        {yogaClasses.map((classData, index) => {
-          if (classData.day === 'Jueves ' && classData.time === '7am') {
-            return <li> {yogis[index].name} </li>
-          }
-          return null;
-        })}
-        <ul id='jue6'> Jueves 6pm </ul>
-        {yogaClasses.map((classData, index) => {
-          if (classData.day === 'Jueves ' && classData.time === '6pm') {
-            return <li> {yogis[index].name} </li>
-          }
-          return null;
-        })}
-        <ul id='sab4'> Sábado 4pm </ul>
-        {yogaClasses.map((classData, index) => {
-          if (classData.day === 'Sábado ' && classData.time === '4pm') {
-            return <li> {yogis[index].name} </li>
-          }
-          return null;
-        })}
+      <h3 className='admin-headline'> Admin </h3>
+      <button className='btn btn-success' onClick={generateClasses} disabled={classCount === 5}>
+        Generate Classes
+      </button>
+      <div className='classes-wrapper'>
+        <div className='date-time' id='tue-am'>
+          Martes 7am
+          {userDetails.length > 0 && yogaClassDetails.length > 0 && yogaClassDetails.map((classDetail, index) => {
+            if (classDetail.day === 'Martes' && classDetail.time === '7am' && userDetails[index]) {
+              return (
+                <div className='user-info' key={userDetails[index]._id}>
+                  <div className='user-name'>{userDetails[index].name}
+                    <button className='btn btn-success m-2' onClick={() => confirmUser(userDetails[index]._id)}>Confirm</button>
+                    <button className='btn btn-danger m-2' onClick={() => cancelUser(userDetails[index]._id)}>Cancel</button>
+                  </div>
+                </div>
+              );
+            }
+            return null;
+          })}
+        </div>
+        <div className='date-time' id='tue-pm'>
+          Martes 6pm
+          {userDetails.length > 0 && yogaClassDetails.length > 0 && yogaClassDetails.map((classDetail, index) => {
+            if (classDetail.day === 'Martes' && classDetail.time === '6pm' && userDetails[index]) {
+              return (
+                <div className='user-info' key={userDetails[index]._id}>
+                  <div className='user-name'>{userDetails[index].name}
+                    <button className='btn btn-success m-2' onClick={() => confirmUser(userDetails[index]._id)}>Confirm</button>
+                    <button className='btn btn-danger m-2' onClick={() => cancelUser(userDetails[index]._id)}>Cancel</button>
+                  </div>
+                </div>
+              );
+            }
+            return null;
+          })}
+        </div>
+        <div className='date-time' id='thu-am'>
+          Jueves 7am
+          {userDetails.length > 0 && yogaClassDetails.length > 0 && yogaClassDetails.map((classDetail, index) => {
+            if (classDetail.day === 'Jueves' && classDetail.time === '7am' && userDetails[index]) {
+              return (
+                <div className='user-info' key={userDetails[index]._id}>
+                  <div className='user-name'>{userDetails[index].name}
+                    <button className='btn btn-success m-2' onClick={() => confirmUser(userDetails[index]._id)}>Confirm</button>
+                    <button className='btn btn-danger m-2' onClick={() => cancelUser(userDetails[index]._id)}>Cancel</button>
+                  </div>
+                </div>
+              );
+            }
+            return null;
+          })}
+        </div>
+        <div className='date-time' id='thu-pm'>
+          Jueves 6pm
+          {userDetails.length > 0 && yogaClassDetails.length > 0 && yogaClassDetails.map((classDetail, index) => {
+            if (classDetail.day === 'Jueves' && classDetail.time === '6pm' && userDetails[index]) {
+              return (
+                <div className='user-info' key={userDetails[index]._id}>
+                  <div className='user-name'>{userDetails[index].name}
+                    <button className='btn btn-success m-2' onClick={() => confirmUser(userDetails[index]._id)}>Confirm</button>
+                    <button className='btn btn-danger m-2' onClick={() => cancelUser(userDetails[index]._id)}>Cancel</button>
+                  </div>
+                </div>
+              );
+            }
+            return null;
+          })}
+        </div>
+        <div className='date-time' id='sat-pm'>
+          Sábado 4pm
+          {userDetails.length > 0 && yogaClassDetails.length > 0 && yogaClassDetails.map((classDetail, index) => {
+            if (classDetail.day === 'Sábado' && classDetail.time === '4pm' && userDetails[index]) {
+              return (
+                <div className='user-info' key={userDetails[index]._id}>
+                  <div className='user-name'>{userDetails[index].name}
+                    <button className='btn btn-success m-2' onClick={() => confirmUser(userDetails[index]._id)}>Confirm</button>
+                    <button className='btn btn-danger m-2' onClick={() => cancelUser(userDetails[index]._id)}>Cancel</button>
+                  </div>
+                </div>
+              );
+            }
+            return null;
+          })}
+        </div>
       </div>
     </div>
-  );
+  );  
 };
+  
+
+
+

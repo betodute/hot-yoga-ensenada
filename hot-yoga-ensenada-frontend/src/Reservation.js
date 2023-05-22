@@ -1,45 +1,47 @@
-import './Reservation.css'
-import { YogaClass } from './YogaClass'
-import { useState } from 'react';
+import './Reservation.css';
+import { YogaClass } from './YogaClass';
+import { useState, useEffect } from 'react';
 
 export const Reservation = (props) => {
-  
+  const [yogaClasses, setYogaClasses] = useState([]);
+  const [fetchComplete, setFetchComplete] = useState(false);
 
-  const [yogaClasses, setYogaClasses] = useState([
-    { day: "Martes", time: "7am", caldate: "01/01/2023" },
-    { day: "Martes", time: "6pm", caldate: "01/01/2023" },
-    { day: "Jueves", time: "7am", caldate: "01/01/2023" },
-    { day: "Jueves", time: "6pm", caldate: "01/01/2023" },
-    { day: "Sábado", time: "4pm", caldate: "01/01/2023" },
-  ]);
-  
-  const groupedClasses = yogaClasses.reduce((acc, yogaClass) => {
-    if (!acc[yogaClass.day]) {
-      acc[yogaClass.day] = [];
-    }
-    acc[yogaClass.day].push(yogaClass);
-    return acc;
-  }, {});
+  useEffect(() => {
+    const fetchYogaClasses = async () => {
+      try {
+        const response = await fetch('http://localhost:9000/yogaclass');
+        const data = await response.json();
+        setYogaClasses(data);
+        setFetchComplete(true);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    fetchYogaClasses();
+  }, []);
+
+  if (!fetchComplete) {
+    return null; // Return null or a loading spinner while the fetch is in progress
+  }
 
   return (
-    <div className="reservation-wrapper">
+    <div className='reservation-wrapper'>
       <form>
-        {Object.entries(groupedClasses).map(([day, classes]) => (
-          <div key={day} className="form-row">
-            {classes.map((yogaClass) => (
-              <YogaClass
-                key={yogaClass.time}
-                singleClass={yogaClass}
-                disable={
-                  props.today >= yogaClass.dayOfWeek &&
-                  (props.today > yogaClass.dayOfWeek ||
-                    props.time >= yogaClass.time)
-                }
-              />
-            ))}
-          </div>
+        {[
+          ...yogaClasses.filter(element => element.day === 'Martes' && element.time === '7am'),
+          ...yogaClasses.filter(element => element.day === 'Martes' && element.time === '6pm'),
+          ...yogaClasses.filter(element => element.day === 'Jueves' && element.time === '7am'),
+          ...yogaClasses.filter(element => element.day === 'Jueves' && element.time === '6pm'),
+          ...yogaClasses.filter(element => element.day === 'Sábado' && element.time === '4pm')
+
+        ].map(element => (
+          <YogaClass key={element._id} singleClass={element} />
         ))}
       </form>
     </div>
   );
+  
 };
+
+

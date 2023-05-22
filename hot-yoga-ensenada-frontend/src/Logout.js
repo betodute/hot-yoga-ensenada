@@ -7,7 +7,6 @@ import { UserContext } from "./UserContext.js";
 export const Logout = () => {
 
   const { user } = useContext(UserContext);
-  console.log(user);
 
   const navigate = useNavigate();
 
