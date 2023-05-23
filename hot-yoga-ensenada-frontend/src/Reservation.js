@@ -57,13 +57,13 @@ export const Reservation = (props) => {
 
           if (isPastDateTime(day, time)) {
             return (
-              <div key={element._id} className='col-12'>
+              <div key={element._id} className='class-wrapper, col-12'>
                 <YogaClass singleClass={element} className='disable' />
               </div>
             );
           } else {
             return (
-              <div key={element._id} className={`col-md-${getColumnWidth(day)}`}>
+              <div key={element._id} className={`class-wrapper, col-md-${getColumnWidth(day)}`}>
                 <YogaClass singleClass={element} />
               </div>
             );

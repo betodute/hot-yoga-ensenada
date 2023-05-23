@@ -9,3 +9,7 @@
   cursor: not-allowed;
   opacity: .50;
 }
+
+.class-wrapper.col-md-6 + .class-wrapper.col-md-6 {
+  margin-left: 1px; /* Adjust the margin as needed */
+}
