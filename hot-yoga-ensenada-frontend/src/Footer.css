@@ -1,3 +1,7 @@
 .footer {
   text-align: center;
 }
+
+.git-link {
+  text-decoration: none;
+}

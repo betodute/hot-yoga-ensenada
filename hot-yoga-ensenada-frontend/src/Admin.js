@@ -38,7 +38,6 @@ export const Admin = () => {
           .then((yogaClassDetails) => {
             // Process the results of the yogaClass fetch requests
             setYogaClassDetails(yogaClassDetails);
-            console.log(yogaClassDetails)
           })
           .catch((error) => {
             // Handle any errors from the yogaClass fetch requests
@@ -49,7 +48,6 @@ export const Admin = () => {
           .then((userDetails) => {
             // Process the results of the user fetch requests
             setUserDetails(userDetails);
-            console.log(userDetails)
           })
           .catch((error) => {
             // Handle any errors from the user fetch requests
@@ -108,18 +106,18 @@ export const Admin = () => {
     }
   };
 
-  const confirmUser = () => {
-    console.log("omg user confirmed")
+  const confirmUser = (confirmID) => {
+    console.log(confirmID, "omg user confirmed")
   };
 
-  const cancelUser = () => {
-    console.log('omg user canceled')
+  const cancelUser = (cancelID) => {
+    console.log(cancelID, 'omg user canceled')
   }
 
   return (
     <div className='admin-wrapper'>
       <h3 className='admin-headline'> Admin </h3>
-      <button className='btn btn-success' onClick={generateClasses} disabled={classCount === 5}>
+      <button className='gen-classes btn btn-warning' onClick={generateClasses} disabled={classCount === 5}>
         Generate Classes
       </button>
       <div className='classes-wrapper'>
@@ -129,10 +127,9 @@ export const Admin = () => {
             if (classDetail.day === 'Martes' && classDetail.time === '7am' && userDetails[index]) {
               return (
                 <div className='user-info' key={userDetails[index]._id}>
-                  <div className='user-name'>{userDetails[index].name}
-                    <button className='btn btn-success m-2' onClick={() => confirmUser(userDetails[index]._id)}>Confirm</button>
-                    <button className='btn btn-danger m-2' onClick={() => cancelUser(userDetails[index]._id)}>Cancel</button>
-                  </div>
+                  <div className='user-name'>{userDetails[index].name} </div>
+                  <button className='btn btn-warning' onClick={() => confirmUser(userDetails[index]._id)}>Show</button>
+                  <button className='btn btn-danger' onClick={() => cancelUser(userDetails[index]._id)}>No Show</button>
                 </div>
               );
             }
@@ -145,10 +142,9 @@ export const Admin = () => {
             if (classDetail.day === 'Martes' && classDetail.time === '6pm' && userDetails[index]) {
               return (
                 <div className='user-info' key={userDetails[index]._id}>
-                  <div className='user-name'>{userDetails[index].name}
-                    <button className='btn btn-success m-2' onClick={() => confirmUser(userDetails[index]._id)}>Confirm</button>
-                    <button className='btn btn-danger m-2' onClick={() => cancelUser(userDetails[index]._id)}>Cancel</button>
-                  </div>
+                  <div className='user-name'>{userDetails[index].name} </div>
+                  <button className='btn btn-warning' onClick={() => confirmUser(userDetails[index]._id)}>Show</button>
+                  <button className='btn btn-danger' onClick={() => cancelUser(userDetails[index]._id)}>No Show</button>
                 </div>
               );
             }
@@ -161,10 +157,9 @@ export const Admin = () => {
             if (classDetail.day === 'Jueves' && classDetail.time === '7am' && userDetails[index]) {
               return (
                 <div className='user-info' key={userDetails[index]._id}>
-                  <div className='user-name'>{userDetails[index].name}
-                    <button className='btn btn-success m-2' onClick={() => confirmUser(userDetails[index]._id)}>Confirm</button>
-                    <button className='btn btn-danger m-2' onClick={() => cancelUser(userDetails[index]._id)}>Cancel</button>
-                  </div>
+                  <div className='user-name'>{userDetails[index].name} </div>
+                  <button className='btn btn-warning' onClick={() => confirmUser(userDetails[index]._id)}>Show</button>
+                  <button className='btn btn-danger' onClick={() => cancelUser(userDetails[index]._id)}>No Show</button>
                 </div>
               );
             }
@@ -177,10 +172,9 @@ export const Admin = () => {
             if (classDetail.day === 'Jueves' && classDetail.time === '6pm' && userDetails[index]) {
               return (
                 <div className='user-info' key={userDetails[index]._id}>
-                  <div className='user-name'>{userDetails[index].name}
-                    <button className='btn btn-success m-2' onClick={() => confirmUser(userDetails[index]._id)}>Confirm</button>
-                    <button className='btn btn-danger m-2' onClick={() => cancelUser(userDetails[index]._id)}>Cancel</button>
-                  </div>
+                  <div className='user-name'>{userDetails[index].name} </div>
+                  <button className='btn btn-warning' onClick={() => confirmUser(userDetails[index]._id)}>Show</button>
+                  <button className='btn btn-danger' onClick={() => cancelUser(userDetails[index]._id)}>No Show</button>
                 </div>
               );
             }
@@ -193,10 +187,9 @@ export const Admin = () => {
             if (classDetail.day === 'Sábado' && classDetail.time === '4pm' && userDetails[index]) {
               return (
                 <div className='user-info' key={userDetails[index]._id}>
-                  <div className='user-name'>{userDetails[index].name}
-                    <button className='btn btn-success m-2' onClick={() => confirmUser(userDetails[index]._id)}>Confirm</button>
-                    <button className='btn btn-danger m-2' onClick={() => cancelUser(userDetails[index]._id)}>Cancel</button>
-                  </div>
+                  <div className='user-name'>{userDetails[index].name} </div>
+                  <button className='btn btn-warning' onClick={() => confirmUser(userDetails[index]._id)}>Show</button>
+                  <button className='btn btn-danger' onClick={() => cancelUser(userDetails[index]._id)}>No Show</button>
                 </div>
               );
             }

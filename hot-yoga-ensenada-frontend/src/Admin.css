@@ -7,18 +7,36 @@
 }
 
 .admin-headline {
-  font-size: 2em;
+  font-size: 3em;
+  font-family: 'Texturina', serif;
+  margin: .5em;
+  text-align: center;
+}
+
+.gen-classes {
+  margin-left: .8em;
 }
 
 .date-time {
   font-size: 1.5em;
-  margin: 1em;
+  margin-top: 1em;
+  margin-left: 1em;
   font-weight: bold;
+}
+
+.user-info {
+  display: flex;
+  margin: .5em 10px
+}
+
+.user-info button {
+  margin-left: 7px;
 }
 
 .user-name {
   font-size: .8em;
-  margin: .3em;
   font-weight: 300;
+  margin-left: 7px;
+  width: 100px;
 }
 
