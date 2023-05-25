@@ -106,13 +106,42 @@ export const Admin = () => {
     }
   };
 
-  const confirmUser = (confirmID) => {
-    console.log(confirmID, "omg user confirmed")
+  const confirmUser = (reservationID) => {
+    fetch(`http://localhost:9000/reservation/${reservationID}`, {
+      method: 'PUT',
+      body: JSON.stringify({ show: 'show' }),
+      headers: { 'Content-Type': 'application/json' }
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log(`Reservation ${reservationID} marked as show.`);
+        } else {
+          throw new Error('Error updating reservation.');
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
   };
+  
 
-  const cancelUser = (cancelID) => {
-    console.log(cancelID, 'omg user canceled')
-  }
+  const cancelUser = (reservationID) => {
+    fetch(`http://localhost:9000/reservation/${reservationID}`, {
+      method: 'PUT',
+      body: JSON.stringify({ show: 'no-show' }),
+      headers: { 'Content-Type': 'application/json' }
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log(`Reservation ${reservationID} marked as no-show.`);
+        } else {
+          throw new Error('Error updating reservation.');
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  };
 
   return (
     <div className='admin-wrapper'>
@@ -128,8 +157,8 @@ export const Admin = () => {
               return (
                 <div className='user-info' key={userDetails[index]._id}>
                   <div className='user-name'>{userDetails[index].name} </div>
-                  <button className='btn btn-warning' onClick={() => confirmUser(userDetails[index]._id)}>Show</button>
-                  <button className='btn btn-danger' onClick={() => cancelUser(userDetails[index]._id)}>No Show</button>
+                  <button className='btn btn-warning' onClick={() => confirmUser(reservations[index]._id)}>Show</button>
+                  <button className='btn btn-danger' onClick={() => cancelUser(reservations[index]._id)}>No Show</button>
                 </div>
               );
             }
@@ -143,8 +172,8 @@ export const Admin = () => {
               return (
                 <div className='user-info' key={userDetails[index]._id}>
                   <div className='user-name'>{userDetails[index].name} </div>
-                  <button className='btn btn-warning' onClick={() => confirmUser(userDetails[index]._id)}>Show</button>
-                  <button className='btn btn-danger' onClick={() => cancelUser(userDetails[index]._id)}>No Show</button>
+                  <button className='btn btn-warning' onClick={() => confirmUser(reservations[index]._id)}>Show</button>
+                  <button className='btn btn-danger' onClick={() => cancelUser(reservations[index]._id)}>No Show</button>
                 </div>
               );
             }

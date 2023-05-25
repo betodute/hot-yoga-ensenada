@@ -1,7 +1,7 @@
 const Reservation = require('../models/reservation');
 
 exports.createReservation = async (req, res) => {
-  const { userID, yogaClassID } = req.body;
+  const { userID, yogaClassID, show } = req.body;
 
   try {
     // Check if a reservation already exists with the same userID and yogaClassID
@@ -14,7 +14,8 @@ exports.createReservation = async (req, res) => {
 
     const newReservation = new Reservation({
       userID,
-      yogaClassID
+      yogaClassID,
+      show
     });
 
     const reservationToSave = await newReservation.save();
@@ -32,6 +33,28 @@ exports.getReservations = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+exports.editReservation = async (req, res) => {
+  const reservationID = req.params.id;
+  const { show } = req.body;
+
+  try {
+    const updatedReservation = await Reservation.findByIdAndUpdate(
+      reservationID,
+      { show },
+      { new: true }
+    );
+
+    if (!updatedReservation) {
+      return res.status(404).json({ message: 'Reservation not found.' });
+    }
+
+    res.status(200).json(updatedReservation);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 
 exports.deleteReservation = async (req, res) => {
   const { userID, yogaClassID } = req.body;

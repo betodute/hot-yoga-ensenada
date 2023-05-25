@@ -1,6 +1,7 @@
 .single-class {
   display: inline-flex;
-  width: fit-content;
+  width: 250px;
+  height: 80px;
   margin: .5em;
   padding: .7em .5em .7em 1em;
   border-radius: 50px;

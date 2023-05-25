@@ -53,42 +53,16 @@ export const Reservation = (props) => {
       <form className='row'>
         {/* Render each YogaClass component based on day */}
         {sortedYogaClasses.map((element) => {
-          const { day, time } = element;
-
-          if (isPastDateTime(day, time)) {
-            return (
-              <div key={element._id} className='class-wrapper, col-12'>
-                <YogaClass singleClass={element} className='disable' />
-              </div>
-            );
-          } else {
-            return (
-              <div key={element._id} className={`class-wrapper, col-md-${getColumnWidth(day)}`}>
-                <YogaClass singleClass={element} />
-              </div>
-            );
-          }
+          const { day } = element;
+          return (
+            <div key={element._id} className={`class-wrapper, col-md-${getColumnWidth(day)}`}>
+              <YogaClass singleClass={element} />
+            </div>
+          );
         })}
       </form>
     </div>
   );
-};
-
-// Helper function to check if a given day and time is past the current date and time
-const isPastDateTime = (day, time) => {
-  const currentDate = new Date(); // Get the current date and time
-  const dayOrder = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-
-  const currentDayOfWeek = dayOrder[currentDate.getDay()];
-  const currentTime = currentDate.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
-
-  if (day === currentDayOfWeek) {
-    return time < currentTime;
-  } else if (dayOrder.indexOf(day) < dayOrder.indexOf(currentDayOfWeek)) {
-    return true;
-  } else {
-    return false;
-  }
 };
 
 // Helper function to determine the column width based on day
@@ -103,6 +77,9 @@ const getColumnWidth = (day) => {
     return '12'; // For other days, render on a 12-column width (full width)
   }
 };
+
+// Helper function to check if a given day
+
 
 
 
