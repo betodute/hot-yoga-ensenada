@@ -11,7 +11,6 @@ const User = require('../models/user');
 
 // Register a new user
 module.exports.registerUser = async (req, res) => {
-  
   try {
     const newUser = new User({
       name: req.body.regUserName,
@@ -19,34 +18,52 @@ module.exports.registerUser = async (req, res) => {
       email: req.body.regUserEmail,
       username: req.body.regUserEmail,
       emailtoken: emailToken(),
+      verified: false,
       active: false
     });
 
-    const userPassword = req.body.regUserPassword
+    const userPassword = req.body.regUserPassword;
+
+    // Save the user to get the generated email token
+    const registeredUser = await newUser.save();
 
     const mailOptions = {
       from: 'contact@betodute.com <contact@betodute.com>',
       to: req.body.regUserEmail,
-      subject: "welcome to hot yoga ensenada",
-      html: `<p>Click <a href="http://localhost:3000/user/verifyemail/${emailToken()}">here</a> to verify your email</p>`
-    }
-    const registeredUser = await User.register(newUser, userPassword);
+      subject: "Welcome to hot yoga ensenada",
+      html: `<p>Click <a href="http://localhost:9000/user/verifyemail/${registeredUser.emailtoken}">here</a> to verify your email</p>`
+    };
 
-    const info = await transporter.sendMail(mailOptions)
-    console.log('Message Sent: ' + info.messageId)
-    res.json('/')
- 
+    // Send the verification email
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Message Sent: ' + info.messageId);
+    res.json('/');
+
   } catch (err) {
     console.error(err);
-    res.json('/')
+    res.json('/');
   }
-
 };
 
+
 module.exports.verifyEmail = async (req, res, next) => {
-  console.log("OMG")
-  console.log(req.params)
-}
+  try {
+    const emailToken = req.params.token;
+    const user = await User.findOne({ emailtoken: emailToken });
+
+    if (!user) {
+      return res.status(404).json({ message: 'Invalid token. User not found.' });
+    }
+
+    user.verified = true;
+    await user.save();
+    res.json({ message: 'Email verification successful.' });
+    
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
 
 module.exports.loginUser = async (req, res, next) => {
   passport.authenticate('local', function(err, user, info) {
@@ -71,20 +88,6 @@ module.exports.loginUser = async (req, res, next) => {
   })(req, res, next);
 };
 
-module.exports.findYogi = async (req, res) => {
-  const userID = req.params.id;
-  try {
-    const user = await User.findById(userID);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    console.log("this is the user after database return:", user)
-    res.json(user);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server error' });
-  }
-}
 
 module.exports.logout = async (req, res) => {
   req.logout(function(err) {

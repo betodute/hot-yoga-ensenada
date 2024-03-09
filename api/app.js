@@ -1,5 +1,5 @@
 require('dotenv').config();
-var createError = require('http-errors');
+
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -16,6 +16,8 @@ const MongoStore = require('connect-mongo');
 var usersRouter = require('./routes/user');
 var reservationsRouter = require('./routes/reservation');
 var yogaClassesRouter = require('./routes/yogaclass');
+
+var createError = require('http-errors');
 
 // User Model 
 const User = require('./models/user.js');
