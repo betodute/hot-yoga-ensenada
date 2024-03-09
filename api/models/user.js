@@ -7,7 +7,8 @@ const UserSchema = new Schema({
   phonenumber: String,
   email: String,
   username: String,
-  password: String
+  password: String,
+  emailtoken: String,
 });
 
 UserSchema.plugin(passportLocalMongoose);

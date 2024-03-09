@@ -1,3 +1,4 @@
+require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -10,6 +11,7 @@ const passport = require('passport');  // authentication
 var LocalStrategy = require('passport-local')
 const MongoStore = require('connect-mongo');
 
+
 // Routes Directory
 var usersRouter = require('./routes/user');
 var reservationsRouter = require('./routes/reservation');
@@ -19,7 +21,6 @@ var yogaClassesRouter = require('./routes/yogaclass');
 const User = require('./models/user.js');
 
 // DB Connection
-require('dotenv').config();
 const mongoose = require('mongoose');
 
 var app = express();
@@ -51,7 +52,7 @@ database.once('connected', () => {
 const store = new MongoStore({
   mongoUrl: mongoString,
   secret,
-  touchAfter: 24 * 60 * 60 // doesn't update db if same for amount of seconds
+  touchAfter: 60
 })
 
 store.on('error', function (e) {
@@ -66,7 +67,6 @@ const sessionConfig = {
   saveUninitialized: true,
   cookie: {
       httpOnly: true,
-      expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
       maxAge: 1000 * 60 * 60 * 24 * 7
   }
 }
@@ -75,14 +75,15 @@ app.use(session(sessionConfig));
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Routes Declaration
-app.use('/user', usersRouter);
-app.use('/reservation', reservationsRouter);
-app.use('/yogaclass', yogaClassesRouter)
 
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+// Routes Declaration
+app.use('/user', usersRouter);
+app.use('/reservation', reservationsRouter);
+app.use('/yogaclass', yogaClassesRouter)
 
 // Catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -98,6 +99,12 @@ app.use(function(err, req, res, next) {
   // Render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+const port = process.env.PORT
+
+app.listen(port, () => {
+  console.log(`Server is running at http://localhost:${port}`);
 });
 
 
