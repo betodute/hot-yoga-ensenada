@@ -36,6 +36,8 @@ export const Auth = () => {
       return response.json();
     })
     .then((user) => {
+      // this is where the USER is defined for app context, it is done upon submission
+      console.log("RIGHT BEFORE SET USER THSI IS THE USER:", user)
       setUser(user); 
       navigate('/home');
     })

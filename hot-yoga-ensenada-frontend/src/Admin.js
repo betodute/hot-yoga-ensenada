@@ -65,18 +65,19 @@ export const Admin = () => {
   const generateClasses = () => {
     let nextDates = getNextDates();
     let yogaClassesTemplate = [
-      {date: nextDates[0], day:'Martes', time: '7am', active: true},
-      {date: nextDates[0], day:'Martes', time: '6pm', active: true},
-      {date: nextDates[1], day:'Jueves', time: '7am', active: true},
-      {date: nextDates[1], day:'Jueves', time: '6pm', active: true},
-      {date: nextDates[2], day:'Sábado', time: '4pm', active: true}
+      {date: nextDates[0], day:'Lunes', time: '7am', active: true},
+      {date: nextDates[1], day:'Martes', time: '6pm', active: true},
+      {date: nextDates[2], day:'Miercoles', time: '7am', active: true},
+      {date: nextDates[3], day:'Jueves', time: '6pm', active: true},
+      {date: nextDates[4], day:'Viernes', time: '7am', active: true},
+      {date: nextDates[5], day:'Sábado', time: '12pm', active: true}
     ];
     genClassesBackend(yogaClassesTemplate);
   };
 
   const getNextDates = () => {
     const today = new Date();
-    const daysToAdd = [2, 4, 6]; // Tuesday, Thursday, and Saturday
+    const daysToAdd = [1, 2, 3, 4, 5, 6]; // Monday, Tuesday, Wednesday, Thursday, Friday, and Saturday
     const nextDates = [];
 
     for (const dayToAdd of daysToAdd) {

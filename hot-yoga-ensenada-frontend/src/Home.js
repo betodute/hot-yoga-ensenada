@@ -16,7 +16,7 @@ export const Home = () => {
           <img className="home-image mx-auto d-block" src={homeImageOne}></img>
         </div>
         <Profile />
-        {/* <Reservation today={new Date().getDay()} time={new Date().getHours()} className='col-12'/> */}
+        <Reservation today={new Date().getDay()} time={new Date().getHours()} className='col-12'/>
         <Logout />
         <Footer />
       </div>
