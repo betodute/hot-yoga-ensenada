@@ -39,7 +39,6 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 const mongoString = process.env.DATABASE_URL
-const secret = process.env.SECRET
 
 // Connecting to MongoDB and Printing Error or Confirmation
 mongoose.connect(mongoString);
@@ -50,6 +49,9 @@ database.on('error', (error) => {
 database.once('connected', () => {
   console.log('Database Connected');
 });
+
+// *** AUTH ***
+const secret = process.env.SECRET
 
 const store = new MongoStore({
   mongoUrl: mongoString,
@@ -64,7 +66,7 @@ store.on('error', function (e) {
 const sessionConfig = {
   store: store,
   name: 'session',
-  secret,
+  secret: secret,
   resave: false,
   saveUninitialized: true,
   cookie: {

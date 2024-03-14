@@ -48,6 +48,7 @@ export const Auth = () => {
 
   const handleRegisterSubmit = (event) => {
     event.preventDefault();
+    console.log("PASSWORD:", regUserPassword)
     fetch('http://localhost:9000/user/registeruser', {
       method: 'POST',
       body: JSON.stringify({regUserName, regPhoneNumber, regUserEmail, regUserPassword}),
@@ -129,7 +130,7 @@ export const Auth = () => {
             </span>
           </div>
           <div className="form-group mt-3">
-            <label>Full Name</label>
+            <label>nombre</label>
             <input
               type="text"
               className="form-control mt-1"
@@ -139,7 +140,7 @@ export const Auth = () => {
             />
           </div>
           <div className="form-group mt-3">
-            <label>Phone Number</label>
+            <label>teléfono</label>
             <input
               type="tel"
               className="form-control mt-1"
@@ -149,7 +150,7 @@ export const Auth = () => {
             />
           </div>
           <div className="form-group mt-3">
-            <label>Email address</label>
+            <label>email</label>
             <input
               type="email"
               className="form-control mt-1"
@@ -159,7 +160,7 @@ export const Auth = () => {
             />
           </div>
           <div className="form-group mt-3">
-            <label>Password</label>
+            <label>contraseña</label>
             <input
               type="password"
               className="form-control mt-1"

@@ -1,16 +1,24 @@
 const mongoose = require('mongoose');
 var express = require('express');
 const router = express.Router();
-const passport = require('passport');
 const transporter = require("../utilities/emailer");
 const emailToken = require('../utilities/emailToken');
 router.use(express.json());
 const User = require('../models/user');
 
-
-
 // Register a new user
+const passport = require('passport');
+var LocalStrategy = require('passport-local')
+
 module.exports.registerUser = async (req, res) => {
+
+  const existingEmail = await User.findOne({email: req.body.regUserEmail});
+
+  if (existingEmail) {
+    console.log("error", "An account is already registered with this email");
+    return res.redirect("/auth");
+  }
+
   try {
     const newUser = new User({
       name: req.body.regUserName,
@@ -24,8 +32,12 @@ module.exports.registerUser = async (req, res) => {
 
     const userPassword = req.body.regUserPassword;
 
-    // Save the user to get the generated email token
-    const registeredUser = await newUser.save();
+    console.log("DEBUG: before user.register function this is the user password:", userPassword)
+    
+    // AUTH METHOD USING PASSPORT
+    const registeredUser = await User.register(newUser, userPassword);
+    
+    // Login user after registration using passport helper method
 
     const mailOptions = {
       from: 'contact@betodute.com <contact@betodute.com>',
@@ -46,6 +58,7 @@ module.exports.registerUser = async (req, res) => {
 };
 
 
+
 module.exports.verifyEmail = async (req, res, next) => {
   try {
     const emailToken = req.params.token;
@@ -58,7 +71,7 @@ module.exports.verifyEmail = async (req, res, next) => {
     user.verified = true;
     await user.save();
     res.json({ message: 'Email verification successful.' });
-    
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });
