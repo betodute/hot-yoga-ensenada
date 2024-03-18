@@ -7,6 +7,7 @@ import { UserContext } from "./UserContext.js";
 export const Logout = () => {
 
   const { user } = useContext(UserContext);
+  console.log( "id", user.id )
 
   const navigate = useNavigate();
 
@@ -16,7 +17,7 @@ export const Logout = () => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(user.id)
+      body: JSON.stringify( {userId: user.id} )
     })
     .then((response) => response.json())
     .then((data) => {

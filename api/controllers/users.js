@@ -11,8 +11,7 @@ const passport = require('passport');
 var LocalStrategy = require('passport-local')
 
 module.exports.registerUser = async (req, res) => {
-
-  const existingEmail = await User.findOne({email: req.body.regUserEmail});
+  const existingEmail = await User.findOne({ email: req.body.regUserEmail });
 
   if (existingEmail) {
     console.log("error", "An account is already registered with this email");
@@ -32,12 +31,26 @@ module.exports.registerUser = async (req, res) => {
 
     const userPassword = req.body.regUserPassword;
 
-    console.log("DEBUG: before user.register function this is the user password:", userPassword)
-    
-    // AUTH METHOD USING PASSPORT
+    // Register the user
     const registeredUser = await User.register(newUser, userPassword);
-    
+
+    // Construct user object to send back in the response
+    const userToSend = {
+      id: registeredUser._id, // Assuming MongoDB generates _id for the user
+      name: registeredUser.name,
+      email: registeredUser.email,
+      // Include other properties you want to send back to the client
+    };
+
     // Login user after registration using passport helper method
+    req.login(registeredUser, function(err) {
+      if (err) {
+        console.log('Error logging in after registration:', err);
+        return res.status(400).json({ message: 'Error logging in' });
+      }
+      console.log('User logged in successfully after registration:', registeredUser.username);
+      console.log('Session ID:', req.sessionID);
+    });
 
     const mailOptions = {
       from: 'contact@betodute.com <contact@betodute.com>',
@@ -49,15 +62,15 @@ module.exports.registerUser = async (req, res) => {
     // Send the verification email
     const info = await transporter.sendMail(mailOptions);
     console.log('Message Sent: ' + info.messageId);
-    res.json('/');
+
+    // Respond back with the user object
+    res.status(200).json(userToSend);
 
   } catch (err) {
     console.error(err);
-    res.json('/');
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-
-
 
 module.exports.verifyEmail = async (req, res, next) => {
   try {
@@ -101,12 +114,17 @@ module.exports.loginUser = async (req, res, next) => {
   })(req, res, next);
 };
 
-
 module.exports.logout = async (req, res) => {
-  req.logout(function(err) {
-    if (err) { 
-      return res.status(500).json({ error: 'Internal Server Error' }); 
-    }
-    return res.status(200).json({ message: 'Logged out successfully' });
-  });
+  try {
+    req.logout(function(err) {
+      if (err) { 
+        return res.status(500).json({ error: 'Internal Server Error' }); 
+      }
+      // Send response after successful logout
+      return res.status(200).json({ message: 'Logged out successfully' });
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
 }
