@@ -16,6 +16,7 @@ export const Auth = () => {
   let [regUserName, setRegUserName] = useState("");
   let [regPhoneNumber, setRegPhoneNumber] = useState("");
   let [regUserEmail, setRegUserEmail] = useState("");
+  let [forgotEmail, setForgotEmail] = useState("");
   let [regUserPassword, setRegUserPassword] = useState("");
 
   const handleSubmit = (event) => {
@@ -63,6 +64,18 @@ export const Auth = () => {
     })
     .catch((error) => {
       alert(error.message);
+    });
+  };
+
+  const handleForgot = (event) => {
+    event.preventDefault();
+    fetch('http://localhost:9000/user/forgot')
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("RETURNED FROM BACKEND FORGOT:", data);
+    })
+    .catch((error) => {
+      console.error('Error fetching reservations:', error);
     });
   };
 
@@ -180,7 +193,7 @@ export const Auth = () => {
   if (authMode === "forgot") {
     return (
       <div className="auth-form-container">
-        <form onSubmit={handleSubmit} className="auth-form">
+        <form onSubmit={handleForgot} className="auth-form">
           <div className="auth-form-content">
             <h5 className="auth-form-hye">hot yoga ensenada</h5>
             <h4 className="auth-form-title">Restablecer Contraseña</h4>
@@ -190,8 +203,8 @@ export const Auth = () => {
                 type="email"
                 className="form-control mt-1"
                 placeholder="Enter email"
-                value={username}
-                onChange={(event) => {setUserEmail(event.target.value)}}
+                value={forgotEmail}
+                onChange={(event) => {setForgotEmail(event.target.value)}}
               />
             </div>
             <div className="d-grid gap-2 mt-3">

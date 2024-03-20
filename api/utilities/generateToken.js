@@ -1,4 +1,4 @@
-const emailToken = () => {
+const generateToken = () => {
   let length = 13;
   let result = '';
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -11,4 +11,4 @@ const emailToken = () => {
   return result;
 }
 
-module.exports = emailToken;
+module.exports = generateToken;

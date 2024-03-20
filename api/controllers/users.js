@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 var express = require('express');
 const router = express.Router();
 const transporter = require("../utilities/emailer");
-const emailToken = require('../utilities/emailToken');
+const generateToken = require('../utilities/generateToken');
 router.use(express.json());
 const User = require('../models/user');
 
@@ -24,7 +24,7 @@ module.exports.registerUser = async (req, res) => {
       phonenumber: req.body.regPhoneNumber,
       email: req.body.regUserEmail,
       username: req.body.regUserEmail,
-      emailtoken: emailToken(),
+      emailtoken: generateToken(),
       verified: false,
       active: false
     });
@@ -123,6 +123,45 @@ module.exports.logout = async (req, res) => {
       // Send response after successful logout
       return res.status(200).json({ message: 'Logged out successfully' });
     });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+module.exports.forgot = async (req, res) => {
+  try {
+
+    console.log("what is the email this should be the problem", req.body.email);
+
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      throw new Error("No user found with this email address");
+    }
+
+    if (!user.verified) {
+      throw new Error(
+        "Please verify your account before resetting the password"
+      );
+    }
+
+    const forgotToken = generateToken();
+    const forgotLink = `http://localhost:3000/user/forgot/${forgotToken}`;
+
+    console.log("forgotlink backend line 148", forgotLink)
+
+    const mailOptions = {
+      from: 'contact@betodute.com <contact@betodute.com>',
+      to: email,
+      subject: "Welcome to hot yoga ensenada",
+      html: `<p>Click <a href="${forgotLink}">here</a> to verify your email</p>`
+    };
+
+    return res.status(200)
+
+  
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Internal Server Error' });

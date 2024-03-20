@@ -9,6 +9,7 @@ const UserSchema = new Schema({
   username: String,
   password: String,
   emailtoken: String,
+  forgottoken: String,
   verified: Boolean
 });
 
