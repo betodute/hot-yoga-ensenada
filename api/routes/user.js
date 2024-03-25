@@ -8,6 +8,6 @@ router.post('/login', userController.loginUser);
 // router.get('/:id', userController.findYogi);
 router.post('/logout', userController.logout);
 router.get('/forgot', userController.forgot);
-router.post('/forgot/:token', userController.forgot);
+router.get('/changepass/:token', userController.changePass);
 
 module.exports = router;

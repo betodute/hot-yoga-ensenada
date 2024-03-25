@@ -29,6 +29,14 @@
   font-weight: 800;
 }
 
+.auth-form-title-newpass {
+  text-align: center;
+  margin-bottom: .2em;
+  font-size: 2em;
+  color: rgb(34, 34, 34);
+  font-weight: 800;
+}
+
 .auth-form-hye {
   text-align: center;
   margin-bottom: 1em;

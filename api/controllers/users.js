@@ -132,10 +132,11 @@ module.exports.logout = async (req, res) => {
 module.exports.forgot = async (req, res) => {
   try {
 
-    console.log("what is the email this should be the problem", req.body.email);
+    console.log("what is the email this should be the problem", req.headers.forgotpassemail);
 
-    const { email } = req.body;
-    const user = await User.findOne({ email });
+    const forgotemail = req.headers.forgotpassemail;
+    console.log(forgotemail, "this is data type:", typeof forgotemail)
+    const user = await User.findOne({ email: forgotemail });
 
     if (!user) {
       throw new Error("No user found with this email address");
@@ -148,18 +149,26 @@ module.exports.forgot = async (req, res) => {
     }
 
     const forgotToken = generateToken();
-    const forgotLink = `http://localhost:3000/user/forgot/${forgotToken}`;
-
-    console.log("forgotlink backend line 148", forgotLink)
+    const forgotLink = `http://localhost:3000/user/changepass/${forgotToken}`;
 
     const mailOptions = {
       from: 'contact@betodute.com <contact@betodute.com>',
-      to: email,
-      subject: "Welcome to hot yoga ensenada",
-      html: `<p>Click <a href="${forgotLink}">here</a> to verify your email</p>`
+      to: forgotemail,
+      subject: "Hot Yoga Ensenada",
+      html: `<h3>Click <a href="${forgotLink}">aquí</a> para restablecer tu contraseña. </h3>`
     };
 
-    return res.status(200)
+    await User.updateOne(
+      { email: forgotemail },
+      { $set: { forgottoken: forgotToken } }
+    );
+
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Message Sent: ' + info.messageId);
+
+    // sending a custom json object with a string to change authmode on the Auth.js page
+
+    return res.status(200).json({authMode: "renderNewPassword"})
 
   
   } catch (error) {
@@ -167,3 +176,24 @@ module.exports.forgot = async (req, res) => {
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 }
+
+module.exports.changePass = async (req, res, next) => {
+  console.log('hit change pass method backend')
+  try {
+    console.log("hit change pass", req.params.token)
+    const forgotToken = req.params.token;
+    const user = await User.findOne({ forgottoken: forgotToken });
+
+    if (!user) {
+      return res.status(404).json({ message: 'Invalid token. User not found.' });
+    }
+
+    user.verified = true;
+    await user.save();
+    res.json({ message: 'Email verification successful.' });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};

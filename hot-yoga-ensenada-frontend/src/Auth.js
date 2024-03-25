@@ -1,23 +1,37 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { useContext } from "react";
 import { UserContext } from "./UserContext.js";
 import { useNavigate } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 import './Auth.css';
 
 
 export const Auth = () => {
   
   const navigate = useNavigate();
-  let { setUser } = useContext(UserContext);
+  const { setUser } = useContext(UserContext);
+  const { enqueueSnackbar } = useSnackbar();
 
-  let [authMode, setAuthMode] = useState("signin");
-  let [username, setUserEmail] = useState("");
-  let [password, setUserPassword] = useState("");
-  let [regUserName, setRegUserName] = useState("");
-  let [regPhoneNumber, setRegPhoneNumber] = useState("");
-  let [regUserEmail, setRegUserEmail] = useState("");
-  let [forgotEmail, setForgotEmail] = useState("");
-  let [regUserPassword, setRegUserPassword] = useState("");
+  const [authMode, setAuthMode] = useState("signin");
+  const [username, setUserEmail] = useState("");
+  const [password, setUserPassword] = useState("");
+  const [regUserName, setRegUserName] = useState("");
+  const [regPhoneNumber, setRegPhoneNumber] = useState("");
+  const [regUserEmail, setRegUserEmail] = useState("");
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [regUserPassword, setRegUserPassword] = useState("");
+  const [newPasswordOne, setNewPasswordOne] = useState("");
+  const [newPasswordTwo, setNewPasswordTwo] = useState("");
+  const [passwordsMatch, setPasswordsMatch] = useState(false);
+
+  useEffect(() => {
+    // Check if passwords match whenever newPasswordOne or newPasswordTwo changes
+    if (newPasswordOne && newPasswordOne === newPasswordTwo) {
+      setPasswordsMatch(true);
+    } else {
+      setPasswordsMatch(false);
+    }
+  }, [newPasswordOne, newPasswordTwo]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -69,15 +83,30 @@ export const Auth = () => {
 
   const handleForgot = (event) => {
     event.preventDefault();
-    fetch('http://localhost:9000/user/forgot')
+    fetch('http://localhost:9000/user/forgot', {
+      method: 'GET',
+      headers: { 
+        'Content-Type': 'application/json',
+        'forgotPassEmail' : forgotEmail 
+      }
+    })
     .then((response) => response.json())
     .then((data) => {
-      console.log("RETURNED FROM BACKEND FORGOT:", data);
+      if (data.authMode) {
+        enqueueSnackbar("Se ha enviado un enlace para restablecer tu contraseña a tu correo electrónico.", {variant: 'default', autoHideDuration: 10000})
+        setAuthMode("signin")
+        setForgotEmail("");
+      }
     })
     .catch((error) => {
       console.error('Error fetching reservations:', error);
     });
   };
+
+  const handleNewPassword = (event) => {
+    event.preventDefault();
+    console.log("{hit handle new pass")
+  }
 
   if (authMode === "signin") {
     return (
@@ -93,32 +122,33 @@ export const Auth = () => {
               </span>
             </div>
             <div className="form-group mt-3">
-              <label>Email address</label>
+              <label>correo electrónico</label>
               <input
                 type="email"
                 className="form-control mt-1"
-                placeholder="Enter email"
+                placeholder="email"
                 value={username}
                 onChange={(event) => {setUserEmail(event.target.value)}}
               />
             </div>
             <div className="form-group mt-3">
-              <label>Password</label>
+              <label>contraseña</label>
               <input
                 type="password"
                 className="form-control mt-1"
-                placeholder="Enter password"
+                placeholder="password"
+                autoComplete="current-password"
                 value={password}
                 onChange={(event) => {setUserPassword(event.target.value)}}
               />
             </div>
             <div className="d-grid gap-2 mt-3">
-              <button type="submit" className="btn btn-primary">
-                Submit
+              <button type="submit" className="btn btn-warning">
+                submit
               </button>
             </div>
             <p className="text-center mt-3">
-              <a href="#" onClick={() => setAuthMode("forgot")}>restablecer contraseña</a>
+              <span className='link-primary' onClick={() => setAuthMode("forgot")}>restablecer contraseña</span>
             </p>
           </div>
         </form>
@@ -160,11 +190,11 @@ export const Auth = () => {
               />
             </div>
             <div className="form-group mt-3">
-              <label>email</label>
+              <label>correo electrónico</label>
               <input
                 type="email"
                 className="form-control mt-1"
-                placeholder="Email Address"
+                placeholder="email"
                 value={regUserEmail}
                 onChange={(event) => {setRegUserEmail(event.target.value)}}
               />
@@ -174,14 +204,15 @@ export const Auth = () => {
               <input
                 type="password"
                 className="form-control mt-1"
-                placeholder="Password"
+                placeholder="password"
+                autoComplete="current-password"
                 value={regUserPassword}
                 onChange={(event) => {setRegUserPassword(event.target.value)}}
               />
             </div>
             <div className="d-grid gap-2 mt-3 mb-4">
-              <button type="submit" className="btn btn-primary">
-                Submit
+              <button type="submit" className="btn btn-warning">
+                submit
               </button>
             </div>
           </div>
@@ -198,18 +229,18 @@ export const Auth = () => {
             <h5 className="auth-form-hye">hot yoga ensenada</h5>
             <h4 className="auth-form-title">Restablecer Contraseña</h4>
             <div className="form-group mt-3">
-              <label>Email address</label>
+              <label>correo electrónico</label>
               <input
                 type="email"
                 className="form-control mt-1"
-                placeholder="Enter email"
+                placeholder="email"
                 value={forgotEmail}
                 onChange={(event) => {setForgotEmail(event.target.value)}}
               />
             </div>
             <div className="d-grid gap-2 mt-3">
-              <button type="submit" className="btn btn-primary">
-                Submit
+              <button type="submit" className="btn btn-warning">
+                submit
               </button>
             </div>
             <div className=" mt-3 text-center">
@@ -217,6 +248,44 @@ export const Auth = () => {
               <span className="link-primary" onClick={() => setAuthMode("signin")}>
                 Login
               </span>
+            </div>
+          </div>
+        </form>
+      </div>
+    )
+  }
+
+  if (authMode === "renderNewPassword") {
+    return (
+      <div className="auth-form-container">
+        <form onSubmit={handleNewPassword} className="auth-form">
+          <div className="auth-form-content">
+            <h5 className="auth-form-hye">hot yoga ensenada</h5>
+            <h4 className="auth-form-title-newpass">nueva contraseña dos veces please</h4>
+            <div className="form-group mt-3">
+              <label>primera vez</label>
+              <input
+                type="password"
+                className="form-control mt-1"
+                autoComplete="current-password"
+                value={newPasswordOne}
+                onChange={(event) => {setNewPasswordOne(event.target.value)}}
+              />
+            </div>
+            <div className="form-group mt-3">
+              <label>segunda vez</label>
+              <input
+                type="password"
+                className="form-control mt-1"
+                autoComplete="current-password"
+                value={newPasswordTwo}
+                onChange={(event) => {setNewPasswordTwo(event.target.value)}}
+              />
+            </div>
+            <div className="d-grid gap-2 mt-3">
+              <button type="submit" className="btn btn-dark" disabled={!passwordsMatch}>
+                Submit
+              </button>
             </div>
           </div>
         </form>
