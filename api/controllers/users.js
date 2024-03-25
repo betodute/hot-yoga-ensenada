@@ -149,7 +149,7 @@ module.exports.forgot = async (req, res) => {
     }
 
     const forgotToken = generateToken();
-    const forgotLink = `http://localhost:3000/user/changepass/${forgotToken}`;
+    const forgotLink = `http://localhost:9000/user/changepass/${forgotToken}`;
 
     const mailOptions = {
       from: 'contact@betodute.com <contact@betodute.com>',
@@ -178,14 +178,18 @@ module.exports.forgot = async (req, res) => {
 }
 
 module.exports.changePass = async (req, res, next) => {
-  console.log('hit change pass method backend')
   try {
     console.log("hit change pass", req.params.token)
+    
     const forgotToken = req.params.token;
     const user = await User.findOne({ forgottoken: forgotToken });
 
     if (!user) {
       return res.status(404).json({ message: 'Invalid token. User not found.' });
+    }
+
+    if (!user.verified) {
+      return res.status(404).json({message: 'Please verify this email before changing the password.'})
     }
 
     user.verified = true;
