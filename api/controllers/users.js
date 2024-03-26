@@ -46,7 +46,7 @@ module.exports.registerUser = async (req, res) => {
     const mailOptions = {
       from: 'contact@betodute.com <contact@betodute.com>',
       to: req.body.regUserEmail,
-      subject: "Welcome to hot yoga ensenada",
+      subject: "Welcome to Hot Yoga Ensenada",
       html: `<p>Click <a href="http://localhost:9000/user/verifyemail/${registeredUser.emailtoken}">here</a> to verify your email</p>`
     };
 
@@ -65,7 +65,8 @@ module.exports.registerUser = async (req, res) => {
 
 module.exports.verifyEmail = async (req, res, next) => {
   try {
-    const emailToken = req.headers.token;
+    console.log(req.params.token)
+    const emailToken = req.params.token;
     const user = await User.findOne({ emailtoken: emailToken });
 
     if (!user) {
@@ -74,7 +75,17 @@ module.exports.verifyEmail = async (req, res, next) => {
 
     user.verified = true;
     await user.save();
-    await loginUser(req, res, next);
+    // Login user after registration using passport helper method
+    req.login(user, function (err) {
+      if (err) {
+        console.log('Error logging in after registration:', err);
+        return res.status(400).json({ message: 'Error logging in' });
+      }
+      console.log('User logged in successfully after registration:', user.username);
+      console.log('Session ID:', req.sessionID);
+    });
+
+    res.redirect('http://localhost:3000/home');
 
   } catch (error) {
     console.error(error);
@@ -83,7 +94,7 @@ module.exports.verifyEmail = async (req, res, next) => {
 };
 
 module.exports.loginUser = async (req, res, next) => {
-  passport.authenticate('local', function(err, user, info) {
+  passport.authenticate('local', function (err, user, info) {
     if (err) {
       console.log('Error during authentication:', err);
       return res.status(400).json({ message: 'Error during authentication' });
@@ -93,7 +104,7 @@ module.exports.loginUser = async (req, res, next) => {
       return res.status(401).json({ message: info.message });
     }
     // If authentication is successful, you can access the authenticated user via req.user
-    req.login(user, function(err) {
+    req.login(user, function (err) {
       if (err) {
         console.log('Error logging in:', err);
         return res.status(400).json({ message: 'Error logging in' });
@@ -107,9 +118,9 @@ module.exports.loginUser = async (req, res, next) => {
 
 module.exports.logout = async (req, res) => {
   try {
-    req.logout(function(err) {
-      if (err) { 
-        return res.status(500).json({ error: 'Internal Server Error' }); 
+    req.logout(function (err) {
+      if (err) {
+        return res.status(500).json({ error: 'Internal Server Error' });
       }
       // Send response after successful logout
       return res.status(200).json({ message: 'Logged out successfully' });
@@ -157,9 +168,9 @@ module.exports.forgot = async (req, res) => {
 
     // sending a custom json object with a string to change authmode on the Auth.js page
 
-    return res.status(200).json({authMode: "verifyForgotToken"})
+    return res.status(200).json({ authMode: "verifyForgotToken" })
 
-  
+
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Internal Server Error' });
@@ -176,9 +187,9 @@ module.exports.forgotToken = async (req, res, next) => {
     if (!user) {
       return res.status(404).json({ message: 'Invalid token. User not found.' });
     }
-    
+
     await user.save();
-    return res.status(200).json({authMode: "renderNewPassword"})
+    return res.status(200).json({ authMode: "renderNewPassword" })
 
   } catch (error) {
     console.error(error);
@@ -196,9 +207,9 @@ module.exports.changePass = async (req, res, next) => {
     if (!user) {
       return res.status(404).json({ message: 'Invalid token. User not found.' });
     }
-    
+
     await user.save();
-    return res.status(200).json({render: "home"})
+    return res.status(200).json({ render: "home" })
 
   } catch (error) {
     console.error(error);

@@ -187,7 +187,7 @@ export const Auth = () => {
             <h3 className="auth-form-title">Regístrate</h3>
             <div className="text-center">
             ¿ Ya Registradx ? {" "}
-              <span className="link-primary" onClick={() => setAuthMode("signin")}>
+              <span className="link-primary" onClick={() => setAuthMode("login")}>
                 Login
               </span>
             </div>
@@ -267,7 +267,7 @@ export const Auth = () => {
             </div>
             <div className=" mt-3 text-center">
             Back to {" "}
-              <span className="link-primary" onClick={() => setAuthMode("signin")}>
+              <span className="link-primary" onClick={() => setAuthMode("login")}>
                 Login
               </span>
             </div>
