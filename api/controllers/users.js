@@ -8,6 +8,7 @@ const User = require('../models/user');
 
 // Register a new user
 const passport = require('passport');
+const { loginUser } = require('./users');
 var LocalStrategy = require('passport-local')
 
 module.exports.registerUser = async (req, res) => {
@@ -64,7 +65,7 @@ module.exports.registerUser = async (req, res) => {
 
 module.exports.verifyEmail = async (req, res, next) => {
   try {
-    const emailToken = req.params.token;
+    const emailToken = req.headers.token;
     const user = await User.findOne({ emailtoken: emailToken });
 
     if (!user) {
@@ -72,6 +73,7 @@ module.exports.verifyEmail = async (req, res, next) => {
     }
 
     user.verified = true;
+    await user.save();
     await loginUser(req, res, next);
 
   } catch (error) {
@@ -164,7 +166,7 @@ module.exports.forgot = async (req, res) => {
   }
 }
 
-module.exports.fogotToken = async (req, res, next) => {
+module.exports.forgotToken = async (req, res, next) => {
   try {
     console.log("hit forgotToken", req.params.token)
 
