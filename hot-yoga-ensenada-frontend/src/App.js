@@ -4,6 +4,7 @@ import { UserProvider } from "./UserContext.js";
 import { Home } from './Home'
 import { Auth } from './Auth'
 import { Admin } from './Admin'
+import { VerifyMessage } from './VerifyMessage'
 import './App.css';
 
 const NotFound = () => {
@@ -19,6 +20,7 @@ function App() {
           <Route path="/" element={<Auth />} />
           <Route path="/home" element={<Home />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/verifymessage" element={<VerifyMessage/>} />
         </Routes>
       </Router>
     </UserProvider>

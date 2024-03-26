@@ -1,13 +1,13 @@
 
-.auth-form-container {
+.verify-container {
   display: flex;
   justify-content: center;
-  align-items: center;
+  margin-top: 2em;
   width: 100vw;
-  height: 100vh;
+  height: auto;
 }
 
-.auth-form {
+.verify-message {
   width: 420px;
   box-shadow: rgb(0 0 0 / 16%) 1px 1px 10px;
   padding-top: 30px;
@@ -16,30 +16,25 @@
   background-color: antiquewhite;
 }
 
-.auth-form-content {
+.verify-content {
   padding-left: 12%;
   padding-right: 12%;
 }
 
-.auth-form-title {
+.verify-title {
   text-align: center;
-  margin-bottom: .7em;
-  font-size: 2em;
-  color: rgb(13, 11, 11);
+  margin-bottom: .2em;
+  font-size: 1.5em;
+  color: rgb(220, 18, 18);
   font-weight: 800;
 }
 
-.auth-form-hye {
+
+.verify-hye {
   text-align: center;
   margin-bottom: 1em;
   font-size: 2em;
   font-family: 'Texturina', serif;
   color: rgb(34, 34, 34);
   font-weight: 800;
-}
-
-label {
-  font-size: 14px;
-  font-weight: 600;
-  color: rgb(34, 34, 34);
 }

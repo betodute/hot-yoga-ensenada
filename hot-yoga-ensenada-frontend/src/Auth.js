@@ -12,7 +12,7 @@ export const Auth = () => {
   const { setUser } = useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
 
-  const [authMode, setAuthMode] = useState("signin");
+  const [authMode, setAuthMode] = useState("login");
   const [username, setUserEmail] = useState("");
   const [password, setUserPassword] = useState("");
   const [regUserName, setRegUserName] = useState("");
@@ -20,6 +20,7 @@ export const Auth = () => {
   const [regUserEmail, setRegUserEmail] = useState("");
   const [forgotEmail, setForgotEmail] = useState("");
   const [regUserPassword, setRegUserPassword] = useState("");
+  const [forgotToken, setForgotToken] = useState("")
   const [newPasswordOne, setNewPasswordOne] = useState("");
   const [newPasswordTwo, setNewPasswordTwo] = useState("");
   const [passwordsMatch, setPasswordsMatch] = useState(false);
@@ -33,7 +34,7 @@ export const Auth = () => {
     }
   }, [newPasswordOne, newPasswordTwo]);
 
-  const handleSubmit = (event) => {
+  const handleLogin = (event) => {
     event.preventDefault();
     fetch('http://localhost:9000/user/login', {
       method: 'POST',
@@ -49,7 +50,6 @@ export const Auth = () => {
     .then((user) => {
       // this is where the USER is defined for app context, it is done upon submission
       // remember that setUser here is defined in the state of UserContext.js
-      console.log("RIGHT BEFORE SET USER THIS IS THE USER:", user)
       setUser(user); 
       navigate('/home');
     })
@@ -74,7 +74,7 @@ export const Auth = () => {
     })
     .then((user) => {
       setUser(user); 
-      navigate('/home');
+      navigate('/verifymessage');
     })
     .catch((error) => {
       alert(error.message);
@@ -88,6 +88,28 @@ export const Auth = () => {
       headers: { 
         'Content-Type': 'application/json',
         'forgotPassEmail' : forgotEmail 
+      }
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.authMode) {
+        enqueueSnackbar("Código de seguridad confirmado, omaiga.", {variant: 'default', autoHideDuration: 10000})
+        setAuthMode("verifyForgotToken")
+        setForgotToken("");
+      }
+    })
+    .catch((error) => {
+      console.error('Error verificando código.', error);
+    });
+  };
+
+  const handleForgotToken = (event) => {
+    event.preventDefault();
+    fetch('http://localhost:9000/user/forgotToken', {
+      method: 'GET',
+      headers: { 
+        'Content-Type': 'application/json',
+        'forgotToken' : forgotToken 
       }
     })
     .then((response) => response.json())
@@ -108,10 +130,10 @@ export const Auth = () => {
     console.log("{hit handle new pass")
   }
 
-  if (authMode === "signin") {
+  if (authMode === "login") {
     return (
       <div className="auth-form-container">
-        <form onSubmit={handleSubmit} className="auth-form">
+        <form onSubmit={handleLogin} className="auth-form">
           <div className="auth-form-content">
             <h5 className="auth-form-hye">hot yoga ensenada</h5>
             <h3 className="auth-form-title">Login</h3>
@@ -255,13 +277,41 @@ export const Auth = () => {
     )
   }
 
+  if (authMode === "verifyForgotToken") {
+    return (
+      <div className="auth-form-container">
+        <form onSubmit={handleForgotToken} className="auth-form">
+          <div className="auth-form-content">
+            <h5 className="auth-form-hye">hot yoga ensenada</h5>
+            <h4 className="auth-form-title"> ingresa el código enviado a tu email </h4>
+            <div className="form-group mt-3">
+              <input
+                type="input"
+                className="form-control mt-1"
+                autoComplete="current-password"
+                placeholder='código'
+                value={newPasswordOne}
+                onChange={(event) => {setForgotToken(event.target.value)}}
+              />
+            </div>
+            <div className="d-grid gap-2 mt-3">
+              <button type="submit" className="btn btn-warning">
+                Submit
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    )
+  }
+
   if (authMode === "renderNewPassword") {
     return (
       <div className="auth-form-container">
         <form onSubmit={handleNewPassword} className="auth-form">
           <div className="auth-form-content">
             <h5 className="auth-form-hye">hot yoga ensenada</h5>
-            <h4 className="auth-form-title-newpass">nueva contraseña dos veces please</h4>
+            <h4 className="auth-form-title-newpass">nueva contraseña dos veces, please</h4>
             <div className="form-group mt-3">
               <label>primera vez</label>
               <input
@@ -283,7 +333,7 @@ export const Auth = () => {
               />
             </div>
             <div className="d-grid gap-2 mt-3">
-              <button type="submit" className="btn btn-dark" disabled={!passwordsMatch}>
+              <button type="submit" className="btn btn-warning" disabled={!passwordsMatch}>
                 Submit
               </button>
             </div>

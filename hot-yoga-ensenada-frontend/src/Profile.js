@@ -26,8 +26,6 @@ export const Profile = () => {
   const { user } = useContext(UserContext);
   const [greeting, setGreeting] = useState('Buen día');
 
-  console.log("ojo object", user)
-
   useEffect(() => {
     const now = new Date();
     const hour = now.getHours();

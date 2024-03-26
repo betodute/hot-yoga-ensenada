@@ -42,16 +42,6 @@ module.exports.registerUser = async (req, res) => {
       // Include other properties you want to send back to the client
     };
 
-    // Login user after registration using passport helper method
-    req.login(registeredUser, function(err) {
-      if (err) {
-        console.log('Error logging in after registration:', err);
-        return res.status(400).json({ message: 'Error logging in' });
-      }
-      console.log('User logged in successfully after registration:', registeredUser.username);
-      console.log('Session ID:', req.sessionID);
-    });
-
     const mailOptions = {
       from: 'contact@betodute.com <contact@betodute.com>',
       to: req.body.regUserEmail,
@@ -82,8 +72,7 @@ module.exports.verifyEmail = async (req, res, next) => {
     }
 
     user.verified = true;
-    await user.save();
-    res.json({ message: 'Email verification successful.' });
+    await loginUser(req, res, next);
 
   } catch (error) {
     console.error(error);
@@ -132,8 +121,6 @@ module.exports.logout = async (req, res) => {
 module.exports.forgot = async (req, res) => {
   try {
 
-    console.log("what is the email this should be the problem", req.headers.forgotpassemail);
-
     const forgotemail = req.headers.forgotpassemail;
     console.log(forgotemail, "this is data type:", typeof forgotemail)
     const user = await User.findOne({ email: forgotemail });
@@ -168,7 +155,7 @@ module.exports.forgot = async (req, res) => {
 
     // sending a custom json object with a string to change authmode on the Auth.js page
 
-    return res.status(200).json({authMode: "renderNewPassword"})
+    return res.status(200).json({authMode: "verifyForgotToken"})
 
   
   } catch (error) {
@@ -177,24 +164,39 @@ module.exports.forgot = async (req, res) => {
   }
 }
 
+module.exports.fogotToken = async (req, res, next) => {
+  try {
+    console.log("hit forgotToken", req.params.token)
+
+    const forgotToken = req.headers.Forgottoken;
+    const user = await User.findOne({ forgottoken: forgotToken });
+
+    if (!user) {
+      return res.status(404).json({ message: 'Invalid token. User not found.' });
+    }
+    
+    await user.save();
+    return res.status(200).json({authMode: "renderNewPassword"})
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 module.exports.changePass = async (req, res, next) => {
   try {
     console.log("hit change pass", req.params.token)
-    
+
     const forgotToken = req.params.token;
     const user = await User.findOne({ forgottoken: forgotToken });
 
     if (!user) {
       return res.status(404).json({ message: 'Invalid token. User not found.' });
     }
-
-    if (!user.verified) {
-      return res.status(404).json({message: 'Please verify this email before changing the password.'})
-    }
-
-    user.verified = true;
+    
     await user.save();
-    res.json({ message: 'Email verification successful.' });
+    return res.status(200).json({render: "home"})
 
   } catch (error) {
     console.error(error);
