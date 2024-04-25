@@ -74,7 +74,7 @@ export const Auth = () => {
     })
     .then((user) => {
       setUser(user); 
-      navigate('/verifymessage');
+      navigate('/verifyemail');
     })
     .catch((error) => {
       alert(error.message);

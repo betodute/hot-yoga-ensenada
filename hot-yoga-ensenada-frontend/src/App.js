@@ -4,7 +4,6 @@ import { UserProvider } from "./UserContext.js";
 import { Home } from './Home'
 import { Auth } from './Auth'
 import { Admin } from './Admin'
-import { VerifyMessage } from './VerifyMessage'
 import { VerifyEmail } from './VerifyEmail'
 import './App.css';
 
@@ -21,8 +20,7 @@ function App() {
           <Route path="/" element={<Auth />} />
           <Route path="/home" element={<Home />} />
           <Route path="/admin" element={<Admin />} />
-          <Route path="/verifymessage" element={<VerifyMessage/>} />
-          <Route path="/verifyemail" element={<VerifyEmail/>} />
+          <Route path="/verifyemail" element={<VerifyEmail />} />
         </Routes>
       </Router>
     </UserProvider>

@@ -47,7 +47,7 @@ module.exports.registerUser = async (req, res) => {
       from: 'contact@betodute.com <contact@betodute.com>',
       to: req.body.regUserEmail,
       subject: "Welcome to Hot Yoga Ensenada",
-      html: `<p>Click <a href="http://localhost:3000/verifyemail/${registeredUser.emailtoken}">here</a> to verify your email</p>`
+      html: `<p>Tu código de verificación es <span style="font-size: larger; font-weight: bold;">${registeredUser.emailtoken}</span><br></p>`
     };
 
     // Send the verification email
@@ -65,9 +65,9 @@ module.exports.registerUser = async (req, res) => {
 
 module.exports.verifyEmail = async (req, res, next) => {
   try {
-    console.log(req.params.token)
-    const emailToken = req.params.token;
-    const user = await User.findOne({ emailtoken: emailToken });
+    const verifyToken = req.headers.verifytoken;
+    console.log(req.headers.verifytoken)
+    const user = await User.findOne({ emailtoken: verifyToken });
 
     if (!user) {
       return res.status(404).json({ message: 'Invalid token. User not found.' });
@@ -85,7 +85,7 @@ module.exports.verifyEmail = async (req, res, next) => {
       console.log('Session ID:', req.sessionID);
     });
 
-    res.redirect('http://localhost:3000');
+    res.json({response: 'success'});
 
   } catch (error) {
     console.error(error);

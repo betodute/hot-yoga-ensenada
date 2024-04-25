@@ -1,7 +1,7 @@
 const generateToken = () => {
-  let length = 13;
+  let length = 5;
   let result = '';
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
   const charactersLength = characters.length;
   let counter = 0;
     while (counter < length) {
