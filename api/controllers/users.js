@@ -47,7 +47,7 @@ module.exports.registerUser = async (req, res) => {
       from: 'contact@betodute.com <contact@betodute.com>',
       to: req.body.regUserEmail,
       subject: "Welcome to Hot Yoga Ensenada",
-      html: `<p>Click <a href="http://localhost:9000/user/verifyemail/${registeredUser.emailtoken}">here</a> to verify your email</p>`
+      html: `<p>Click <a href="http://localhost:3000/verifyemail/${registeredUser.emailtoken}">here</a> to verify your email</p>`
     };
 
     // Send the verification email
@@ -85,7 +85,7 @@ module.exports.verifyEmail = async (req, res, next) => {
       console.log('Session ID:', req.sessionID);
     });
 
-    res.redirect('http://localhost:3000/home');
+    res.redirect('http://localhost:3000');
 
   } catch (error) {
     console.error(error);

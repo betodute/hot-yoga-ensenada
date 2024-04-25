@@ -1,23 +1,23 @@
 require('dotenv').config();
 
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var cors = require("cors");
+let express = require('express');
+let path = require('path');
+let cookieParser = require('cookie-parser');
+let logger = require('morgan');
+let cors = require("cors");
 const bodyParser = require('body-parser'); // parser middleware
 const session = require('express-session');  // session middleware
 const passport = require('passport');  // authentication
-var LocalStrategy = require('passport-local')
+let LocalStrategy = require('passport-local')
 const MongoStore = require('connect-mongo');
 
 
 // Routes Directory
-var usersRouter = require('./routes/user');
-var reservationsRouter = require('./routes/reservation');
-var yogaClassesRouter = require('./routes/yogaclass');
+let usersRouter = require('./routes/user');
+let reservationsRouter = require('./routes/reservation');
+let yogaClassesRouter = require('./routes/yogaclass');
 
-var createError = require('http-errors');
+let createError = require('http-errors');
 
 // User Model 
 const User = require('./models/user.js');
@@ -25,7 +25,7 @@ const User = require('./models/user.js');
 // DB Connection
 const mongoose = require('mongoose');
 
-var app = express();
+let app = express();
 
 // View Engine Setup
 app.set('views', path.join(__dirname, 'views'));
@@ -68,7 +68,7 @@ const sessionConfig = {
   name: 'session',
   secret: secret,
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie: {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 7
