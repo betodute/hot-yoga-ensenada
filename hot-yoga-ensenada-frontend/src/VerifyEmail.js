@@ -1,9 +1,12 @@
 import React, { useState } from "react"
+import { useContext } from "react";
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from "./UserContext.js";
 import './VerifyEmail.css';
 
 export const VerifyEmail = () => {
   const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
   const [verifyToken, setVerifyToken] = useState("")
 
   const handleVerifyToken = (event) => {
@@ -18,6 +21,7 @@ export const VerifyEmail = () => {
     .then((response) => response.json())
     .then((data) => {
       if (data.response === 'success') {
+        setUser(data.user)
         navigate('/home');
       } else {
         console.log(data);

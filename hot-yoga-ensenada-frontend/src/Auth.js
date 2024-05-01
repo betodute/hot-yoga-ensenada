@@ -7,7 +7,7 @@ import './Auth.css';
 
 
 export const Auth = () => {
-  
+
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
@@ -20,10 +20,13 @@ export const Auth = () => {
   const [regUserEmail, setRegUserEmail] = useState("");
   const [forgotEmail, setForgotEmail] = useState("");
   const [regUserPassword, setRegUserPassword] = useState("");
-  const [forgotToken, setForgotToken] = useState("")
+  const [regUserPasswordTwo, setRegUserPasswordTwo] = useState("");
+  const [forgotToken, setForgotToken] = useState("");
   const [newPasswordOne, setNewPasswordOne] = useState("");
   const [newPasswordTwo, setNewPasswordTwo] = useState("");
   const [passwordsMatch, setPasswordsMatch] = useState(false);
+
+  const [submitClicked, setSubmitClicked] = useState(false);
 
   useEffect(() => {
     // Check if passwords match whenever newPasswordOne or newPasswordTwo changes
@@ -38,96 +41,104 @@ export const Auth = () => {
     event.preventDefault();
     fetch('http://localhost:9000/user/login', {
       method: 'POST',
-      body: JSON.stringify({username, password}),
+      body: JSON.stringify({ username, password }),
       headers: { 'Content-Type': 'application/json' }
     })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error('Failed to login');
-      }
-      return response.json();
-    })
-    .then((user) => {
-      // this is where the USER is defined for app context, it is done upon submission
-      // remember that setUser here is defined in the state of UserContext.js
-      setUser(user); 
-      navigate('/home');
-    })
-    .catch((error) => {
-      alert(error.message);
-    });
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to login');
+        }
+        return response.json();
+      })
+      .then((user) => {
+        // this is where the USER is defined for app context, it is done upon submission
+        // remember that setUser here is defined in the state of UserContext.js
+        setUser(user);
+        navigate('/home');
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
   };
 
   const handleRegisterSubmit = (event) => {
     event.preventDefault();
+    setSubmitClicked(true)
+
+    if (regUserPassword !== regUserPasswordTwo) {
+      enqueueSnackbar("Las contraseñas no coinciden--omaiga", { variant: 'error', autoHideDuration: 6000 })
+      return;
+    }
+
     fetch('http://localhost:9000/user/registeruser', {
       method: 'POST',
-      body: JSON.stringify({regUserName, regPhoneNumber, regUserEmail, regUserPassword}),
+      body: JSON.stringify({ regUserName, regPhoneNumber, regUserEmail, regUserPassword }),
       headers: { 'Content-Type': 'application/json' }
     })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error('Registration failed.');
-      }
-    })
-    .then((user) => {
-      setUser(user); 
-      navigate('/verifyemail');
-    })
-    .catch((error) => {
-      alert(error.message);
-    });
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Registration failed.');
+        }
+      })
+      .then((user) => {
+        // I removed the "setUser" userContext method from here so that the user
+        // is only set AFTER the email is verified.
+        navigate('/verifyemail');
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
   };
 
   const handleForgot = (event) => {
     event.preventDefault();
     fetch('http://localhost:9000/user/forgot', {
       method: 'GET',
-      headers: { 
+      headers: {
         'Content-Type': 'application/json',
-        'forgotPassEmail' : forgotEmail 
+        'forgotPassEmail': forgotEmail
       }
     })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.authMode) {
-        enqueueSnackbar("Código de seguridad confirmado, omaiga.", {variant: 'default', autoHideDuration: 10000})
-        setAuthMode("verifyForgotToken")
-        setForgotToken("");
-      }
-    })
-    .catch((error) => {
-      console.error('Error verificando código.', error);
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.authMode) {
+          enqueueSnackbar("Código de seguridad confirmado, omaiga.", { variant: 'default', autoHideDuration: 10000 })
+          setAuthMode("verifyForgotToken")
+          setForgotToken("");
+        }
+      })
+      .catch((error) => {
+        console.error('Error verificando código.', error);
+      });
   };
 
   const handleForgotToken = (event) => {
     event.preventDefault();
     fetch('http://localhost:9000/user/forgotToken', {
       method: 'GET',
-      headers: { 
+      headers: {
         'Content-Type': 'application/json',
-        'forgotToken' : forgotToken 
+        'forgotToken': forgotToken
       }
     })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.authMode) {
-        enqueueSnackbar("Se ha enviado un enlace para restablecer tu contraseña a tu correo electrónico.", {variant: 'default', autoHideDuration: 10000})
-        setAuthMode("signin")
-        setForgotEmail("");
-      }
-    })
-    .catch((error) => {
-      console.error('Error fetching reservations:', error);
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.authMode) {
+          enqueueSnackbar("Se ha enviado un enlace para restablecer tu contraseña a tu correo electrónico.", { variant: 'default', autoHideDuration: 10000 })
+          setAuthMode("signin")
+          setForgotEmail("");
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching reservations:', error);
+      });
   };
 
   const handleNewPassword = (event) => {
     event.preventDefault();
-    console.log("{hit handle new pass")
+    console.log("hit handle new pass")
   }
 
   if (authMode === "login") {
@@ -138,9 +149,9 @@ export const Auth = () => {
             <h5 className="auth-form-hye">hot yoga ensenada</h5>
             <h3 className="auth-form-title">Login</h3>
             <div className="text-center">
-            ¿ No Tienes Cuenta ? {" "}
+              ¿ No Tienes Cuenta ? {" "}
               <span className="link-primary" onClick={() => setAuthMode("register")}>
-              Regístrate
+                Regístrate
               </span>
             </div>
             <div className="form-group mt-3">
@@ -150,7 +161,7 @@ export const Auth = () => {
                 className="form-control mt-1"
                 placeholder="email"
                 value={username}
-                onChange={(event) => {setUserEmail(event.target.value)}}
+                onChange={(event) => { setUserEmail(event.target.value) }}
               />
             </div>
             <div className="form-group mt-3">
@@ -161,7 +172,7 @@ export const Auth = () => {
                 placeholder="password"
                 autoComplete="current-password"
                 value={password}
-                onChange={(event) => {setUserPassword(event.target.value)}}
+                onChange={(event) => { setUserPassword(event.target.value) }}
               />
             </div>
             <div className="d-grid gap-2 mt-3">
@@ -186,42 +197,42 @@ export const Auth = () => {
             <h5 className="auth-form-hye">hot yoga ensenada</h5>
             <h3 className="auth-form-title">Regístrate</h3>
             <div className="text-center">
-            ¿ Ya Registradx ? {" "}
+              ¿ Ya Registradx ? {" "}
               <span className="link-primary" onClick={() => setAuthMode("login")}>
                 Login
               </span>
             </div>
-            <div className="form-group mt-3">
+            <div className="form-group mt-2">
               <label>nombre</label>
               <input
                 type="text"
                 className="form-control mt-1"
                 placeholder="Marco Antonio Solis"
                 value={regUserName}
-                onChange={(event) => {setRegUserName(event.target.value)}}
+                onChange={(event) => { setRegUserName(event.target.value) }}
               />
             </div>
-            <div className="form-group mt-3">
+            <div className="form-group mt-2">
               <label>teléfono</label>
               <input
                 type="tel"
                 className="form-control mt-1"
                 placeholder="(646) 555-5555"
                 value={regPhoneNumber}
-                onChange={(event) => {setRegPhoneNumber(event.target.value)}}
+                onChange={(event) => { setRegPhoneNumber(event.target.value) }}
               />
             </div>
-            <div className="form-group mt-3">
+            <div className="form-group mt-2">
               <label>correo electrónico</label>
               <input
                 type="email"
                 className="form-control mt-1"
                 placeholder="email"
                 value={regUserEmail}
-                onChange={(event) => {setRegUserEmail(event.target.value)}}
+                onChange={(event) => { setRegUserEmail(event.target.value) }}
               />
             </div>
-            <div className="form-group mt-3">
+            <div className="form-group mt-2">
               <label>contraseña</label>
               <input
                 type="password"
@@ -229,13 +240,29 @@ export const Auth = () => {
                 placeholder="password"
                 autoComplete="current-password"
                 value={regUserPassword}
-                onChange={(event) => {setRegUserPassword(event.target.value)}}
+                onChange={(event) => { setRegUserPassword(event.target.value); setSubmitClicked(false) }}
+              />
+            </div>
+            <div className="form-group mt-1">
+              <label>contraseña otra vez</label>
+              <input
+                type="password"
+                className="form-control mt-1"
+                placeholder="confirm password"
+                autoComplete="current-password"
+                value={regUserPasswordTwo}
+                onChange={(event) => { setRegUserPasswordTwo(event.target.value); setSubmitClicked(false) }}
               />
             </div>
             <div className="d-grid gap-2 mt-3 mb-4">
               <button type="submit" className="btn btn-warning">
                 submit
               </button>
+              {submitClicked && regUserPassword !== regUserPasswordTwo && (
+              <div className="mt-2 text-danger">
+                Las contraseñas no coinciden--omaiga
+              </div>
+            )}
             </div>
           </div>
         </form>
@@ -257,7 +284,7 @@ export const Auth = () => {
                 className="form-control mt-1"
                 placeholder="email"
                 value={forgotEmail}
-                onChange={(event) => {setForgotEmail(event.target.value)}}
+                onChange={(event) => { setForgotEmail(event.target.value) }}
               />
             </div>
             <div className="d-grid gap-2 mt-3">
@@ -266,7 +293,7 @@ export const Auth = () => {
               </button>
             </div>
             <div className=" mt-3 text-center">
-            Back to {" "}
+              Back to {" "}
               <span className="link-primary" onClick={() => setAuthMode("login")}>
                 Login
               </span>
@@ -291,7 +318,7 @@ export const Auth = () => {
                 autoComplete="current-password"
                 placeholder='código'
                 value={newPasswordOne}
-                onChange={(event) => {setForgotToken(event.target.value)}}
+                onChange={(event) => { setForgotToken(event.target.value) }}
               />
             </div>
             <div className="d-grid gap-2 mt-3">
@@ -319,7 +346,7 @@ export const Auth = () => {
                 className="form-control mt-1"
                 autoComplete="current-password"
                 value={newPasswordOne}
-                onChange={(event) => {setNewPasswordOne(event.target.value)}}
+                onChange={(event) => { setNewPasswordOne(event.target.value) }}
               />
             </div>
             <div className="form-group mt-3">
@@ -329,7 +356,7 @@ export const Auth = () => {
                 className="form-control mt-1"
                 autoComplete="current-password"
                 value={newPasswordTwo}
-                onChange={(event) => {setNewPasswordTwo(event.target.value)}}
+                onChange={(event) => { setNewPasswordTwo(event.target.value) }}
               />
             </div>
             <div className="d-grid gap-2 mt-3">

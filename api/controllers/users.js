@@ -46,7 +46,7 @@ module.exports.registerUser = async (req, res) => {
     const mailOptions = {
       from: 'contact@betodute.com <contact@betodute.com>',
       to: req.body.regUserEmail,
-      subject: "Welcome to Hot Yoga Ensenada",
+      subject: "Bienvenide a Hot Yoga Ensenada",
       html: `<p>Tu código de verificación es <span style="font-size: larger; font-weight: bold;">${registeredUser.emailtoken}</span><br></p>`
     };
 
@@ -85,7 +85,7 @@ module.exports.verifyEmail = async (req, res, next) => {
       console.log('Session ID:', req.sessionID);
     });
 
-    res.json({response: 'success'});
+    res.json({response: 'success', user: user});
 
   } catch (error) {
     console.error(error);
