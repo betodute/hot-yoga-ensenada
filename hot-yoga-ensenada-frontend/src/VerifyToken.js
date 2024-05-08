@@ -1,17 +1,27 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { useContext } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { UserContext } from "./UserContext.js";
-import './VerifyEmail.css';
+import './VerifyToken.css';
 
-export const VerifyEmail = () => {
+export const VerifyToken = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { setUser } = useContext(UserContext);
   const [verifyToken, setVerifyToken] = useState("")
+  const [verifyType, setVerifyType] = useState(location.state?.verifyType || "email");
+
+  useEffect(() => {
+    if (location.state?.verifyType) {
+      setVerifyType(location.state.verifyType);
+    }
+  }, [location.state?.verifyType]);
 
   const handleVerifyToken = (event) => {
     event.preventDefault();
-    fetch('http://localhost:9000/user/verifyemail', {
+    console.log("this is the verify type", verifyType)
+    
+    fetch('http://localhost:9000/user/verifytoken', {
       method: 'GET',
       headers: { 
         'Content-Type': 'application/json',
@@ -20,11 +30,12 @@ export const VerifyEmail = () => {
     })
     .then((response) => response.json())
     .then((data) => {
-      if (data.response === 'success') {
+      if (data.response === 'success' && verifyType === 'email') {
         setUser(data.user)
         navigate('/home');
-      } else {
-        console.log(data);
+      }
+      if (data.response === 'success' && verifyType ==='newPass') {
+        navigate('/', { state: { authMode: 'renderNewPassword' } } )
       }
     })
     .catch((error) => {

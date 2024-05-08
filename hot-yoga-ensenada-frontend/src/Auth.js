@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { useContext } from "react";
 import { UserContext } from "./UserContext.js";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import './Auth.css';
 
@@ -9,10 +9,12 @@ import './Auth.css';
 export const Auth = () => {
 
   const navigate = useNavigate();
+  const location = useLocation();
   const { setUser } = useContext(UserContext);
   const { enqueueSnackbar } = useSnackbar();
 
   const [authMode, setAuthMode] = useState("login");
+  const [verifyType, setVerifyType] = useState("");
   const [username, setUserEmail] = useState("");
   const [password, setUserPassword] = useState("");
   const [regUserName, setRegUserName] = useState("");
@@ -25,17 +27,23 @@ export const Auth = () => {
   const [newPasswordOne, setNewPasswordOne] = useState("");
   const [newPasswordTwo, setNewPasswordTwo] = useState("");
   const [passwordsMatch, setPasswordsMatch] = useState(false);
+  const [verifyToken, setVerifyToken] = useState("")
 
   const [submitClicked, setSubmitClicked] = useState(false);
 
   useEffect(() => {
-    // Check if passwords match whenever newPasswordOne or newPasswordTwo changes
     if (newPasswordOne && newPasswordOne === newPasswordTwo) {
       setPasswordsMatch(true);
     } else {
       setPasswordsMatch(false);
     }
   }, [newPasswordOne, newPasswordTwo]);
+
+  useEffect(() => {
+    if (location.state && location.state.authMode) {
+      setAuthMode(location.state.authMode);
+    }
+  }, [location.state]);
 
   const handleLogin = (event) => {
     event.preventDefault();
@@ -85,7 +93,7 @@ export const Auth = () => {
       .then((user) => {
         // I removed the "setUser" userContext method from here so that the user
         // is only set AFTER the email is verified.
-        navigate('/verifyemail');
+        navigate('/verifytoken', { state: { verifyType: 'registerEmail' } });
       })
       .catch((error) => {
         alert(error.message);
@@ -103,11 +111,8 @@ export const Auth = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data.authMode) {
-          enqueueSnackbar("Código de seguridad confirmado, omaiga.", { variant: 'default', autoHideDuration: 10000 })
-          setAuthMode("verifyForgotToken")
-          setForgotToken("");
-        }
+        console.log('data response in handleForgot', data);
+        navigate('/verifytoken', { state: { verifyType: 'newPass' } });
       })
       .catch((error) => {
         console.error('Error verificando código.', error);
@@ -129,6 +134,29 @@ export const Auth = () => {
           enqueueSnackbar("Se ha enviado un enlace para restablecer tu contraseña a tu correo electrónico.", { variant: 'default', autoHideDuration: 10000 })
           setAuthMode("signin")
           setForgotEmail("");
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching reservations:', error);
+      });
+  };
+
+  const handleVerifyToken = (event) => {
+    event.preventDefault();
+    fetch('http://localhost:9000/user/verifytoken', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'verifytoken': verifyToken
+      }
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.response === 'success') {
+          setUser(data.user)
+          navigate('/home');
+        } else {
+          console.log(data);
         }
       })
       .catch((error) => {
@@ -181,7 +209,7 @@ export const Auth = () => {
               </button>
             </div>
             <p className="text-center mt-3">
-              <span className='link-primary' onClick={() => setAuthMode("forgot")}>restablecer contraseña</span>
+              <span className='link-primary' onClick={() => setAuthMode("forgot")}>Restablecer Contraseña</span>
             </p>
           </div>
         </form>
@@ -259,10 +287,10 @@ export const Auth = () => {
                 submit
               </button>
               {submitClicked && regUserPassword !== regUserPasswordTwo && (
-              <div className="mt-2 text-danger">
-                Las contraseñas no coinciden--omaiga
-              </div>
-            )}
+                <div className="mt-2 text-danger">
+                  Las contraseñas no coinciden--omaiga
+                </div>
+              )}
             </div>
           </div>
         </form>
@@ -304,41 +332,15 @@ export const Auth = () => {
     )
   }
 
-  if (authMode === "verifyForgotToken") {
-    return (
-      <div className="auth-form-container">
-        <form onSubmit={handleForgotToken} className="auth-form">
-          <div className="auth-form-content">
-            <h5 className="auth-form-hye">hot yoga ensenada</h5>
-            <h4 className="auth-form-title"> ingresa el código enviado a tu email </h4>
-            <div className="form-group mt-3">
-              <input
-                type="input"
-                className="form-control mt-1"
-                autoComplete="current-password"
-                placeholder='código'
-                value={newPasswordOne}
-                onChange={(event) => { setForgotToken(event.target.value) }}
-              />
-            </div>
-            <div className="d-grid gap-2 mt-3">
-              <button type="submit" className="btn btn-warning">
-                Submit
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-    )
-  }
-
   if (authMode === "renderNewPassword") {
     return (
       <div className="auth-form-container">
         <form onSubmit={handleNewPassword} className="auth-form">
           <div className="auth-form-content">
-            <h5 className="auth-form-hye">hot yoga ensenada</h5>
-            <h4 className="auth-form-title-newpass">nueva contraseña dos veces, please</h4>
+            <div className="d-grid gap-2 mt-3">
+            </div>
+            <h5 className="verify-hye">hot yoga ensenada</h5>
+            <h5 className="auth-form-title-newpass">nueva contraseña dos veces</h5>
             <div className="form-group mt-3">
               <label>primera vez</label>
               <input

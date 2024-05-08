@@ -25,7 +25,7 @@ module.exports.registerUser = async (req, res) => {
       phonenumber: req.body.regPhoneNumber,
       email: req.body.regUserEmail,
       username: req.body.regUserEmail,
-      emailtoken: generateToken(),
+      token: generateToken(),
       verified: false,
       active: false
     });
@@ -47,7 +47,7 @@ module.exports.registerUser = async (req, res) => {
       from: 'contact@betodute.com <contact@betodute.com>',
       to: req.body.regUserEmail,
       subject: "Bienvenide a Hot Yoga Ensenada",
-      html: `<p>Tu código de verificación es <span style="font-size: larger; font-weight: bold;">${registeredUser.emailtoken}</span><br></p>`
+      html: `<p>Tu código de verificación es <span style="font-size: larger; font-weight: bold;">${registeredUser.token}</span><br></p>`
     };
 
     // Send the verification email
@@ -63,11 +63,11 @@ module.exports.registerUser = async (req, res) => {
   }
 };
 
-module.exports.verifyEmail = async (req, res, next) => {
+module.exports.verifyToken = async (req, res, next) => {
   try {
     const verifyToken = req.headers.verifytoken;
     console.log(req.headers.verifytoken)
-    const user = await User.findOne({ emailtoken: verifyToken });
+    const user = await User.findOne({ token: verifyToken });
 
     if (!user) {
       return res.status(404).json({ message: 'Invalid token. User not found.' });
@@ -132,10 +132,11 @@ module.exports.logout = async (req, res) => {
 }
 
 module.exports.forgot = async (req, res) => {
+
+  console.log("hit forgot backend")
   try {
 
     const forgotemail = req.headers.forgotpassemail;
-    console.log(forgotemail, "this is data type:", typeof forgotemail)
     const user = await User.findOne({ email: forgotemail });
 
     if (!user) {
@@ -148,27 +149,26 @@ module.exports.forgot = async (req, res) => {
       );
     }
 
-    const forgotToken = generateToken();
-    const forgotLink = `http://localhost:9000/user/changepass/${forgotToken}`;
+    const token = generateToken();
 
     const mailOptions = {
       from: 'contact@betodute.com <contact@betodute.com>',
       to: forgotemail,
-      subject: "Hot Yoga Ensenada",
-      html: `<h3>Click <a href="${forgotLink}">aquí</a> para restablecer tu contraseña. </h3>`
+      subject: "Restablece Contraseña",
+      html: `<p>Tu código de verificación es <span style="font-size: larger; font-weight: bold;">${token}</span><br></p>`
     };
 
     await User.updateOne(
       { email: forgotemail },
-      { $set: { forgottoken: forgotToken } }
+      { $set: { token: token } }
     );
 
     const info = await transporter.sendMail(mailOptions);
     console.log('Message Sent: ' + info.messageId);
 
     // sending a custom json object with a string to change authmode on the Auth.js page
-
-    return res.status(200).json({ authMode: "verifyForgotToken" })
+    console.log(user)
+    return res.status(200).json({ authMode: "renderNewPassword" })
 
 
   } catch (error) {
@@ -176,26 +176,6 @@ module.exports.forgot = async (req, res) => {
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 }
-
-module.exports.forgotToken = async (req, res, next) => {
-  try {
-    console.log("hit forgotToken", req.params.token)
-
-    const forgotToken = req.headers.Forgottoken;
-    const user = await User.findOne({ forgottoken: forgotToken });
-
-    if (!user) {
-      return res.status(404).json({ message: 'Invalid token. User not found.' });
-    }
-
-    await user.save();
-    return res.status(200).json({ authMode: "renderNewPassword" })
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-};
 
 module.exports.changePass = async (req, res, next) => {
   try {
@@ -209,6 +189,7 @@ module.exports.changePass = async (req, res, next) => {
     }
 
     await user.save();
+
     return res.status(200).json({ render: "home" })
 
   } catch (error) {

@@ -4,7 +4,7 @@ import { UserProvider } from "./UserContext.js";
 import { Home } from './Home'
 import { Auth } from './Auth'
 import { Admin } from './Admin'
-import { VerifyEmail } from './VerifyEmail'
+import { VerifyToken } from './VerifyToken'
 import './App.css';
 
 const NotFound = () => {
@@ -20,7 +20,7 @@ function App() {
           <Route path="/" element={<Auth />} />
           <Route path="/home" element={<Home />} />
           <Route path="/admin" element={<Admin />} />
-          <Route path="/verifyemail" element={<VerifyEmail />} />
+          <Route path="/verifytoken" element={<VerifyToken />} />
         </Routes>
       </Router>
     </UserProvider>

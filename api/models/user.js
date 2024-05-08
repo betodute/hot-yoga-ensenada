@@ -8,8 +8,7 @@ const UserSchema = new Schema({
   email: String,
   username: String,
   password: String,
-  emailtoken: String,
-  forgottoken: String,
+  token: String,
   verified: Boolean
 });
 
