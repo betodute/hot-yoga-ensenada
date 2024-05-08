@@ -287,7 +287,7 @@ export const Auth = () => {
                 submit
               </button>
               {submitClicked && regUserPassword !== regUserPasswordTwo && (
-                <div className="mt-2 text-danger">
+                <div className="mt-2 mx-auto text-danger">
                   Las contraseñas no coinciden--omaiga
                 </div>
               )}

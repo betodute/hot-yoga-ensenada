@@ -9,7 +9,7 @@ export const VerifyToken = () => {
   const location = useLocation();
   const { setUser } = useContext(UserContext);
   const [verifyToken, setVerifyToken] = useState("")
-  const [verifyType, setVerifyType] = useState(location.state?.verifyType || "email");
+  const [verifyType, setVerifyType] = useState(location.state?.verifyType || "registerEmail");
 
   useEffect(() => {
     if (location.state?.verifyType) {
@@ -30,7 +30,7 @@ export const VerifyToken = () => {
     })
     .then((response) => response.json())
     .then((data) => {
-      if (data.response === 'success' && verifyType === 'email') {
+      if (data.response === 'success' && verifyType === 'registerEmail') {
         setUser(data.user)
         navigate('/home');
       }
