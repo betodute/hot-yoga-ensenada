@@ -15,7 +15,7 @@
 .verify-title {
   text-align: center;
   margin-bottom: .2em;
-  font-size: 1.5em;
+  font-size: 1em;
   color: rgb(220, 18, 18);
   font-weight: 800;
 }
@@ -23,7 +23,7 @@
 
 .verify-hye {
   text-align: center;
-  margin-bottom: 1em;
+  margin-bottom: 1.3em;
   font-size: 2em;
   font-family: 'Texturina', serif;
   color: rgb(34, 34, 34);

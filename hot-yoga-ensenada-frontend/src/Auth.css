@@ -38,6 +38,14 @@
   font-weight: 800;
 }
 
+.auth-form-urgent {
+  text-align: center;
+  margin-bottom: .2em;
+  font-size: 1.3em;
+  color: rgb(220, 18, 18);
+  font-weight: 800;
+}
+
 .link-primary {
   cursor: pointer;
 }

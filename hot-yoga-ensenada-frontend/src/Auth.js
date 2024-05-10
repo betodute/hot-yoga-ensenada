@@ -27,7 +27,7 @@ export const Auth = () => {
   const [newPasswordOne, setNewPasswordOne] = useState("");
   const [newPasswordTwo, setNewPasswordTwo] = useState("");
   const [passwordsMatch, setPasswordsMatch] = useState(false);
-  const [verifyToken, setVerifyToken] = useState("")
+  const [verifyTokenAuth, setVerifyTokenAuth] = useState("")
 
   const [submitClicked, setSubmitClicked] = useState(false);
 
@@ -119,35 +119,13 @@ export const Auth = () => {
       });
   };
 
-  const handleForgotToken = (event) => {
-    event.preventDefault();
-    fetch('http://localhost:9000/user/forgotToken', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'forgotToken': forgotToken
-      }
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.authMode) {
-          enqueueSnackbar("Se ha enviado un enlace para restablecer tu contraseña a tu correo electrónico.", { variant: 'default', autoHideDuration: 10000 })
-          setAuthMode("signin")
-          setForgotEmail("");
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching reservations:', error);
-      });
-  };
-
   const handleVerifyToken = (event) => {
     event.preventDefault();
     fetch('http://localhost:9000/user/verifytoken', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'verifytoken': verifyToken
+        'verifytoken': verifyTokenAuth
       }
     })
       .then((response) => response.json())
@@ -160,13 +138,34 @@ export const Auth = () => {
         }
       })
       .catch((error) => {
-        console.error('Error fetching reservations:', error);
+        console.error('Error verifying token:', error);
       });
   };
 
   const handleNewPassword = (event) => {
     event.preventDefault();
-    console.log("hit handle new pass")
+    setVerifyTokenAuth(verifyTokenAuth)
+    console.log("front end verifytoken", verifyTokenAuth)
+    fetch('http://localhost:9000/user/changepass', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'verifytoken': verifyTokenAuth,
+        'newpasswordone': newPasswordOne
+      }
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.response === 'success') {
+          setUser(data.user)
+          navigate('/home');
+        } else {
+          console.log(data)
+        }
+      })
+      .catch((error) => {
+        console.error('Error changing new password:', error)
+      }); 
   }
 
   if (authMode === "login") {
@@ -337,10 +336,12 @@ export const Auth = () => {
       <div className="auth-form-container">
         <form onSubmit={handleNewPassword} className="auth-form">
           <div className="auth-form-content">
-            <div className="d-grid gap-2 mt-3">
+            <div className="d-grid gap-2 mt-1">
             </div>
-            <h5 className="verify-hye">hot yoga ensenada</h5>
-            <h5 className="auth-form-title-newpass">nueva contraseña dos veces</h5>
+            <h5 className="auth-form-hye">hot yoga ensenada</h5>
+            <div className='mx-auto'>
+              <h5 className="auth-form-urgent">crea una nueva contraseña e ingrésala dos veces</h5>
+            </div>
             <div className="form-group mt-3">
               <label>primera vez</label>
               <input

@@ -19,7 +19,7 @@ export const VerifyToken = () => {
 
   const handleVerifyToken = (event) => {
     event.preventDefault();
-    console.log("this is the verify type", verifyType)
+   
     
     fetch('http://localhost:9000/user/verifytoken', {
       method: 'GET',
@@ -35,7 +35,7 @@ export const VerifyToken = () => {
         navigate('/home');
       }
       if (data.response === 'success' && verifyType ==='newPass') {
-        navigate('/', { state: { authMode: 'renderNewPassword' } } )
+        navigate('/', { state: { authMode: 'renderNewPassword', verifyTokenAuth: verifyToken} } )
       }
     })
     .catch((error) => {
@@ -48,7 +48,7 @@ export const VerifyToken = () => {
     <form onSubmit={handleVerifyToken} className="auth-form">
       <div className="verify-content">
         <h5 className="verify-hye">hot yoga ensenada</h5>
-        <h4 className="verify-title"> ingresa el código enviado a tu email--omaiga </h4>
+        <h4 className="verify-title">please ingresa el código enviado a tu email</h4>
         <div className="form-group mt-3">
           <input
             type="input"

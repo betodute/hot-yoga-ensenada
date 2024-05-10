@@ -179,18 +179,30 @@ module.exports.forgot = async (req, res) => {
 
 module.exports.changePass = async (req, res, next) => {
   try {
-    console.log("hit change pass", req.params.token)
+    console.log('HIT CHANGE PASS BACKEND')
+    const verifyToken = req.headers.verifytoken;
+    console.log(verifyToken);
+    console.log(req.headers.newpasswordone)
 
-    const forgotToken = req.params.token;
-    const user = await User.findOne({ forgottoken: forgotToken });
+    const newUserPass = req.headers.newpasswordone
+    const user = await User.findOne({ token: verifyToken });
 
     if (!user) {
       return res.status(404).json({ message: 'Invalid token. User not found.' });
     }
-
+    
     await user.save();
+    // Login user after registration using passport helper method
+    req.login(user, function (err) {
+      if (err) {
+        console.log('Error logging in after registration:', err);
+        return res.status(400).json({ message: 'Error logging in' });
+      }
+      console.log('User logged in successfully after registration:', user.username);
+      console.log('Session ID:', req.sessionID);
+    });
 
-    return res.status(200).json({ render: "home" })
+    res.json({response: 'success', user: user});
 
   } catch (error) {
     console.error(error);
