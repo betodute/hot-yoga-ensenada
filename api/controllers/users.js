@@ -66,8 +66,15 @@ module.exports.registerUser = async (req, res) => {
 module.exports.verifyToken = async (req, res, next) => {
   try {
     const verifyToken = req.headers.verifytoken;
+    const verifyType = req.headers.verifytype;
+
     console.log(req.headers.verifytoken)
+    console.log(req.headers.verifytype)
+    
     const user = await User.findOne({ token: verifyToken });
+
+    console.log('this is the user')
+    console.log(user)
 
     if (!user) {
       return res.status(404).json({ message: 'Invalid token. User not found.' });
@@ -75,6 +82,16 @@ module.exports.verifyToken = async (req, res, next) => {
 
     user.verified = true;
     await user.save();
+
+    // The following code checks verification type, if it is to changepass
+    // the user should NOT be logged in, if it is to verify the email then the user is
+    // logged in
+
+    if (verifyType === 'newPass') {
+      console.log('hit verifyType conditional')
+      return res.json({authMode: 'renderNewPassword', user: user});
+    }
+
     // Login user after registration using passport helper method
     req.login(user, function (err) {
       if (err) {

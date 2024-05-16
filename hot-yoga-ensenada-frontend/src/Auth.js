@@ -130,12 +130,18 @@ export const Auth = () => {
     })
       .then((response) => response.json())
       .then((data) => {
+
+        console.log("hit front end response", data.response.authMode)
         if (data.response === 'success') {
           setUser(data.user)
           navigate('/home');
-        } else {
-          console.log(data);
-        }
+        };
+
+        if (data.response.authMode === 'renderNewPassword') {
+          console.log('hit auth verify token front end omg')
+          setAuthMode('renderNewPassword')
+        };
+
       })
       .catch((error) => {
         console.error('Error verifying token:', error);

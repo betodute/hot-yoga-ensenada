@@ -25,7 +25,8 @@ export const VerifyToken = () => {
       method: 'GET',
       headers: { 
         'Content-Type': 'application/json',
-        'verifytoken' : verifyToken 
+        'verifytoken' : verifyToken,
+        'verifytype' : verifyType 
       }
     })
     .then((response) => response.json())
