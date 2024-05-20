@@ -45,6 +45,12 @@ export const Auth = () => {
     }
   }, [location.state]);
 
+  useEffect(() => {
+    if (location.state && location.state.verifyTokenAuth) {
+      setVerifyTokenAuth(location.state.verifyTokenAuth);
+    }
+  }, [location.state]);
+
   const handleLogin = (event) => {
     event.preventDefault();
     fetch('http://localhost:9000/user/login', {
@@ -116,35 +122,6 @@ export const Auth = () => {
       })
       .catch((error) => {
         console.error('Error verificando código.', error);
-      });
-  };
-
-  const handleVerifyToken = (event) => {
-    event.preventDefault();
-    fetch('http://localhost:9000/user/verifytoken', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'verifytoken': verifyTokenAuth
-      }
-    })
-      .then((response) => response.json())
-      .then((data) => {
-
-        console.log("hit front end response", data.response.authMode)
-        if (data.response === 'success') {
-          setUser(data.user)
-          navigate('/home');
-        };
-
-        if (data.response.authMode === 'renderNewPassword') {
-          console.log('hit auth verify token front end omg')
-          setAuthMode('renderNewPassword')
-        };
-
-      })
-      .catch((error) => {
-        console.error('Error verifying token:', error);
       });
   };
 

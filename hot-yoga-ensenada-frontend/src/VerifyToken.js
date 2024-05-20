@@ -36,6 +36,7 @@ export const VerifyToken = () => {
         navigate('/home');
       }
       if (data.response === 'success' && verifyType ==='newPass') {
+        console.log('this is the verify token sent to the auth component from verify token component', verifyToken)
         navigate('/', { state: { authMode: 'renderNewPassword', verifyTokenAuth: verifyToken} } )
       }
     })
@@ -49,7 +50,7 @@ export const VerifyToken = () => {
     <form onSubmit={handleVerifyToken} className="auth-form">
       <div className="verify-content">
         <h5 className="verify-hye">hot yoga ensenada</h5>
-        <h4 className="verify-title">please ingresa el código enviado a tu email</h4>
+        <h4 className="verify-title">ingresa el código enviado a tu email</h4>
         <div className="form-group mt-3">
           <input
             type="input"

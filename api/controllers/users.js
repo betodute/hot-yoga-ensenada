@@ -89,7 +89,7 @@ module.exports.verifyToken = async (req, res, next) => {
 
     if (verifyType === 'newPass') {
       console.log('hit verifyType conditional')
-      return res.json({authMode: 'renderNewPassword', user: user});
+      return res.json({response: 'success', user: user});
     }
 
     // Login user after registration using passport helper method
