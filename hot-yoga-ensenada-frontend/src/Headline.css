@@ -7,3 +7,11 @@
   font-family: 'Texturina', serif;
   font-size: 4em;
 }
+
+.home-image {
+  width: 100%;
+  max-width: 35em;
+  height: auto;
+  margin: 1em;
+  border-radius: 30px;
+}
