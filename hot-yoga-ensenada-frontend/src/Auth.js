@@ -23,6 +23,7 @@ export const Auth = () => {
   const [forgotEmail, setForgotEmail] = useState("");
   const [regUserPassword, setRegUserPassword] = useState("");
   const [regUserPasswordTwo, setRegUserPasswordTwo] = useState("");
+  const [regPasswordsMatch, setRegPasswordsMatch] = useState("");
   const [forgotToken, setForgotToken] = useState("");
   const [newPasswordOne, setNewPasswordOne] = useState("");
   const [newPasswordTwo, setNewPasswordTwo] = useState("");
@@ -38,6 +39,14 @@ export const Auth = () => {
       setPasswordsMatch(false);
     }
   }, [newPasswordOne, newPasswordTwo]);
+
+  useEffect(() => {
+    if (regUserPassword && regUserPassword === regUserPasswordTwo) {
+      setRegPasswordsMatch(true);
+    } else {
+      setRegPasswordsMatch(false);
+    }
+  }, [regUserPassword, regUserPasswordTwo]);
 
   useEffect(() => {
     if (location.state && location.state.authMode) {
@@ -170,7 +179,9 @@ export const Auth = () => {
                 type="email"
                 className="form-control mt-1"
                 placeholder="email"
+                autoComplete="username"
                 value={username}
+                required
                 onChange={(event) => { setUserEmail(event.target.value) }}
               />
             </div>
@@ -182,6 +193,7 @@ export const Auth = () => {
                 placeholder="password"
                 autoComplete="current-password"
                 value={password}
+                required
                 onChange={(event) => { setUserPassword(event.target.value) }}
               />
             </div>
@@ -238,6 +250,7 @@ export const Auth = () => {
                 type="email"
                 className="form-control mt-1"
                 placeholder="email"
+                autoComplete="username"
                 value={regUserEmail}
                 onChange={(event) => { setRegUserEmail(event.target.value) }}
               />
@@ -248,7 +261,7 @@ export const Auth = () => {
                 type="password"
                 className="form-control mt-1"
                 placeholder="password"
-                autoComplete="current-password"
+                autoComplete="new-password"
                 value={regUserPassword}
                 onChange={(event) => { setRegUserPassword(event.target.value); setSubmitClicked(false) }}
               />
@@ -259,16 +272,16 @@ export const Auth = () => {
                 type="password"
                 className="form-control mt-1"
                 placeholder="confirm password"
-                autoComplete="current-password"
+                autoComplete="new-password"
                 value={regUserPasswordTwo}
                 onChange={(event) => { setRegUserPasswordTwo(event.target.value); setSubmitClicked(false) }}
               />
             </div>
             <div className="d-grid gap-2 mt-3 mb-4">
-              <button type="submit" className="btn btn-warning">
+              <button type="submit" className="btn btn-warning" disabled={!regPasswordsMatch}>
                 submit
               </button>
-              {submitClicked && regUserPassword !== regUserPasswordTwo && (
+              {regUserPassword && regUserPasswordTwo && regUserPassword.length <= regUserPasswordTwo.length && regUserPassword !== regUserPasswordTwo && (
                 <div className="mt-2 mx-auto text-danger">
                   Las contraseñas no coinciden--omaiga
                 </div>
@@ -330,7 +343,7 @@ export const Auth = () => {
               <input
                 type="password"
                 className="form-control mt-1"
-                autoComplete="current-password"
+                autoComplete="new-password"
                 value={newPasswordOne}
                 onChange={(event) => { setNewPasswordOne(event.target.value) }}
               />
@@ -340,7 +353,7 @@ export const Auth = () => {
               <input
                 type="password"
                 className="form-control mt-1"
-                autoComplete="current-password"
+                autoComplete="new-password"
                 value={newPasswordTwo}
                 onChange={(event) => { setNewPasswordTwo(event.target.value) }}
               />
@@ -349,6 +362,11 @@ export const Auth = () => {
               <button type="submit" className="btn btn-warning" disabled={!passwordsMatch}>
                 Submit
               </button>
+              {newPasswordOne && newPasswordTwo && newPasswordOne.length <= newPasswordTwo.length && newPasswordOne !== newPasswordTwo && (
+                <div className="mt-2 mx-auto text-danger">
+                  Las contraseñas no coinciden--omaiga
+                </div>
+              )}
             </div>
           </div>
         </form>
