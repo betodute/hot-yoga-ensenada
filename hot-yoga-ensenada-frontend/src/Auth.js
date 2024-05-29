@@ -123,15 +123,25 @@ export const Auth = () => {
         'forgotPassEmail': forgotEmail
       }
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          return response.json().then((data) => {
+            throw new Error(data.error || 'Este email no está registrado.');
+          });
+        }
+        return response.json();
+      })
       .then((data) => {
         console.log('data response in handleForgot', data);
         navigate('/verifytoken', { state: { verifyType: 'newPass' } });
       })
       .catch((error) => {
         console.error('Error verificando código.', error);
+        enqueueSnackbar("Este email no está registrado.", {variant: 'error', autoHideDuration: 10000})
+        setAuthMode('login');
       });
   };
+  
 
   const handleNewPassword = (event) => {
     event.preventDefault();
