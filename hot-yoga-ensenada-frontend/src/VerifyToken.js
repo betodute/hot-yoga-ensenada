@@ -8,6 +8,8 @@ export const VerifyToken = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { setUser } = useContext(UserContext);
+  const [backendToken, setBackendToken] = useState(location.state?.backendToken);
+  const [tokensMatch, setTokensMatch] = useState(false);
   const [verifyToken, setVerifyToken] = useState("")
   const [verifyType, setVerifyType] = useState(location.state?.verifyType || "registerEmail");
 
@@ -17,9 +19,21 @@ export const VerifyToken = () => {
     }
   }, [location.state?.verifyType]);
 
+  useEffect(() => {
+    console.log(verifyToken)
+    console.log(backendToken)
+
+    if (verifyToken && verifyToken === backendToken) {
+      setTokensMatch(true)
+    } else {
+      setTokensMatch(false)
+    }
+
+  }, [verifyToken, backendToken])
+
   const handleVerifyToken = (event) => {
     event.preventDefault();
-   
+    
     
     fetch('http://localhost:9000/user/verifytoken', {
       method: 'GET',
@@ -61,9 +75,14 @@ export const VerifyToken = () => {
           />
         </div>
         <div className="d-grid gap-2 mt-3">
-          <button type="submit" className="btn btn-warning">
+          <button type="submit" className="btn btn-warning" disabled={!tokensMatch}>
             Submit
           </button>
+          {verifyToken && backendToken && verifyToken.length >= backendToken.length && verifyToken !== backendToken && (
+                <div className="mt-2 mx-auto text-danger">
+                  por favor verifica el código
+                </div>
+              )}
         </div>
       </div>
     </form>

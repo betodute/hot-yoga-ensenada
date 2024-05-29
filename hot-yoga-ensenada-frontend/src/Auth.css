@@ -50,6 +50,10 @@
   cursor: pointer;
 }
 
+.auth-loading {
+  top: -50px;
+}
+
 label {
   font-size: 14px;
   font-weight: 600;

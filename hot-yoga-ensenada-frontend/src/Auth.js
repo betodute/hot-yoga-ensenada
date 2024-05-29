@@ -24,13 +24,10 @@ export const Auth = () => {
   const [regUserPassword, setRegUserPassword] = useState("");
   const [regUserPasswordTwo, setRegUserPasswordTwo] = useState("");
   const [regPasswordsMatch, setRegPasswordsMatch] = useState("");
-  const [forgotToken, setForgotToken] = useState("");
   const [newPasswordOne, setNewPasswordOne] = useState("");
   const [newPasswordTwo, setNewPasswordTwo] = useState("");
   const [passwordsMatch, setPasswordsMatch] = useState(false);
-  const [verifyTokenAuth, setVerifyTokenAuth] = useState("")
-
-  const [submitClicked, setSubmitClicked] = useState(false);
+  const [verifyTokenAuth, setVerifyTokenAuth] = useState("");
 
   useEffect(() => {
     if (newPasswordOne && newPasswordOne === newPasswordTwo) {
@@ -62,6 +59,8 @@ export const Auth = () => {
 
   const handleLogin = (event) => {
     event.preventDefault();
+    setAuthMode('loading');
+
     fetch('http://localhost:9000/user/login', {
       method: 'POST',
       body: JSON.stringify({ username, password }),
@@ -69,6 +68,8 @@ export const Auth = () => {
     })
       .then((response) => {
         if (!response.ok) {
+          setAuthMode('login')
+          enqueueSnackbar("Hubo un problema al iniciar sesión, por favor verifica tu correo electrónico y contraseña.", {variant: 'error', autoHideDuration: 10000})
           throw new Error('Failed to login');
         }
         return response.json();
@@ -86,29 +87,27 @@ export const Auth = () => {
 
   const handleRegisterSubmit = (event) => {
     event.preventDefault();
-    setSubmitClicked(true)
-
-    if (regUserPassword !== regUserPasswordTwo) {
-      enqueueSnackbar("Las contraseñas no coinciden--omaiga", { variant: 'error', autoHideDuration: 6000 })
-      return;
-    }
-
+    setAuthMode('loading');
+  
     fetch('http://localhost:9000/user/registeruser', {
       method: 'POST',
       body: JSON.stringify({ regUserName, regPhoneNumber, regUserEmail, regUserPassword }),
       headers: { 'Content-Type': 'application/json' }
     })
       .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
+        if (!response.ok) {
+          setAuthMode('login');
           throw new Error('Registration failed.');
         }
+        return response.json(); 
+        // Parse the JSON from the response - this is VITAL for the DATA to be in JSON
+        // in the next .then promise
       })
-      .then((user) => {
+      .then((data) => {
+        console.log(data);
         // I removed the "setUser" userContext method from here so that the user
         // is only set AFTER the email is verified.
-        navigate('/verifytoken', { state: { verifyType: 'registerEmail' } });
+        navigate('/verifytoken', { state: { verifyType: 'registerEmail', backendToken: data.token } });
       })
       .catch((error) => {
         alert(error.message);
@@ -263,7 +262,7 @@ export const Auth = () => {
                 placeholder="password"
                 autoComplete="new-password"
                 value={regUserPassword}
-                onChange={(event) => { setRegUserPassword(event.target.value); setSubmitClicked(false) }}
+                onChange={(event) => { setRegUserPassword(event.target.value); }}
               />
             </div>
             <div className="form-group mt-1">
@@ -274,7 +273,7 @@ export const Auth = () => {
                 placeholder="confirm password"
                 autoComplete="new-password"
                 value={regUserPasswordTwo}
-                onChange={(event) => { setRegUserPasswordTwo(event.target.value); setSubmitClicked(false) }}
+                onChange={(event) => { setRegUserPasswordTwo(event.target.value); }}
               />
             </div>
             <div className="d-grid gap-2 mt-3 mb-4">
@@ -372,6 +371,19 @@ export const Auth = () => {
         </form>
       </div>
     )
+  }
+
+  if (authMode === "loading") {
+    return (
+      <div className="auth-form-container auth-loading">
+        <div className="auth-form-content">
+          <div className="spinner-border text-warning" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <h5>Loading...</h5>
+        </div>
+      </div>
+    );
   }
 
 };

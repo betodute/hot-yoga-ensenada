@@ -9,7 +9,7 @@ const User = require('../models/user');
 // Register a new user
 const passport = require('passport');
 const { loginUser } = require('./users');
-var LocalStrategy = require('passport-local')
+var LocalStrategy = require('passport-local');
 
 module.exports.registerUser = async (req, res) => {
   const existingEmail = await User.findOne({ email: req.body.regUserEmail });
@@ -19,13 +19,15 @@ module.exports.registerUser = async (req, res) => {
     return res.redirect("/auth");
   }
 
+  const newToken = generateToken()
+
   try {
     const newUser = new User({
       name: req.body.regUserName,
       phonenumber: req.body.regPhoneNumber,
       email: req.body.regUserEmail,
       username: req.body.regUserEmail,
-      token: generateToken(),
+      token: newToken,
       verified: false,
       active: false
     });
@@ -40,6 +42,7 @@ module.exports.registerUser = async (req, res) => {
       id: registeredUser._id, // Assuming MongoDB generates _id for the user
       name: registeredUser.name,
       email: registeredUser.email,
+      token: newToken
       // Include other properties you want to send back to the client
     };
 
@@ -196,19 +199,21 @@ module.exports.forgot = async (req, res) => {
 
 module.exports.changePass = async (req, res, next) => {
   try {
-    console.log('HIT CHANGE PASS BACKEND')
     const verifyToken = req.headers.verifytoken;
-    console.log(verifyToken);
-    console.log(req.headers.newpasswordone)
-
     const newUserPass = req.headers.newpasswordone
+
     const user = await User.findOne({ token: verifyToken });
 
     if (!user) {
       return res.status(404).json({ message: 'Invalid token. User not found.' });
     }
     
+    // Set the new password
+    await user.setPassword(newUserPass);
+    
+    // Save the updated user
     await user.save();
+
     // Login user after registration using passport helper method
     req.login(user, function (err) {
       if (err) {
