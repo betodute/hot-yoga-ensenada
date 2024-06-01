@@ -110,12 +110,14 @@ export const Auth = () => {
         navigate('/verifytoken', { state: { verifyType: 'registerEmail', backendToken: data.token } });
       })
       .catch((error) => {
-        alert(error.message);
+        console.log(error);
+        enqueueSnackbar("Este email no está registrado.", {variant: 'error', autoHideDuration: 10000});
       });
   };
 
   const handleForgot = (event) => {
     event.preventDefault();
+    setAuthMode('loading');
     fetch('http://localhost:9000/user/forgot', {
       method: 'GET',
       headers: {
@@ -133,7 +135,7 @@ export const Auth = () => {
       })
       .then((data) => {
         console.log('data response in handleForgot', data);
-        navigate('/verifytoken', { state: { verifyType: 'newPass' } });
+        navigate('/verifytoken', { state: { verifyType: 'newPass', backendToken: data.user.token } });
       })
       .catch((error) => {
         console.error('Error verificando código.', error);
@@ -145,6 +147,7 @@ export const Auth = () => {
 
   const handleNewPassword = (event) => {
     event.preventDefault();
+    setAuthMode('loading');
     setVerifyTokenAuth(verifyTokenAuth)
     console.log("front end verifytoken", verifyTokenAuth)
     fetch('http://localhost:9000/user/changepass', {

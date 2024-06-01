@@ -152,12 +152,10 @@ module.exports.logout = async (req, res) => {
 }
 
 module.exports.forgot = async (req, res) => {
-
-  console.log("hit forgot backend")
+  console.log("hit forgot backend");
   try {
-
     const forgotemail = req.headers.forgotpassemail;
-    const user = await User.findOne({ email: forgotemail });
+    let user = await User.findOne({ email: forgotemail });
 
     if (!user) {
       throw new Error("No user found with this email address");
@@ -186,16 +184,19 @@ module.exports.forgot = async (req, res) => {
     const info = await transporter.sendMail(mailOptions);
     console.log('Message Sent: ' + info.messageId);
 
-    // sending a custom json object with a string to change authmode on the Auth.js page
-    console.log(user)
-    return res.status(200).json({ authMode: "renderNewPassword" })
+    // Re-fetch the user to get the updated token
+    user = await User.findOne({ email: forgotemail });
 
+    // sending a custom json object with the updated user and authMode
+    console.log(user);
+    return res.status(200).json({ authMode: "renderNewPassword", user: user });
 
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 }
+
 
 module.exports.changePass = async (req, res, next) => {
   try {
