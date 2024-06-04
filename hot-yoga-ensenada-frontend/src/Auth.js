@@ -111,7 +111,7 @@ export const Auth = () => {
       })
       .catch((error) => {
         console.log(error);
-        enqueueSnackbar("Este email no está registrado.", {variant: 'error', autoHideDuration: 10000});
+        enqueueSnackbar("Este email ya está registrado.", {variant: 'error', autoHideDuration: 10000});
       });
   };
 

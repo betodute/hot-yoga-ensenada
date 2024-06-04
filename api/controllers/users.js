@@ -142,8 +142,13 @@ module.exports.logout = async (req, res) => {
       if (err) {
         return res.status(500).json({ error: 'Internal Server Error' });
       }
-      // Send response after successful logout
-      return res.status(200).json({ message: 'Logged out successfully' });
+      req.session.destroy((err) => {
+        if (err) {
+          return res.status(500).json({ error: 'Failed to destroy session' });
+        }
+        res.clearCookie('connect.sid'); // Clear the cookie
+        return res.status(200).json({ message: 'Logged out successfully' });
+      });
     });
   } catch (error) {
     console.error(error);
