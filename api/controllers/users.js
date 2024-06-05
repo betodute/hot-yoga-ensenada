@@ -130,6 +130,7 @@ module.exports.loginUser = async (req, res, next) => {
         return res.status(400).json({ message: 'Error logging in' });
       }
       console.log('User logged in successfully:', user.username);
+      console.log(req.session)
       console.log('Session ID:', req.sessionID);
       return res.status(200).json(user);
     });
@@ -138,17 +139,14 @@ module.exports.loginUser = async (req, res, next) => {
 
 module.exports.logout = async (req, res) => {
   try {
-    req.logout(function (err) {
+    console.log("hit back end logout method")
+    console.log(req.session)
+    console.log('Session ID:', req.sessionID);
+    req.logout((err) => {
       if (err) {
         return res.status(500).json({ error: 'Internal Server Error' });
       }
-      req.session.destroy((err) => {
-        if (err) {
-          return res.status(500).json({ error: 'Failed to destroy session' });
-        }
-        res.clearCookie('connect.sid'); // Clear the cookie
-        return res.status(200).json({ message: 'Logged out successfully' });
-      });
+      return res.status(200).json({ message: 'Logged out successfully' });
     });
   } catch (error) {
     console.error(error);
@@ -160,7 +158,7 @@ module.exports.forgot = async (req, res) => {
   console.log("hit forgot backend");
   try {
     const forgotemail = req.headers.forgotpassemail;
-    let user = await User.findOne({ email: forgotemail });
+    let user = await User.findOne({ email: forgotemail })
 
     if (!user) {
       throw new Error("No user found with this email address");

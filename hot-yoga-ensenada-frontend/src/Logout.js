@@ -1,23 +1,18 @@
 import './Logout.css'
-import React, { useState, useEffect } from "react"
+import React, { useContext } from "react"
 import { useNavigate } from 'react-router-dom'
-import { useContext } from "react";
 import { UserContext } from "./UserContext.js";
 
 export const Logout = () => {
-
-  const { user } = useContext(UserContext);
-  console.log( "id", user.id )
 
   const navigate = useNavigate();
 
   const logoutUser = () => {
     fetch('http://localhost:9000/user/logout', {
-      method: 'POST',
+      method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
-      },
-      body: JSON.stringify( {userId: user.id} )
+      }
     })
     .then((response) => response.json())
     .then((data) => {
@@ -26,7 +21,9 @@ export const Logout = () => {
     });
   };
 
-  return(
-    <p className="logout-link"> <a href="#" onClick={(logoutUser)}> logout </a> </p>
-  )
-}
+  return (
+    <p className="logout-link">
+      <a href="#" onClick={logoutUser}> logout </a>
+    </p>
+  );
+};
