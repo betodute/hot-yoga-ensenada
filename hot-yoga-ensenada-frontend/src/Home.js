@@ -1,6 +1,7 @@
 import { Headline } from './Headline'
 import { Reservation } from './Reservation'
 import { Profile } from './Profile'
+import { Schedule } from './Schedule'
 import { Logout } from './Logout'
 import { Footer } from './Footer'
 import './Home.css'
@@ -13,6 +14,7 @@ export const Home = () => {
         <Headline className='col-12'/>
         <Profile />
         {/* <Reservation today={new Date().getDay()} time={new Date().getHours()} className='col-12'/> */}
+        <Schedule />
         <Logout />
         <Footer />
       </div>

@@ -64,7 +64,8 @@ export const Auth = () => {
     fetch('http://localhost:9000/user/login', {
       method: 'POST',
       body: JSON.stringify({ username, password }),
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include'
     })
       .then((response) => {
         if (!response.ok) {
@@ -77,6 +78,7 @@ export const Auth = () => {
       .then((user) => {
         // this is where the USER is defined for app context, it is done upon submission
         // remember that setUser here is defined in the state of UserContext.js
+        console.log({message: 'Logged in successfully.'})
         setUser(user);
         navigate('/home');
       })

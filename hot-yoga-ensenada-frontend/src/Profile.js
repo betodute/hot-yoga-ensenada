@@ -1,6 +1,5 @@
 import './Profile.css'
-import React, { useState, useEffect } from "react"
-import { useContext } from "react";
+import React, { useState, useEffect, useContext } from "react"
 import { UserContext } from "./UserContext.js";
 
 export const Profile = () => {

@@ -123,6 +123,8 @@ module.exports.loginUser = async (req, res, next) => {
       console.log('Authentication failed:', info.message);
       return res.status(401).json({ message: info.message });
     }
+    console.log('this is the user object from the passport.auth method', user)
+    console.log("user authentication with passport succesful here is the info:", info)
     // If authentication is successful, you can access the authenticated user via req.user
     req.login(user, function (err) {
       if (err) {
@@ -139,20 +141,37 @@ module.exports.loginUser = async (req, res, next) => {
 
 module.exports.logout = async (req, res) => {
   try {
-    console.log("hit back end logout method")
-    console.log(req.session)
+    console.log("hit back end logout method");
+    console.log(req.session);
     console.log('Session ID:', req.sessionID);
+
     req.logout((err) => {
       if (err) {
         return res.status(500).json({ error: 'Internal Server Error' });
       }
-      return res.status(200).json({ message: 'Logged out successfully' });
+
+      // Destroy the session
+      req.session.destroy((err) => {
+        if (err) {
+          return res.status(500).json({ error: 'Failed to destroy session' });
+        }
+
+        return res.status(200).json({ message: 'Logged out successfully' });
+      });
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
-}
+};
+
+module.exports.getCurrentUser = (req, res) => {
+  if (req.isAuthenticated()) {
+    res.json({ user: req.user });
+  } else {
+    res.status(401).json({ message: 'Not authenticated' });
+  }
+};
 
 module.exports.forgot = async (req, res) => {
   console.log("hit forgot backend");

@@ -1,0 +1,8 @@
+.schedule-container {
+  color: black;
+}
+
+.classes-container {
+  display: flex;
+  justify-content: center;
+}
