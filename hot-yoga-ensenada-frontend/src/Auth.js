@@ -70,7 +70,7 @@ export const Auth = () => {
       .then((response) => {
         if (!response.ok) {
           setAuthMode('login')
-          enqueueSnackbar("Hubo un problema al iniciar sesión, por favor verifica tu correo electrónico y contraseña.", {variant: 'error', autoHideDuration: 10000})
+          enqueueSnackbar("Hubo un problema al iniciar sesión, por favor verifica tu correo electrónico y contraseña.", { variant: 'error', autoHideDuration: 10000 })
           throw new Error('Failed to login');
         }
         return response.json();
@@ -78,7 +78,7 @@ export const Auth = () => {
       .then((user) => {
         // this is where the USER is defined for app context, it is done upon submission
         // remember that setUser here is defined in the state of UserContext.js
-        console.log({message: 'Logged in successfully.'})
+        console.log({ message: 'Logged in successfully.' })
         setUser(user);
         navigate('/home');
       })
@@ -90,7 +90,7 @@ export const Auth = () => {
   const handleRegisterSubmit = (event) => {
     event.preventDefault();
     setAuthMode('loading');
-  
+
     fetch('http://localhost:9000/user/registeruser', {
       method: 'POST',
       body: JSON.stringify({ regUserName, regPhoneNumber, regUserEmail, regUserPassword }),
@@ -101,7 +101,7 @@ export const Auth = () => {
           setAuthMode('login');
           throw new Error('Registration failed.');
         }
-        return response.json(); 
+        return response.json();
         // Parse the JSON from the response - this is VITAL for the DATA to be in JSON
         // in the next .then promise
       })
@@ -113,7 +113,7 @@ export const Auth = () => {
       })
       .catch((error) => {
         console.log(error);
-        enqueueSnackbar("Este email ya está registrado.", {variant: 'error', autoHideDuration: 10000});
+        enqueueSnackbar("Este email ya está registrado.", { variant: 'error', autoHideDuration: 10000 });
       });
   };
 
@@ -141,11 +141,11 @@ export const Auth = () => {
       })
       .catch((error) => {
         console.error('Error verificando código.', error);
-        enqueueSnackbar("Este email no está registrado.", {variant: 'error', autoHideDuration: 10000})
+        enqueueSnackbar("Este email no está registrado.", { variant: 'error', autoHideDuration: 10000 })
         setAuthMode('login');
       });
   };
-  
+
 
   const handleNewPassword = (event) => {
     event.preventDefault();
@@ -171,7 +171,7 @@ export const Auth = () => {
       })
       .catch((error) => {
         console.error('Error changing new password:', error)
-      }); 
+      });
   }
 
   if (authMode === "login") {

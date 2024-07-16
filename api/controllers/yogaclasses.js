@@ -12,10 +12,10 @@ exports.getYogaClasses = async (req, res) => {
 
 exports.createYogaClass = async (req, res) => {
   const yogaclass = new YogaClass ({
-    date: req.body.date,
-    day: req.body.day,
-    time: req.body.time,
-    active: req.body.active,
+    date: req.body.yogaDate,
+    day: req.body.yogaDay,
+    time: req.body.yogaTime,
+    active: req.body.classActive
   });
 
   try {

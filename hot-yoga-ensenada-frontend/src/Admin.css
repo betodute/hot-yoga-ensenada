@@ -1,10 +1,12 @@
 .admin-wrapper {
   margin: 2em;
   padding: 1em;
+  color: antiqueWhite;
 }
 
 .form-heading {
   font-size: 1.5em;
+  color: antiqueWhite;
 }
 
 .create-button {
@@ -14,4 +16,10 @@
 
 .form-group {
   margin-top: .7em;
+}
+
+.dia-semana {
+  font-size: 1.5em;
+  margin-right: .8em;
+  color: antiqueWhite;
 }

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import './Admin.css';
 
 export const Admin = () => {
@@ -8,11 +8,36 @@ export const Admin = () => {
   const [yogaTime, setYogaTime] = useState('');
   const [classActive, setClassActive] = useState(true);
 
-  const handleCreateYoga = (event) => {
+  async function handleCreateYoga (event) {
     event.preventDefault();
     console.log("hit create handler")
+    
+    // Make the YogaClass fetch request here with all data. 
+
+    try {
+
+      const response = await fetch('http://localhost:9000/yogaclass', {
+        method: 'POST',
+        body: JSON.stringify({ yogaDate, yogaDay, yogaTime, classActive }),
+        headers: { 'Content-Type': 'application/json' }
+      })
+
+      if (!response.ok) {
+        throw new Error(`Response status ${response.status}`)
+      }
+
+      const json = await response.json();
+      console.log("this is the data response in json", json);
+
+    } catch (error) {
+
+      console.error(error.message)
+
+    }
+    
+
   }
-  
+
   useEffect(() => {
     if (classActive) {
       console.log('this is the date');
@@ -23,7 +48,7 @@ export const Admin = () => {
       console.log(yogaTime);
 
     }
-  }, [yogaDate] )
+  }, [yogaDate, yogaDay, yogaTime])
 
 
   return (
@@ -36,13 +61,26 @@ export const Admin = () => {
           <div className='form-heading'> Create Yoga Class </div>
           <div className='input-wrapper'>
             <div className="form-group">
-              <input type='text' placeholder='Date' value={yogaDate} onChange={(e) => setYogaDate(e.target.value)} />
+              <input type='date' placeholder='Date' value={yogaDate} onChange={(e) => setYogaDate(e.target.value)} />
             </div>
             <div className="form-group">
-              <input type='text' placeholder='Day' value={yogaDay} onChange={(e) => setYogaDay(e.target.value)} />
+              <label className='dia-semana' htmlFor="dropdown">Día:</label>
+              <select 
+                id="dropdown" 
+                name="dropdown" 
+                value={yogaDay} 
+                onChange={(e) => setYogaDay(e.target.value)}
+              >
+                <option value="Lunes">Lunes</option>
+                <option value="Martes">Martes</option>
+                <option value="Miercoles">Miercoles</option>
+                <option value="Jueves">Jueves</option>
+                <option value="Viernes">Viernes</option>
+                <option value="Sabado">Sábado</option>
+              </select>
             </div>
             <div className="form-group">
-              <input type='text' placeholder='Time' value={yogaTime} onChange={(e) => setYogaTime(e.target.value)} />
+              <input type='time' placeholder='12:00' value={yogaTime} onChange={(e) => setYogaTime(e.target.value)} />
             </div>
           </div>
           <button className='btn btn-warning create-button'> submit </button>
