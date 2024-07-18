@@ -1,7 +1,9 @@
 .admin-wrapper {
-  margin: 2em;
-  padding: 1em;
+  margin: 3em 4em;
+  padding: 3em;
   color: antiqueWhite;
+  border: .2em solid yellow;
+  border-radius: 1em;
 }
 
 .form-heading {
@@ -18,8 +20,8 @@
   margin-top: .7em;
 }
 
-.dia-semana {
-  font-size: 1.5em;
-  margin-right: .8em;
-  color: antiqueWhite;
+.custom-datepicker input {
+  font-size: 1.2em;
+  font-weight: bold; 
+  width: auto;
 }

@@ -8,8 +8,7 @@ export const VerifyToken = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { setUser } = useContext(UserContext);
-  const [backendToken, setBackendToken] = useState(location.state?.backendToken);
-  const [tokensMatch, setTokensMatch] = useState(false);
+  const [tokensLength, setTokensLength] = useState(false);
   const [verifyToken, setVerifyToken] = useState("")
   const [verifyType, setVerifyType] = useState(location.state?.verifyType || "registerEmail");
 
@@ -21,15 +20,14 @@ export const VerifyToken = () => {
 
   useEffect(() => {
     console.log(verifyToken)
-    console.log(backendToken)
 
-    if (verifyToken && verifyToken === backendToken) {
-      setTokensMatch(true)
+    if (verifyToken.length >= 5) {
+      setTokensLength(true)
     } else {
-      setTokensMatch(false)
+      setTokensLength(false)
     }
 
-  }, [verifyToken, backendToken])
+  }, [verifyToken])
 
   const handleVerifyToken = (event) => {
     event.preventDefault();
@@ -75,14 +73,9 @@ export const VerifyToken = () => {
           />
         </div>
         <div className="d-grid gap-2 mt-3">
-          <button type="submit" className="btn btn-warning" disabled={!tokensMatch}>
+          <button type="submit" className="btn btn-warning" disabled={!tokensLength}>
             Submit
           </button>
-          {verifyToken && backendToken && verifyToken.length >= backendToken.length && verifyToken !== backendToken && (
-                <div className="mt-2 mx-auto text-danger">
-                  por favor verifica el código
-                </div>
-              )}
         </div>
       </div>
     </form>

@@ -41,8 +41,7 @@ module.exports.registerUser = async (req, res) => {
     const userToSend = {
       id: registeredUser._id, // Assuming MongoDB generates _id for the user
       name: registeredUser.name,
-      email: registeredUser.email,
-      token: newToken
+      email: registeredUser.email
       // Include other properties you want to send back to the client
     };
 

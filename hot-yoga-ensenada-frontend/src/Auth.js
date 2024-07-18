@@ -109,7 +109,7 @@ export const Auth = () => {
         console.log(data);
         // I removed the "setUser" userContext method from here so that the user
         // is only set AFTER the email is verified.
-        navigate('/verifytoken', { state: { verifyType: 'registerEmail', backendToken: data.token } });
+        navigate('/verifytoken', { state: { verifyType: 'registerEmail' }});
       })
       .catch((error) => {
         console.log(error);
@@ -137,7 +137,7 @@ export const Auth = () => {
       })
       .then((data) => {
         console.log('data response in handleForgot', data);
-        navigate('/verifytoken', { state: { verifyType: 'newPass', backendToken: data.user.token } });
+        navigate('/verifytoken', { state: { verifyType: 'newPass'}});
       })
       .catch((error) => {
         console.error('Error verificando código.', error);
