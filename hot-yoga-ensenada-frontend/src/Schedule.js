@@ -26,16 +26,38 @@ export const Schedule = () => {
     fetchClasses();
   }, []);
 
-  const handleReserve = (day, id) => {
-    setReservedClasses((prev) => ({
-      ...prev,
-      [day]: !prev[day],
-    }));
-
-    
+  const handleReserve = async (day, id) => {
     console.log('this is the user object from useContext', user);
     console.log('this is the user.id', user._id);
     console.log('this is the YogaClass id', id);
+
+    try {
+      const response = await fetch('http://localhost:9000/reservation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userID: user._id,
+          yogaClassID: id,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to reserve the class');
+      }
+
+      const result = await response.json();
+      console.log('Reservation successful:', result);
+
+      // Update reservedClasses state only if the reservation was successful
+      setReservedClasses((prev) => ({
+        ...prev,
+        [day]: !prev[day],
+      }));
+    } catch (error) {
+      console.error('Error reserving the class:', error);
+    }
   };
 
   return (
@@ -47,6 +69,7 @@ export const Schedule = () => {
             title={`${day} ${time}`}
             reserved={reservedClasses[day]}
             onReserve={() => handleReserve(day, _id)}
+            yogaIdForReserve={_id}
           />
         ))}
       </div>
