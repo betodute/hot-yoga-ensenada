@@ -1,18 +1,18 @@
 import './YogaClass.css';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import { UserContext } from "./UserContext.js";
 
+export const YogaClass = ({ title, onReserve, reserved}) => {
 
-export const YogaClass = ({ title, onReserve, reserved, yogaIdForReserve }) => {
-
-  const { user } = useContext(UserContext);
+  // Determine the button class based on the reserved status
+  const buttonClass = reserved ? 'btn btn-danger' : 'btn btn-warning';
 
   return (
     <div className='single-class col-12'>
       <div className={`${title.toLowerCase().replace(' ', '-')}-title`}>{title}</div>
       <button
-        className={`${title.toLowerCase().replace(' ', '-')}-button btn btn-warning`}
-        onClick={onReserve}
+        className={`${title.toLowerCase().replace(' ', '-')}-button ${buttonClass}`}
+        onClick={() => onReserve()}
       >
         {reserved ? 'cancelar' : 'reservar'}
       </button>
@@ -20,6 +20,7 @@ export const YogaClass = ({ title, onReserve, reserved, yogaIdForReserve }) => {
     </div>
   );
 };
+
 
 
 

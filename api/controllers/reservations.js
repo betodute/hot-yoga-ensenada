@@ -26,8 +26,24 @@ exports.createReservation = async (req, res) => {
 };
 
 exports.getReservations = async (req, res) => {
+  console.log("hit the getReservations back end method!");
+
   try {
+    // Find all reservations
     const reservations = await Reservation.find({});
+    res.status(200).json(reservations);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+exports.getUserReservations = async (req, res) => {
+  const { userID } = req.body; // Extract userID from the request body
+  console.log("hit the getUserReservations back end method!", userID);
+
+  try {
+    // Find reservations by userID
+    const reservations = await Reservation.find({ userID });
     res.status(200).json(reservations);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -59,9 +75,11 @@ exports.editReservation = async (req, res) => {
 exports.deleteReservation = async (req, res) => {
   const { userID, yogaClassID } = req.body;
 
+  console.log("hit the back end!",userID, yogaClassID)
+
   try {
     // Find and remove the reservation based on the userID and yogaClassID
-    const canceledReservation = await Reservation.findOneAndRemove({ userID, yogaClassID });
+    const canceledReservation = await Reservation.findOneAndDelete({ userID, yogaClassID });
 
     if (canceledReservation) {
       res.status(200).json({ message: 'Reservation canceled successfully.' });
