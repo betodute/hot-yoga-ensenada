@@ -6,6 +6,20 @@ import './Admin.css';
 export const Admin = () => {
   const [yogaDate, setYogaDate] = useState(new Date());
   const [classActive, setClassActive] = useState(true);
+  const [reservations, setReservations] = useState([]);
+
+  useEffect(() =>{
+
+    const fetchReservations = async () => {
+      const reservationResponse = await fetch('http://localhost:9000/reservation')
+      console.log(reservationResponse.json());
+    }
+
+    fetchReservations();
+
+  }, [])
+
+  
 
   const getDayOfWeek = (date) => {
     const options = { weekday: 'long' };

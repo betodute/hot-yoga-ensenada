@@ -3,7 +3,10 @@ const Schema = mongoose.Schema;
 
 const ReservationSchema = new Schema({
   userID: String,
+  userName: String,
   yogaClassID: String,
+  day: String,
+  time: String,
   show: String,
 })
 

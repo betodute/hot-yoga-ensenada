@@ -46,7 +46,7 @@ export const Schedule = () => {
   }, [user._id]);
 
 
-  const handleReserve = async (id) => {
+  const handleReserve = async (id, day, time) => {
     try {
 
       const existingReservation = reservations.find(reservation => reservation.yogaClassID === id);
@@ -85,7 +85,11 @@ export const Schedule = () => {
           },
           body: JSON.stringify({
             userID: user._id,
+            userName: user.name,
             yogaClassID: id,
+            day: day,
+            time: time,
+            show: "pending"
           }),
         });
 
@@ -115,7 +119,7 @@ export const Schedule = () => {
               key={_id}
               title={`${day} ${time}`}
               reserved={reserved}
-              onReserve={() => handleReserve(_id)}
+              onReserve={() => handleReserve(_id, day, time)}
             />
           );
         })}
