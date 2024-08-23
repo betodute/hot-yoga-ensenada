@@ -54,11 +54,6 @@ exports.getUserReservations = async (req, res) => {
   }
 };
 
-exports.getAdmin = async (req, res) => {
-  const yogaClasses = await YogaClass.find({});
-  res.status(200).json(yogaClasses);
-}
-
 exports.editReservation = async (req, res) => {
   const reservationID = req.params.id;
   const { show } = req.body;

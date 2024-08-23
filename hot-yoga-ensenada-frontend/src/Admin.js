@@ -12,14 +12,14 @@ export const Admin = () => {
 
     const fetchReservations = async () => {
       const reservationResponse = await fetch('http://localhost:9000/reservation')
-      console.log(reservationResponse.json());
+      const reservationData = await reservationResponse.json();
+      console.log(reservationData);
+      setReservations(reservationData);
     }
 
     fetchReservations();
 
   }, [])
-
-  
 
   const getDayOfWeek = (date) => {
     const options = { weekday: 'long' };
@@ -86,6 +86,13 @@ export const Admin = () => {
           </div>
           <button className='btn btn-warning create-button'>Submit</button>
         </form>
+      </div>
+      <div className='reservations-wrapper'>
+        {reservations.map(({day, time, userName, _id})=> {
+          return (
+            <p key={`${_id}`}> Day: {day} </p>
+          )
+        })}
       </div>
     </div>
   );
