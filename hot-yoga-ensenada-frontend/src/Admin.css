@@ -1,14 +1,42 @@
 .admin-wrapper {
   margin: 3em 4em;
   padding: 3em;
-  color: antiqueWhite;
+  background-color: antiquewhite;
   border: .2em solid yellow;
   border-radius: 1em;
 }
 
+.admin-heading {
+  font-family: 'Texturina', serif;
+  font-size: 2em;
+  margin-bottom: .5em;
+}
+
+.create-yoga-wrapper {
+  border: solid red;
+  padding: 1.5em;
+  border-radius: 15px;
+  margin-bottom: 2.5em;
+}
+
+.create-teacher-wrapper {
+  border: solid red;
+  padding: 1.5em;
+  border-radius: 15px;
+  margin-bottom: 2.5em;
+}
+
 .form-heading {
   font-size: 1.5em;
-  color: antiqueWhite;
+  color: black;
+}
+
+.form-heading-reservations {
+  display: felx;
+  text-align: center;
+  font-size: 2.3em;
+  color: black;
+  margin-bottom: 1em;
 }
 
 .create-button {
@@ -24,4 +52,21 @@
   font-size: 1.2em;
   font-weight: bold; 
   width: auto;
+}
+
+.reservations-wrapper {
+  border: solid red;
+  padding: 1.5em;
+  border-radius: 15px;
+  margin-bottom: 1em;
+}
+
+.student-list {
+  list-style: none;
+  margin: 1em;
+}
+
+.single-student {
+  font-size: 1.7em;
+  margin: .5em;
 }

@@ -5,6 +5,8 @@ const YogaClassSchema = new Schema({
   date: String,
   day: String,
   time: String,
+  teacher: String,
+  yogaType: String,
   active: Boolean,
 })
 

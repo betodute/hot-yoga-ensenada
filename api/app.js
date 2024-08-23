@@ -16,6 +16,7 @@ const MongoStore = require('connect-mongo');
 let usersRouter = require('./routes/user');
 let reservationsRouter = require('./routes/reservation');
 let yogaClassesRouter = require('./routes/yogaclass');
+let teachersRouter = require('./routes/teacher');
 
 let createError = require('http-errors');
 
@@ -89,7 +90,9 @@ passport.deserializeUser(User.deserializeUser());
 // Routes Declaration
 app.use('/user', usersRouter);
 app.use('/reservation', reservationsRouter);
-app.use('/yogaclass', yogaClassesRouter)
+app.use('/yogaclass', yogaClassesRouter);
+app.use('/teacher', teachersRouter);
+
 
 // Catch 404 and forward to error handler
 app.use(function(req, res, next) {
