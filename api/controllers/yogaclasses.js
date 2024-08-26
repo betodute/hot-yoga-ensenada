@@ -15,7 +15,8 @@ exports.createYogaClass = async (req, res) => {
     date: req.body.yogaDate,
     day: req.body.yogaDay,
     time: req.body.yogaTime,
-    teacher: req.body.teacher,
+    teacherID: req.body.teacherID,
+    ycTeacherName: req.body.ycTeacherName,
     yogaType: req.body.yogaType,
     active: req.body.classActive
   });

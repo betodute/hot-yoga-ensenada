@@ -61,6 +61,10 @@
   margin-bottom: 1em;
 }
 
+.admim-class-title {
+  margin: .5em;
+}
+
 .student-list {
   list-style: none;
   margin: 1em;

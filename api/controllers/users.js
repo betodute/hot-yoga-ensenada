@@ -6,6 +6,15 @@ const generateToken = require('../utilities/generateToken');
 router.use(express.json());
 const User = require('../models/user');
 
+module.exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({});
+    res.status(200).json(users);
+  } catch(error) {
+    res.status(400).json({message: error.message})
+  }
+}
+
 // Register a new user
 const passport = require('passport');
 const { loginUser } = require('./users');
