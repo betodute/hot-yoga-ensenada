@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {fetchUsers} from './fetches.js';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import './Admin.css';
@@ -31,6 +32,9 @@ export const Admin = () => {
         const yogaClassesResponse = await fetch('http://localhost:9000/yogaclass');
         const yogaClassesData = await yogaClassesResponse.json();
         setYogaClasses(yogaClassesData);
+
+        const testApi = await fetchUsers()
+        console.log("this is the test api", testApi)
 
         // Fetch all reservations
         const reservationsResponse = await fetch('http://localhost:9000/reservation');
