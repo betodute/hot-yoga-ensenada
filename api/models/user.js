@@ -10,8 +10,8 @@ const UserSchema = new Schema({
   password: String,
   token: String,
   verified: Boolean,
-  classesCredit: Number,
-  unlimitedExp: String,
+  classesCredit: {type: Number, default: 0},
+  unlimitedExp: {type: String, default: ''}
 });
 
 UserSchema.plugin(passportLocalMongoose);

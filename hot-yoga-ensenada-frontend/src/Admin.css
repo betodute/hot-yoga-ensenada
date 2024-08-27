@@ -61,6 +61,13 @@
   margin-bottom: 1em;
 }
 
+.make-res-admin-wrapper {
+  border: solid red;
+  padding: 1.5em;
+  border-radius: 15px;
+  margin-bottom: 1em;
+}
+
 .admim-class-title {
   margin: .5em;
 }
