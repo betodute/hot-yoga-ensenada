@@ -3,6 +3,8 @@ import { useContext } from "react";
 import { UserContext } from "./UserContext.js";
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
+import { Login } from './Login'
+import { loginUser, registerUser } from './fetches';
 import './Auth.css';
 
 
@@ -57,16 +59,11 @@ export const Auth = () => {
     }
   }, [location.state]);
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
     setAuthMode('loading');
 
-    fetch('http://localhost:9000/user/login', {
-      method: 'POST',
-      body: JSON.stringify({ username, password }),
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include'
-    })
+    const response = await loginUser(username, password)
       .then((response) => {
         if (!response.ok) {
           setAuthMode('login')
@@ -109,7 +106,7 @@ export const Auth = () => {
         console.log(data);
         // I removed the "setUser" userContext method from here so that the user
         // is only set AFTER the email is verified.
-        navigate('/verifytoken', { state: { verifyType: 'registerEmail' }});
+        navigate('/verifytoken', { state: { verifyType: 'registerEmail' } });
       })
       .catch((error) => {
         console.log(error);
@@ -137,7 +134,7 @@ export const Auth = () => {
       })
       .then((data) => {
         console.log('data response in handleForgot', data);
-        navigate('/verifytoken', { state: { verifyType: 'newPass'}});
+        navigate('/verifytoken', { state: { verifyType: 'newPass' } });
       })
       .catch((error) => {
         console.error('Error verificando código.', error);
@@ -175,54 +172,14 @@ export const Auth = () => {
   }
 
   if (authMode === "login") {
-    return (
-      <div className="auth-form-container">
-        <form onSubmit={handleLogin} className="auth-form">
-          <div className="auth-form-content">
-            <h5 className="auth-form-hye">hot yoga ensenada</h5>
-            <h3 className="auth-form-title">Login</h3>
-            <div className="text-center">
-              ¿ No Tienes Cuenta ? {" "}
-              <span className="link-primary" onClick={() => setAuthMode("register")}>
-                Regístrate
-              </span>
-            </div>
-            <div className="form-group mt-3">
-              <label>correo electrónico</label>
-              <input
-                type="email"
-                className="form-control mt-1"
-                placeholder="email"
-                autoComplete="username"
-                value={username}
-                required
-                onChange={(event) => { setUserEmail(event.target.value) }}
-              />
-            </div>
-            <div className="form-group mt-3">
-              <label>contraseña</label>
-              <input
-                type="password"
-                className="form-control mt-1"
-                placeholder="password"
-                autoComplete="current-password"
-                value={password}
-                required
-                onChange={(event) => { setUserPassword(event.target.value) }}
-              />
-            </div>
-            <div className="d-grid gap-2 mt-3">
-              <button type="submit" className="btn btn-warning">
-                submit
-              </button>
-            </div>
-            <p className="text-center mt-3">
-              <span className='link-primary' onClick={() => setAuthMode("forgot")}>Restablecer Contraseña</span>
-            </p>
-          </div>
-        </form>
-      </div>
-    )
+    return (<Login
+      setAuthMode={setAuthMode}
+      username={username}
+      password={password}
+      setUserEmail={setUserEmail}
+      setUserPassword={setUserPassword}
+      handleLogin={handleLogin}
+    />)
   }
 
   if (authMode === "register") {
